@@ -1,0 +1,48 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>当前数据状况-{$Think.config.cms_name}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css'> 
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+<table width="98%" border="0" cellpadding="4" cellspacing="1" class="table">
+  <tr class="table_title">
+    <td colspan="2">数据概览：</td>
+  </tr>
+  <tr class="ji">
+    <td width="200">数据总量：</td>
+    <td >{$data.all}</td>
+  </tr>
+  <tr class="ou">
+    <td>可处理数据量：</td>
+    <td>{$data.nowCan}</td>
+  </tr>
+  <tr class="ji">
+    <td>我的全部数据</td>
+    <td>{$data.myDataAll}</td>
+  </tr>
+  <tr class="ou">
+    <td>我的未处理数据</td>
+    <td>{$data.myDataNot}</td>
+  </tr>
+  <tr class="ji">
+    <td>我的已处理数据</td>
+    <td>{$data.myDataYes}</td>
+  </tr>
+  <tr class="ji">
+    <td>可用二次数据总量</td>
+    <td>{$data.dataAgain}</td>
+  </tr>
+  <tr class="ji">
+    <td>我的二次数据处理量</td>
+    <td>{$data.myDataAgain}&nbsp;&nbsp;<a href="{:U('/Admin/DataDealed/again')}">领取并处理（100起）</a></td>
+  </tr>
+    
+</table>
+<script>var version='{$Think.config.cms_var}';</script>
+<include file="Index:footer" />
+</body>
+</html>

@@ -1,0 +1,66 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+/**
+$(function(){
+	$(".denySubmit").click(function () {
+		alert("is me");
+	});
+})
+**/
+</script>
+<br/>
+目标发送客户：<a href="{$pInfo.http}" target="_blank"><span class="h1">{$pInfo.name}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+行业：<span class="h1">{$pInfo.catName}  - {$pInfo.subCat}</span>
+<br/><br/>
+<table  class="table">
+<tr class="list_head ct">
+	<td>序号</td>
+	<td>姓名</td>
+	<td>电话</td>
+	<td>地址</td>
+	<td>发送网站</td>
+	<td>错误代码</td>
+	<td>可发送项目&nbsp;&nbsp;&nbsp;&nbsp;<a href="{:U('/Admin/Project/denyAgainByGB',array('cat'=>'big','id'=>$aInfo[id]))}">换一批</a></td>
+	<td>发送</td>
+</tr>
+		<tr class='tr'>
+	<form name="thisForm"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByDeny" method="POST" target="_blank">
+	<td>{$aInfo.id}</td>
+	<td>{$aInfo.name}</td>
+	<td>{$aInfo.phone}</td>
+	<td>{$aInfo.address}</td>
+	<td>{$aInfo.site}</td>
+	<td>{$aInfo.status}</td>
+	<td>
+		<volist name="aProjectList" id="v">
+			<input type="radio" name="projectID" value="{$v.projectID}"><a href="{$v.http}"  target="_blank">{$v.name}</a><br/>
+		</volist>
+	</td>
+	<td  class="denySubmit" ><input type="submit" value="发送" ><br/><br/><br/><br/><a href="{:U('/Admin/DataDealed/abandon',array('id'=>$aInfo[id]))}">废弃</a></td>
+	<input type="hidden" name="username" value="{$aInfo.name}"/>
+	<input type="hidden" name="phone" value="{$aInfo.phone}"/>
+	<input type="hidden" name="ip" value="{$aInfo.ip}"/>
+	<input type="hidden" name="address" value="{$aInfo.address}"/>
+	<input type="hidden" name="website" value="28"/>
+	<input type="hidden" name="id" value="{$aInfo.id}"/>
+
+	</form>
+	</tr>
+	</volist>
+
+
+</table>
+</body>
+</html>

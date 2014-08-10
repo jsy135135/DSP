@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>抽查发送成功情况-{$Think.config.cms_name}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+            <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+            <style>td{ height:22px; line-height:22px}</style>
+    </head>
+    <body>
+        <table width="98%" border="0" cellpadding="6" cellspacing="1" class="table">
+            <tr>
+                <td colspan="13" class="table_title">
+                    <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
+                    <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
+                    <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
+                    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+                        <script>
+                            $(function() {
+                                $("#date").datepicker({});
+                                $.datepicker.regional['zh-CN'] = {
+                                    closeText: '关闭',
+                                    prevText: '&#x3c;上月',
+                                    nextText: '下月&#x3e;',
+                                    currentText: '今天',
+                                    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                                        '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                                    monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                                        '七', '八', '九', '十', '十一', '十二'],
+                                    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                                    dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                                    dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                                    weekHeader: '周',
+                                    dateFormat: 'yy-mm-dd',
+                                    firstDay: 1,
+                                    isRTL: false,
+                                    showMonthAfterYear: true,
+                                    yearSuffix: '年'};
+                                $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+                            });
+                        </script>
+                        <span class="fl">当前日期:{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">发送成功总数:{$listcount}</span>
+                        <!--                        <span class="f1"><a href="__ROOT__/index.php/Admin/Record/index/site/28">28商机网</a></span>
+                                                <span class="f1"><a href="__ROOT__/index.php/Admin/Record/index/site/ls">中国连锁网</a></span>
+                                                <span class="f1"><a href="__ROOT__/index.php/Admin/Record/index/site/zf">致富网</a></span>-->
+                        <form action="__ROOT__/index.php/Admin/Record/index/" method="post">
+                            <span class="fl">查询日期:<input type="text" name="date" id="date" /></span>
+                            <select name="site">
+                                <option value="28">28商机网</option>
+                                <option value="ls">中国连锁网</option>
+                                <option value="zf">致富网</option>
+                            </select>
+                            <input type="submit" value="查询" />
+                            <!-- <input type="reset" value="重选"> -->
+                        </form>
+                </td>
+            </tr>
+            <tr  class="list_head ct">
+                <td>项目ID</td>
+                <td>项目名称</td>
+                <!--<td>项目网址</td>-->
+                <td>姓名</td>
+                <td>电话</td> 
+                <td>地址</td>
+                <td>发送网站</td>
+                <td>提交客服号码</td>
+                <td>发送状态数</td>
+                <td>语音</td>
+            </tr>
+            <volist name="list" id="vo">
+                <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                    <td>{$vo.projectID}</td>
+                    <td>{$vo.pname}</td>
+                    <!--<td><a href="{$vo.webpage}" target="_blank">{$vo.webpage}</a></td>-->
+                    <td>{$vo.name}</td>
+                    <td>{$vo.phone}</td> 
+                    <td>{$vo.address}</td>
+                    <td>{$vo.site}</td>
+                    <td>{$vo.u_id}</td>
+                    <td>{$vo.status}</td>
+                    <td><a href="{$vo.yuyin}" class="records" data-src="{$vo.yuyin}">点击播放</a></td>
+                </tr>
+            </volist>
+            <!-- <tr class="tr">
+      <td colspan="9" class="pages">
+        {$page}
+      </td>
+    </tr> -->
+        </table>
+
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            body.modal-open .modal-backdrop {
+                visibility: visible;
+                opacity: 0.5;
+            }
+
+            body.modal-open .modal {
+                visibility: visible;
+                -webkit-transform: translateY(0);
+            }
+
+            .modal-backdrop {
+                width: 100%;
+                height: 100%;
+                background: black;
+                opacity: 0.5;
+                position: fixed;
+                top: 0;
+                left: 0;
+                z-index: 10;
+                visibility: hidden;
+                opacity: 0;
+                transition: 300ms;
+            }
+
+            .modal {
+                position: fixed;
+                z-index: 20;
+                top: 20px;
+                width: 300px;
+                height: 200px;
+                left: 50%;
+                margin-left: -150px;
+                background: white;
+                transition: 300ms;
+                visibility: hidden;
+                -webkit-transform: translateY(-200%);
+            }
+
+        </style>
+
+        <div id="audio-modal" class="modal">
+            <audio src="" id="player" controls></audio>
+            <button type="button" data-click="closeModal">关闭窗口</button><br />
+            <font size="6"><a href="" id="ftpDownload" target="_blank">下载录音</a></font>
+        </div>
+
+        <div class="modal-backdrop" id="audio-modal-backdrop" data-click="closeModal"></div>
+
+
+        <script>
+            var player = $('#player');
+            var ftpDownload = $('#ftpDownload');
+
+            $('[data-click="closeModal"]').click(function(event) {
+                closeModal();
+            });
+
+            $('[data-click="openModal"]').click(function(event) {
+                openModal();
+            });
+
+            function closeModal() {
+                $('body').removeClass('modal-open');
+                player[0].pause();
+            }
+
+            function openModal() {
+                $('body').addClass('modal-open');
+                player[0].play();
+            }
+
+            $('.records').on('click', function(event) {
+                event.preventDefault();
+                var href = $(this).attr('data-src');
+                $.get(href, function(response) {
+                    var ftpSrc = response;
+                    player.attr('src', ftpSrc);
+                    ftpDownload.attr('href', ftpSrc);
+                    openModal();
+
+                });
+            });
+        </script>
+
+        <script>var version = '{$Think.config.cms_var}';</script>
+        <include file="Index:footer" />
+    </body>
+</html>

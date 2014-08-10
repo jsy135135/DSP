@@ -1,0 +1,117 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>{$title}</title>
+        <link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+        <link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+        <script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+        <script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+        <script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+    </head>
+    <body>
+        请注意:<br/>
+        此通道为特殊通道，请慎重使用！以下情况可以使用：
+        <br/>1) 创业者同意使用其他号码沟通
+        <br/>2）座机回呼的创业者信息，可以先查询号码，然后再提交
+        <br/>3）创业者同意推荐其他类别的项目，此时首先需要使用项目ID查询功能，先查到项目ID之后，然后再提交，否则无法达到另外推荐的目的<br/><br/>
+        电话 <input type="text" name="mobile" id="mobile" /> <input type="button" id="searchBtn" value="查询"/>
+        <br/><br/>
+        <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter" method="post">
+            姓名：<input  type="text" name="username" id="username" /><br/>
+            地址：<input  type="text" name="address" id="address" /><br/>
+            <br/>
+            电话：<input  type="text" name="phone" id="phone" /><br/>
+            备注：<input  type="text" name="content" id="content"><br />
+            IP：<input  type="text" name="ip" id="ip" /><br/>
+            项目ID：<input  type="text" name="projectID"  id="projectID"  value="" />   <a href="{:U('/Admin/Project')}" target="_blank">项目ID查询</a><br/>
+            <br/>
+            <span style="color:blue;">如果提交到其他网站的项目，在填写ID之后，手动点击按钮切换提交站点</span>
+            <br />
+            <div id="btns">
+                <input class="button" status="28" type="button" value="28"  >
+                <input class="button" status="ls" type="button" value="ls"  >
+                <input class="button" status="zf" type="button" value="zf" >
+                <input class="button" status="wp" type="button" value="wp">
+                <input class="button" status="91" type="button" value="91" >
+            </div>
+
+            <br />
+            <input type="text" name="website" id="website" value="自动查询"  />
+            <input type="hidden" name="isHeFei"  value="{$isHF}" />
+            <input type="hidden" name="guestbook_id" id="guestbook_id" value=""/>
+            <input class="button"  type="submit"  id="submitForm" value="提交"/>  <br/>
+        </form>
+
+        <script type="text/javascript">
+
+            $("#searchBtn").click(function() {
+                var $this = $(this);
+                $this.val('查询中......');
+                
+                $.ajax({
+                    type: 'post',
+                    url: '__ROOT__/index.php/Admin/Guestbook/getByMobile',
+                    data: 'mobile=' + $("#mobile").val(),
+                    dataType: 'json',
+                    success: function(data) {
+                        console.log(data);
+                        if(data[0]) {
+                            $("#phone").val($("#mobile").val());
+                            $("#ip").val(data[0]);
+                            $("#projectID").val(data[1]);
+                            $("#website").val(data[2]);
+                            $("#guestbook_id").val(data[3]);
+                            $this.val('查询成功');
+                        } else {
+                            $this.val('数据库无此信息');
+                        }
+                        //                        alert(data);
+                       
+                    }
+                });
+                
+                  $.getJSON('http://api.showji.com/Locating/www.show.ji.c.o.m.aspx?m=' +  $("#mobile").val() + '&output=json&callback=?&timestamp=', function(response) {
+                        $("#address").val(response.Province+'.'+response.City);       
+//        console.log(response);
+                 });
+            });
+
+//            $("#myform").submit(function(event) {
+//                // console.log('fdsfsf');
+//                // event.preventDefault();
+//                return false;
+//            });
+
+            $('body').keydown(function(event) {
+                if (event.which == 13) {
+                    event.preventDefault();
+                }
+
+            });
+
+//            $("#submitForm").click(function() {
+//                console.log('submitform')
+//                $.ajax({
+//                    type: 'post',
+//                    url: '__ROOT__/index.php/Admin/Guestbook/sendDataByInter',
+//                    data: $('#myform').serialize(),
+//                    success: function(data) {
+//                        alert(data);
+//                    }
+//                })
+//            });
+            //点击切换提交网站
+
+            $("#btns").on('click', '[status]', function(event) {
+                var status = $(event.target).attr('status');
+                $('#website').val(status);
+            });
+
+                
+            
+            
+           
+        </script>
+    </body>
+</html>

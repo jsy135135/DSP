@@ -1,0 +1,169 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>首次外呼-{$Think.config.cms_name}</title>
+        <link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+        <link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+        <script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+        <script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+        <script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+    </head>
+    <body>
+        {$iAlreadyCount}
+        <!--<h3><div align="center">未分配信息{$iNoAssignCount}条,{$nowAssignNum}&nbsp;&nbsp;&nbsp;&nbsp;<a href="__ROOT__/index.php/Admin/Guestbook/gbForm/hefei/1" target="_blank">特殊通道</a></div></h3>-->
+        <h3><div align="center">{$iNoAssignCount}{$nowAssignNum}&nbsp;&nbsp;&nbsp;&nbsp;<a href="__ROOT__/index.php/Admin/Guestbook/gbForm/hefei/1" target="_blank">特殊通道</a></div></h3>
+        <div id="top">用户ID:{$uID}&nbsp;&nbsp;来源：<span id="top_keywords"></span>&nbsp;&nbsp;时间：<span id="top_times"></span><br/><br/>Hit：<span id="hit_info"></span></div>
+        <div id="c_left">
+            <volist name="aList"  id="vo">
+                <p thisid="{$vo.ids}" url="{$vo.address}"  k="{$vo.keywords}" phone="{$vo.phone}" dailPhone="0{$vo.phone}" projectID="{$vo.project_id}"  ips="{$vo.ips}"  times="{$vo.times}"  ad="{$vo.province}" site="{$vo.site}" class="">{$i}&nbsp;{$vo.phone}</p>
+            </volist>
+        </div>
+        <div id="c_center">
+            <iframe src="" width="600" height="800" frameborder=no></iframe>
+        </div>
+        <div id="c_right">
+            <input class="button" type="button" value="不需要"  status="7">
+            <input class="button" type="button" value="无人接听"  status="2">
+            <input class="button" type="button" value="无法接通" status="3">
+            <br /><br />
+            <input class="button" type="button" value="挂机" status="4">
+            <input class="button" type="button" value="停机" status="5">
+            <br /><br />
+            <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
+                姓名：<input  type="text" name="username" id="username" /><br/>
+                电话：<input  type="text" name="phone" id="phone" /><br/>
+                备注：<input  type="text" name="content" id="content"><br />
+                IP：<input  type="text" name="ip" id="ip" /><br/>
+                地址：<input  type="text" name="address" id="address" /><br/>
+                项目ID：<input  type="text" name="projectID"  id="projectID"  value=""  /><br/>
+                发送给：<span id="toWhich"></span><br/>
+                用户ID：<span>{$uID}</span>
+                <br/>
+                <input type="hidden" name="website" id="website" value="" />
+                <input type="hidden" name="uID" id="uID" value="{$uID}" />
+                <input type="text" name="guestbook_id" id="guestbook_id"><br/>
+                <input class="submit"  type="submit"  value="提交"/>
+            </form>
+            呼叫号码：<br/>
+            <input  type="text" name="dailPhone" id="dailPhone" /><br/>
+            转移号码：<br/>
+            <input  type="text" name="transferCall" id="transferCall" /><br/>
+        </div>
+        <script>
+            $("#c_left p").click(function() {
+                $(this).addClass("dealed");
+                $("#top span").html("");
+                $("#top_keywords").html($(this).attr("k"));
+                $("#top_times").html($(this).attr("times"));
+                $("#dailPhone").val($(this).attr("dailPhone"));
+                $("#address").val($(this).attr("ad"));
+                $('#c_center iframe').attr('src', $(this).attr("url"));
+                $("#myform input[type=text]").val("");
+                $("#phone").val($(this).attr("phone"));
+                $("#ip").val($(this).attr("ips"));
+                $("#projectID").val($(this).attr("projectID"));
+                $("#guestbook_id").val($(this).attr("thisid"));
+                $("#toWhich").html($(this).attr("site"));
+                $("#website").val($(this).attr("site"));
+                $.ajax({
+                    type: 'get',
+                    url: '__ROOT__/index.php/Admin/Project/getProjectSendStatus/',
+                    data: 'pID=' + $(this).attr('projectID') + '&site=' + $(this).attr('site'),
+                    dataType: 'json',
+                    success: function(data) {
+//                        console.log(data);
+                        //			 alert(data);
+                        // alert(data[0].status);
+                        if (data == 0) {
+                            $("#hit_info").html("此项目不在项目列表中，请在项目表中选择相关项目提交！");
+                            return;
+                        }
+                        if (data[0].status == 0) {
+                            $("#hit_info").html("本项目不接受发送数据，为您推荐以下项目");
+                            for (var i in data) {
+                                //alert(data[i].projectID);
+                                if (data[i].site == 28) {
+                                   var rec_url = "http://tj.28.com" + data[i].webPage; 
+                                }
+                                    
+                                else {
+                                  var rec_url = data[i].webPage; 
+                                }
+                                if (!data[i].projectID) {
+                                    $("#hit_info").html("本项目不接受发送数据，暂时没有相关可推荐项目");
+//                                    console.log('projectId: ' + data[i].projectID);
+                                    break;
+                                }   
+                                $("#hit_info").append(
+                                        "&nbsp;&nbsp;<input class='recommendBtn' type='radio' name='sss' value=" + data[i].projectID + 
+                                        " site=" + data[i].site + "><a href='" + rec_url + "' target='_blank'>" + data[i].name + "</a>");
+                                $(".recommendBtn").click(function() {
+                                    $("#projectID").val($(this).attr("value"));
+                                    if ($(this).attr("site") == '28') {
+                                        $("#website").val("28");
+                                        $("#toWhich").html("28");
+                                    } else {
+                                        $("#website").val("ls");
+                                        $("#toWhich").html("ls");
+                                    }
+                                });
+                            }
+                        } else {
+                            $("#hit_info").html("发送状态：OK");
+                        }
+                    }
+                })
+            })
+
+
+            $(".button").click(function() {
+                $.ajax({
+                    type: 'get',
+                    url: '__ROOT__/index.php/Admin/Guestbook/dealStatus/s/' + $(this).attr("status") + '/id/' + $("#guestbook_id").val() + '/uID/{$uID}',
+                    success: function(data) {
+                        $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+                    }
+                })
+            })
+
+
+            $("#myform").submit(function() {
+                $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+                //return false;
+            });
+            //地址归属地
+            $('#c_left').on('click', 'p', function(event) {
+                var phone = $(this).attr('phone');
+                $.ajax({
+                    type: 'get',
+                    url: '__ROOT__/index.php/Admin/Api/index/' + phone,
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('response: ' + response);
+                        var addrs = response.data.province+'.'+response.data.city;
+//                        console.log(response.data.sp);
+                        $("#address").val(addrs);
+                    }
+//                    success: function(response) {
+////                        console.log('response: ' + response);
+//                       var add =  response.result.att;
+//                       var addrs = add.replace("中国,","");
+//                        $("#address").val(addrs);
+//                    }
+                });
+            });
+        </script>
+        <!--//自动定时请求刷新
+                       <script type="text/javascript">
+                           setTimeout("querySystemNotice()",1000);//1分钟
+       
+                              function querySystemNotice()
+                              {
+       //                            alert('aaaaaaaaa');
+                                   window.location.reload();
+                              }
+                       </script>-->
+    <include file="Index:footer" />
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>项目分类列表-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<!--<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />-->
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+    <div>        
+        <div style="float: left;">
+            <switch name="{userrole}">
+                <case value="0">
+                    <font size="9">团队目标数：{$allaim}</font><br />
+                    <font size="9">成功提交数：{$allnums}</font><br />
+                    <font size="9">距离目标数：{$allalnums}</font><br />
+                     <div style="float: left;margin-top: 123px;margin-left: 160px;">    
+        <a href="__ROOT__/index.php/Admin/MyAim/edit"><input type="button" style="width: 250px;height: 68px;font-size: 24px; font-weight: bold;" value="制定今日目标数"/></a>
+        </div>
+    </div>
+                </case>
+                <case value="1">
+                    <font size="9">团队目标数：{$allaim}</font><br />
+                    <font size="9">成功提交数：{$allnums}</font><br />
+                    <font size="9">距离目标数：{$allalnums}</font><br />
+                    <font size="9">今天目标数：{$aim}</font><br />
+                    <font size="9">成功提交数：{$alnums}</font><br />
+                    <font size="9">距离目标数：{$nums}</font><br />
+                    <font size="9">二级绩效提交数：{$ssendnums}</font><br />
+                </case>
+            </switch>
+        </div>
+       
+		<include file="Index:footer" />
+</body>
+	</html>
+<!-- 本次查询时间：{$date} -->

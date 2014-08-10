@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <title>收回一次数据</title>
+        <!-- <link rel="stylesheet" href="default.css"> -->
+        <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+    </head>
+
+    <body>
+        <form action="__ROOT__/index.php/Admin/Updata/UP" method="post">
+            <div class="header">
+                <label for="select-all">
+                    <span>全选</span>
+                    <input type="checkbox" id="select-all">
+                </label>
+
+                <label for="select-reverse">
+                    <button type="button" id="select-reverse">反选</button>
+                </label>
+            </div>
+            <!-- /header -->
+
+            <div class="main">
+                <volist name="data" id="vo">
+                    <label for="{$vo.username}"><span>{$vo.username}({$vo.remark})</span><input type="checkbox" id="{$vo.username}"></label><br />
+                    <!--      <label for="801"><span>801</span><input type="checkbox" id="801"></label>
+                          <label for="802"><span>802</span><input type="checkbox" id="802"></label>
+                          <label for="803"><span>803</span><input type="checkbox" id="803"></label>
+                          <label for="804"><span>804</span><input type="checkbox" id="804"></label>
+                          <label for="805"><span>805</span><input type="checkbox" id="805"></label>
+                          <label for="806"><span>806</span><input type="checkbox" id="806"></label>
+                          <label for="807"><span>807</span><input type="checkbox" id="807"></label>
+                          <label for="808"><span>808</span><input type="checkbox" id="808"></label>
+                          <label for="809"><span>809</span><input type="checkbox" id="809"></label>
+                          <label for="810"><span>810</span><input type="checkbox" id="810"></label>
+                          <label for="811"><span>811</span><input type="checkbox" id="811"></label>
+                          <label for="812"><span>812</span><input type="checkbox" id="812"></label>
+                          <label for="813"><span>813</span><input type="checkbox" id="813"></label>
+                          <label for="814"><span>814</span><input type="checkbox" id="814"></label>
+                          <label for="815"><span>815</span><input type="checkbox" id="815"></label>
+                          <label for="816"><span>816</span><input type="checkbox" id="816"></label>
+                          <label for="817"><span>817</span><input type="checkbox" id="817"></label>
+                          <label for="818"><span>818</span><input type="checkbox" id="818"></label>
+                          <label for="819"><span>819</span><input type="checkbox" id="819"></label>
+                          <label for="820"><span>820</span><input type="checkbox" id="820"></label>
+                          <label for="821"><span>821</span><input type="checkbox" id="821"></label>
+                          <label for="822"><span>822</span><input type="checkbox" id="822"></label>
+                          <label for="823"><span>823</span><input type="checkbox" id="823"></label>
+                          <label for="824"><span>824</span><input type="checkbox" id="824"></label>
+                          <label for="825"><span>825</span><input type="checkbox" id="825"></label>
+                          <label for="826"><span>826</span><input type="checkbox" id="826"></label>
+                          <label for="827"><span>827</span><input type="checkbox" id="827"></label>
+                          <label for="828"><span>828</span><input type="checkbox" id="828"></label>
+                          <label for="829"><span>829</span><input type="checkbox" id="829"></label>
+                          <label for="830"><span>830</span><input type="checkbox" id="830"></label>
+                          <label for="831"><span>831</span><input type="checkbox" id="831"></label>
+                          <label for="832"><span>832</span><input type="checkbox" id="832"></label>
+                          <label for="833"><span>833</span><input type="checkbox" id="833"></label>
+                          <label for="834"><span>834</span><input type="checkbox" id="834"></label>
+                          <label for="835"><span>835</span><input type="checkbox" id="835"></label>
+                          <label for="836"><span>836</span><input type="checkbox" id="836"></label>
+                          <label for="837"><span>837</span><input type="checkbox" id="837"></label>
+                          <label for="838"><span>838</span><input type="checkbox" id="838"></label>
+                          <label for="839"><span>839</span><input type="checkbox" id="839"></label>
+                          <label for="840"><span>840</span><input type="checkbox" id="840"></label>
+                          <label for="841"><span>841</span><input type="checkbox" id="841"></label>
+                          <label for="842"><span>842</span><input type="checkbox" id="842"></label>
+                          <label for="843"><span>843</span><input type="checkbox" id="843"></label>
+                          <label for="844"><span>844</span><input type="checkbox" id="844"></label>
+                          <label for="845"><span>845</span><input type="checkbox" id="845"></label>
+                          <label for="846"><span>846</span><input type="checkbox" id="846"></label>
+                          <label for="847"><span>847</span><input type="checkbox" id="847"></label>
+                          <label for="848"><span>848</span><input type="checkbox" id="848"></label>
+                          <label for="849"><span>849</span><input type="checkbox" id="849"></label>
+                          <label for="850"><span>850</span><input type="checkbox" id="850"></label>-->
+                </volist>
+            </div>
+            <input type="hidden" name="arr">
+            <div><button type="submit">确认收回</button></div>
+        </form>
+
+        <script>
+
+
+            $('#select-all').on('change', function(event) {
+                $('#select-reverse').prop('checked', false);
+                var checked = $(this).prop('checked');
+
+                $('.main [type="checkbox"]').each(function() {
+                    $(this).prop('checked', checked);
+                });
+            })
+
+
+            $('#select-reverse').on('click', function(event) {
+                $('.main [type="checkbox"]').each(function() {
+                    var checked = $(this).prop('checked');
+                    $(this).prop('checked', !checked);
+                    $(this).trigger('change');
+                });
+            });
+
+            $('.main').on('change', '[type="checkbox"]', function(event) {
+                var checked = $(this).prop('checked');
+                if (checked) {
+                    if ($('.main [type="checkbox"]:checked').length == $('.main [type="checkbox"]').length) {
+                        $('#select-all').prop('checked', true);
+                    }
+                } else {
+                    $('#select-all').prop('checked', false);
+                }
+            });
+
+
+
+
+            // init
+            $('#select-all').prop('checked', true);
+            $('#select-all').trigger('change');
+
+            $('form').submit(function(event) {
+
+                var data = [];
+                $('.main [type="checkbox"]:checked').each(function(item) {
+                    data.push($(this).attr('id'));
+                });
+
+                $('[name="arr"]').val(data.join(','));
+
+                // event.preventDefault();
+            });
+
+            // $('form').trigger('submit');
+        </script>
+    </body>
+
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>今天制定目标数-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+    <form id="form" action="__ROOT__/index.php/Admin/MyAim/updata" method="post">
+        <font size="6">今日个人制定目标数：<input  type="text" name="aim" id="aim"/></font>
+        <font size="6">今日团队制定目标数：<input  type="text" name="teamaim" id="teamaim"/></font>
+     <input type="submit" value="提交"/>  <br/>
+    </form>
+
+		<include file="Index:footer" />
+<script type="text/javascript">
+
+    $('#form').on('submit', function(event) {
+        var $this = $(this);
+        var val = $('#aim').val();
+
+         if (!val){
+            event.preventDefault();
+            alert("不能没有目标数量哦(～ o ～)~zZ");
+	} else {
+            if(val<20){
+                event.preventDefault();
+		alert("亲O(∩_∩)O~，数量有点儿少哦，加几个到20吧↖(^ω^)↗！");
+            }
+	}
+    });
+</script>
+</body>
+	</html>
+<!-- 本次查询时间：{$date} -->

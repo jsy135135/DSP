@@ -1,0 +1,107 @@
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  height: 100%;
+}
+
+body {
+  background: url(../images/admin/bg.jpg) no-repeat center;
+}
+
+body, input, button {
+   font-family: "微软雅黑";
+}
+
+.container {
+  width: 800px; 
+  margin: 0 auto;
+  position: relative;
+  top: 20%;
+  color: white;
+}
+
+.container h2 {
+  font-size: 60px;
+  text-shadow: 2px 1px 1px rgb(189, 189, 189);
+  font-weight: normal;
+  margin-bottom: 50px;
+}
+
+.form-control {
+  display: inline-block;
+  margin-bottom: 15px;
+}
+
+.form-control label {
+  display: none;
+}
+
+.form-control input {
+  width: 16em;
+  background: #454749;
+  border: 1px solid #C4C4C4;
+  padding: 0.5em;
+  border-radius: 2px;
+  color: white;
+  outline: none;
+  margin-right: 10px;
+}
+
+.form-control input.wrong {
+  -webkit-animation: shaking 150ms;
+  -webkit-animation-iteration-count: 5;
+  animation: shaking 150ms;
+  animation-iteration-count: 5;
+}
+
+#verify {
+  width: 16em;
+}
+
+input, button {
+  font-size: 20px;
+}
+
+button[type="submit"] {
+  display: block;
+  width: 35em;
+  background: #414448;
+  padding: 1.5em;
+  border-radius: 2px;
+  color: white;
+  outline: none;
+  border: none;
+}
+
+.copyright {
+  margin-top: 100px;
+  text-align: center;
+  text-shadow: 1px 1px 2px rgb(94, 94, 94);
+}
+
+.copyright a {
+  color: white;
+}
+
+#verifyImg {
+  width: 342px;
+  height: 48px;
+  margin-top: -5px;
+}
+
+@-webkit-keyframes shaking {
+  25% { -webkit-transform: translateY(-3px) translateX(-3px);}  
+  
+  75% { -webkit-transform: translateY(3px) translateX(3px)}
+  100% { -webkit-transform: translateY(0) translateX(0);}
+}
+
+@keyframes shaking {
+  25% { transform: translateY(-3px) translateX(-3px);}  
+  
+  75% { transform: translateY(3px) translateX(3px)}
+  100% { transform: translateY(0) translateX(0);}
+}

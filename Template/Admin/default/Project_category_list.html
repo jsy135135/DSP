@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>分类列表-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+	<table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
+		<tr>
+			<td colspan="9" class="table_title">
+				<span class="fl">项目分类列表</span>
+				<span class="fr">
+					<a href="{:U('/Admin/Project/category/act/add')}">添加分类</a>
+				</span>
+			</td>
+			<tr class="list_head ct">
+				<td width="20">分类ID</td>
+				<td width="70">父类ID</td>
+				<td width="150">分类名称</td>
+				<td width="100">操作</td>
+			</tr>
+	    <volist name="list" id="vo">
+			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+				<td align='center'>{$vo.id}</td>
+				<td align='center'>{$vo.pid}</td>
+				<td align="center">{$vo.catname}</td>
+				<td align='center'>
+					<a href="{:U('/Admin/Project/category/act/edit/',array("id"=>$vo[id]))}">编辑</a>
+					<!-- <a href="{:U('/Admin/Project/category/act/del/',array("id"=>$vo[id]))}">删除</a> -->
+				</td>
+			</tr>
+	    </volist>
+	    <!-- 以后做分页的时候可以使用 -->
+		<!-- <tr class="tr">
+          <td colspan="9" class="pages">
+            {$page}
+          </td>
+        </tr> -->
+		</table>
+		<script>var version='{$Think.config.cms_var}';</script>
+		<include file="Index:footer" />
+</body>
+	</html>

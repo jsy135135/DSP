@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidator.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidatorRegex.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+</head>
+<body>
+<table width="98%" border="0" cellpadding="4" cellspacing="1" class="table">
+<form action="{:U('/Admin/Project/update')}" method="post" name="form" id="form">
+<tr  class="table_title">
+  <td colspan="4">项目分类修改</td>
+</tr>
+<tr class="ji">
+  <volist name="one" id="vo">
+  <input type="hidden" name="id" value="{$vo.id}">
+  </volist>
+  </select>
+  <td class="left">更改分类为</td>
+  <td>
+  <select name="pid" id="pid">
+  <volist name="aBigList" id="vo">
+    <option value="{$vo.id}">{$vo.catname}</option>
+  </volist>
+  </select>
+  <select name="cid" id="cid">
+
+  <volist name="aList" id="vo">
+    
+    <option value="{$vo.id}" pid="{$vo.pid}">{$vo.catname}</option>
+  </volist>
+  </select>
+  </td>
+</tr>                                      
+<tr class="ji">
+  <td colspan="4" align="center">
+    <input class="bginput" type="submit" name="dosubmit" value="提交" >
+    <input class="bginput" type="reset" name="Input" value="重置" >
+  </td>
+</tr>
+</form>
+</table>
+<include file="Index:footer" />
+
+<script type="text/javascript">
+
+
+
+var data = [];
+
+$('#cid option').each(function(index, item) {
+  item = $(item);
+  data.push({
+    value: item.val(),
+    pid: item.attr('pid'),
+    content: item.html()
+  });
+
+
+});
+
+
+// init
+show($('#pid option').val())
+ 
+
+$('#pid').on('change', function (e) {
+  var pid = this.value;
+  show(pid);
+});
+
+
+function show(pid) {
+  $('#cid').html('');
+  var result = '';
+  for (var i = 0; i < data.length; i++) {
+    var item = data[i];
+    if (pid == item.pid) {
+      result += '<option value="' + item.value + '">' + item.content + '</option>';
+    }
+  }
+
+  $('#cid').append(result);
+}
+
+</script>
+</body>
+</html>

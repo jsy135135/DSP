@@ -1,0 +1,45 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+<link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+<script>
+$(function(){
+	$('#tt').datagrid({
+	    url:'__ROOT__/index.php/Admin/Project/showDetail/date/{$date}',
+	    loadMsg:'数据分析中，请稍等....',
+	    remoteSort: false,
+	    rownumbers:true,
+	    striped: true,
+	    showFooter:true,
+	    columns:[[
+	        { field:'site',title:'所属网站',width:100,sortable:true },
+	        { field:'name',title:'项目名称',width:100,sortable:true },
+	        { field:'projectID',title:'项目ID',width:100,sortable:true },
+	        { field:'needNum',title:'需求条数',width:100,sortable:true },
+	        { field:'count',title:'抓取量',width:60,sortable:true },
+	        { field:'callOK',title:'转化量',width:60,sortable:true },
+	        { field:'sendOK',title:'发送量',width:60,sortable:true },
+	        { field:'denyNum',title:'拒绝量',width:60,sortable:true,styler: function(value,row,index){return 'color:blue';} },
+	        { field:'ratio_call',title:'转化率',width:60,sortable:true,styler: function(value,row,index){return 'color:red';} },
+	        { field:'ratio_send',title:'发送率',width:100,sortable:true,styler: function(value,row,index){return 'color:red';} }
+	    ]]
+	});
+});
+</script>
+
+<h3><p align="center">当前查看数据{$date}</p></h3>
+<table id="tt"  class="easyui-datagrid" style="width:900px;height:550px"></table>
+</table>
+<include file="Index:footer" />
+</body>
+</html>
+

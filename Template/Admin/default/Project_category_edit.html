@@ -1,0 +1,47 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title></title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidator.js"></script>
+<script type="text/javascript" src="__PUBLIC__/js/formValidatorRegex.js"></script>
+<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+</head>
+<body>
+<table width="98%" border="0" cellpadding="4" cellspacing="1" class="table">
+<form action="{:U('/Admin/Project/category/act/update')}" method="post" name="form" id="form">
+<tr  class="table_title">
+  <td colspan="4">分类修改</td>
+</tr>
+<input type="hidden" name="act"   value="update">
+<tr class="ji">
+  <td class="left">更改父类</td>
+  <td>
+  <select name="pid">
+  <option value="0">一级分类</option>
+  <volist name="alist" id="vo">
+    <option value="{$vo.id}">{$vo.catname}</option>
+  </volist>
+  </select>
+  <volist name="one" id="vo">
+  <input type="hidden" name="id" value="{$vo.id}">
+  </volist>
+  </td>
+</tr>
+<tr class="tr">
+  <td class="left">更改分类名称为</td>
+  <td><input type="text" name="catname" value="{$vo.catname}" size="35" maxlength="50"></td>
+</tr>                                       
+<tr class="ji">
+  <td colspan="4" align="center">
+    <input class="bginput" type="submit" name="dosubmit" value="提交" >
+    <input class="bginput" type="reset" name="Input" value="重置" >
+  </td>
+</tr>
+</form>
+</table>
+<include file="Index:footer" />
+</body>
+</html>

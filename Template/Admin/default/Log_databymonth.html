@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+<link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<script>
+$(function(){
+	$('#tt').datagrid({
+	    url:'/m/index.php/log/getDataByMonth/month/{$month}',
+	    loadMsg:'数据分析中，请稍等....',
+	    remoteSort: false,
+	    rownumbers:true,
+	    striped: true,
+	    showFooter:true,
+	    columns:[[
+	        {field:'day',title:'日期',width:100,sortable:true},
+	        {field:'visit_total',title:'总访问量',width:100,sortable:true},
+	        {field:'get_total',title:'总抓取量',width:100,sortable:true},
+	        {field:'ratio_total',title:'总比率',width:100,sortable:true},
+	        {field:'visit_28',title:'28-点击量',width:100,sortable:true},
+	        {field:'get_28',title:'28-抓取量',width:100,sortable:true},
+	        {field:'ratio_28',title:'28转化率',width:100,sortable:true},
+	        {field:'visit_zf',title:'致富-点击量',width:100,sortable:true},
+	        {field:'get_zf',title:'致富-抓取量',width:100,sortable:true},
+	        {field:'ratio_zf',title:'致富转化率',width:100,sortable:true},
+	
+	    ]]
+	});
+});
+</script>
+<body>
+
+<table id="tt"  class="easyui-datagrid" style="width:1050px;height:550px"></table>
+
+
+</table>
+</body>
+</html>

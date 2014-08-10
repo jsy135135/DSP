@@ -1,0 +1,82 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+<link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+<script type="text/javascript">
+/**
+$(function(){
+	$(".denySubmit").click(function () {
+		alert("is me");
+	});
+})
+**/
+</script>
+<div>
+目标发送客户：<a href="{$aInfo.http}" target="_blank"><span class="h1">{$aInfo.name}</span></a>&nbsp;&nbsp;&nbsp;&nbsp;
+行业：<span class="h1">{$aInfo.catName}  - {$aInfo.subCat}</span>
+</div>
+<table>
+<tr>
+	<td>序号</td>
+	<td>姓名</td>
+	<td>电话</td>
+	<td>地址</td>
+	<td>发送网站</td>
+	<td>错误代码</td>
+	<td>可发送项目&nbsp;&nbsp;&nbsp;&nbsp;<a href="__ROOT__/index.php/Admin/Project/denyAgain/pID/{$aInfo.projectID}/site/{$aInfo.site}/date/{$date}/cat/big">换一批</a></td>
+	<td>发送</td>
+</tr>
+	<volist name="aList" id="vo">
+		<tr >
+	<form name="thisForm"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByDeny" method="POST" target="_blank">
+	<td>{$vo.id}</td>
+	<td>{$vo.name}</td>
+	<td>{$vo.phone}</td>
+	<td>{$vo.address}</td>
+	<td>{$vo.site}</td>
+	<td>{$vo.status}</td>
+	<td>
+		<volist name="aProjectList" id="v">
+			<input type="radio" name="projectID" value="{$v.projectID}"><a href="{$v.http}"  target="_blank">{$v.name}</a><br/>
+		</volist>
+	</td>
+	<td  class="denySubmit" ><input type="submit" value="发送" ></td>
+	<input type="hidden" name="username" value="{$vo.name}"/>
+	<input type="hidden" name="phone" value="{$vo.phone}"/>
+	<input type="hidden" name="ip" value="{$vo.ip}"/>
+	<input type="hidden" name="address" value="{$vo.address}"/>
+	<input type="hidden" name="website" value="28"/>
+	<input type="hidden" name="id" value="{$vo.id}"/>
+
+	</form>
+	</tr>
+	</volist>
+
+
+</table>
+
+<div style="padding-bottom: 60px;">错误代码一<br/>
+"-1" => "数据格式不对，传来的数据不是数组",<br/>
+"-2" => "传入的客户ID、项目ID不符合基本要求",<br/>
+"-3" => "必填信息项内容为空",<br/>
+"-4" => " 留言接口已经关闭，该站留言不接收 ",<br/>
+"-5" => "同一天对项目已留过言 ",<br/>
+"-6" => "留言发送接口权限有问题",<br/>
+"-7" => "过期留言",<br/>
+"-8" => "项目已经停止投放",<br/>
+"-9" => "用户跳转自己网站，我们不需要留言 ",<br/>
+"-15" => "当前项目超标 则不接收 ",<br/>
+"-21" => "单人留言条数1日内不大于3条",<br/>
+"-22" => "单人留言条数10日内不大于10条",<br/>
+"-38" => "判断超标与否，超标则不接收"<br/>
+</div>
+</body>
+</html>

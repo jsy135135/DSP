@@ -1,0 +1,32 @@
+<?php
+
+return array(
+    'db_type' => 'mysql',
+    'db_host' => 'localhost',
+    'db_name' => '777',
+    'db_user' => 'root',
+    'db_pwd' => '123456',
+    'db_port' => 3306,
+    'db_prefix' => '',
+    'web_name' => '金邦网络',
+    'web_url' => 'http://192.168.200.55/tpcms/',
+    'SHOW_PAGE_TRACE' => true,
+    // 'SHOW_PAGE_TRACE' => false,
+    'web_path' => '/',
+    'web_icp' => '',
+    'CRON_MAX_TIME' => 60,
+    'web_copyright' => '金邦网络',
+    'web_tongji' => '',
+    'web_admin_pagenum' => 20,
+    'web_home_pagenum' => 15,
+    'web_adsensepath' => 'Public/Banner',
+    'xml_28' => 'http://super.28.com/soap/project_Xml.php',
+    'xml_wp' => 'http://super.wp28.com/soap/SiYuan_getProject.php',
+    // 'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/zfwpro.php',
+    'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/fupro_ls.php',
+    'xml_ls' => 'http://www.liansuo.com/index.php?act=public&opt=gb_soap&site=ls',
+    'json_91' => 'http://800.91jmw.com/index.php/gbook/getProListForTel',
+    'author' => 'siyuan',
+    'version' => '1.0',
+);
+?>

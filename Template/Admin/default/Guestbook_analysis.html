@@ -1,0 +1,24 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+<link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+<table >
+<tr>
+	<td>时间</td><td>总数</td><td>28主站</td><td>liansuo.com</td><td>28辅助站</td>
+</tr>
+<volist name="aList" id="vo">
+<tr>
+	<td>{$vo.date}</td><td>{$vo.all}</td><td>{$vo.28}</td><td>{$vo.liansuo}</td><td>{$vo["all"] - $vo["28"] - $vo["liansuo"]}</td>
+</tr>
+</volist>
+</table>
+</body>
+</html>

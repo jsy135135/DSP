@@ -1,0 +1,90 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>管理登录-{$Think.config.cms_name}</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link rel="stylesheet" href="__PUBLIC__/Admin/css/admin-login.css" />
+<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script>
+var count = 0;
+function loginok(form){
+  var check = true;
+    if (form.verify.value==""){
+    $('#verify').addClass('wrong');
+    //alert("验证码不能为空！");
+    form.verify.focus();
+    check = false;
+
+    //return (false);
+  }
+
+
+
+  if (form.login_pwd.value==""){
+    //alert("密码不能为空！");
+    $('#login_pwd').addClass('wrong');
+    form.login_pwd.focus();
+    check = false;
+
+    //return (false);
+  }
+
+    if (form.login_name.value==""){
+    //alert("用户名不能为空！");
+    form.login_name.focus();
+    $('#login_name').addClass('wrong');
+    check = false;
+    //return (false);
+  }
+  if (!check) {
+    if (++count == 20) {
+      // do something evil
+    }
+  }
+  return check;
+}
+
+$(function() {
+  $('form').on('webkitAnimationEnd animationend', function(event) {
+    $('input').each(function() {
+      $(this).removeClass('wrong');
+    });
+  });
+
+if(self!=top){
+  top.location=self.location;
+}
+});
+
+</script>
+</head>
+<body>
+<div class="container">
+  <h2>选择金邦网络，选择不平凡！</h2>
+  <form action="{:U('Admin/Login/checkLogin')}" method="post" name="cms" onSubmit="return loginok(this)">
+    <div class="form-control">
+      <label for="login_name">用户名</label>
+      <input type="text" name="username" id="login_name" placeholder="用户名"/>
+    </div>
+
+    <div class="form-control">
+      <label for="login_pwd">密码</label>
+      <input type="password" name="password" id="login_pwd" placeholder="密码"/>
+    </div>
+
+    <div class="form-control verify">
+      <label for="verify">验证码</label>
+      <input type="text" name="verify" id="verify" placeholder="验证码"/>
+      <img id="verifyImg" SRC="{:U('Admin/Public/verify')}"
+      onclick='this.src=this.src+"&"+Math.random()' BORDER="0" ALT="点击刷新验证码" style="cursor:pointer" align="absmiddle">
+    </div>
+    <button type="submit">
+      登录
+    </button>
+  </form>
+  <div class="copyright">
+    Powered by <a href="{$Think.config.cms_url}" target="_blank">{$Think.config.web_name}&nbsp;{$Think.config.cms_var}</a>&nbsp;Copyright&nbsp;&copy;2014
+  </div>
+</div>
+</body>
+</html>

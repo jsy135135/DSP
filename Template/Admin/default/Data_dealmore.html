@@ -1,0 +1,61 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+<link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+<div id="top">电话：{$aInfo.phone}&nbsp;&nbsp;IP：{$aInfo.ips} 时间：{$aInfo.times}</div>
+<div id="c_left">
+<volist name="aList"  id="vo">
+<p thisid="{$vo.id}" url="{$vo['original_url']|trim|substr=7}"  phone="{$aInfo.phone}"  ips="{$vo.ip}" class="">{$i}&nbsp;{$vo.original_url}</p>
+</volist>
+</div>
+<div id="c_center">
+<iframe src="" width="650" height="800"></iframe>
+</div>
+<div id="c_right">
+<form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/">
+姓名：<input  type="text" name="username" id="username" /><br/>
+电话：<input  type="text" name="phone" id="phone"  value="{$aInfo.phone}"/><br/>
+IP：<input  type="text" name="ip" id="ip" /><br/>
+地址：<input  type="text" name="address" id="address" /><br/>
+项目ID：<input  type="text" name="projectID"  id="projectID" /><br/>
+发送给：<span id="toWhich"></span><br/>
+<br/>
+<input type="text" name="website" id="website" value="" />
+<input class="submit"  type="submit"  value="提交"/>
+</form>
+</div>
+<script>
+$("#c_left p").click(function(){
+	$(this).addClass("dealed");
+	$("#top span").html("");
+	$('#c_center iframe').attr('src','http://'+$(this).attr("url"));
+	$("#ip").val($(this).attr("ips"));
+	$.ajax({
+		type:'post',
+		url:'/m/index.php/Guestbook/dealUrl/',
+		data:'url='+$(this).attr('url'),
+		dataType:'json',
+		success:function(data){
+			//alert(data);
+			$("#toWhich").html(data[0]);
+			$("#website").val(data[0]);
+			$("#projectID").val(data[1]);
+		}
+	})
+})
+
+$("#myform").submit(function(){
+	//#
+	return false; 
+})
+</script>
+</body>
+</html>

@@ -1,0 +1,91 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>再次发送-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+<script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
+			<script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
+			<!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
+			<link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+			<script>
+			  $(function() {
+			    $( "#date" ).datepicker({});
+			    $.datepicker.regional['zh-CN'] = {
+			            closeText: '关闭',
+			            prevText: '&#x3c;上月',
+			            nextText: '下月&#x3e;',
+			            currentText: '今天',
+			            monthNames: ['一月','二月','三月','四月','五月','六月',
+			            '七月','八月','九月','十月','十一月','十二月'],
+			            monthNamesShort: ['一','二','三','四','五','六',
+			            '七','八','九','十','十一','十二'],
+			            dayNames: ['星期日','星期一','星期二','星期三','星期四','星期五','星期六'],
+			            dayNamesShort: ['周日','周一','周二','周三','周四','周五','周六'],
+			            dayNamesMin: ['日','一','二','三','四','五','六'],
+			            weekHeader: '周',
+			            dateFormat: 'yy-mm-dd',
+			            firstDay: 1,
+			            isRTL: false,
+			            showMonthAfterYear: true,
+			            yearSuffix: '年'};
+			    $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+			  });
+			</script>
+	<table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
+		<tr>
+			<td colspan="9" class="table_title">
+			<div>
+			<span>当前日期：{$dDate}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span>当前用户：{$uID}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+			<span>剩余条数：{$iCount}</span>
+			</div>
+<form action="__ROOT__/index.php/Admin/DataDealed/again/" method="post">
+				<span class="fl">查询日期:<input type="text" name="date" id="date" /></span>
+				<input type="submit" value="查询" />
+				<!-- <input type="reset" value="重选"> -->
+</form>
+				<span class="fl">未发送成功数据的二次发送</span>
+				<span class="fr">
+					<a href="{:U('/Admin/Guestbook/gbForm')}">特殊通道</a>
+				</span>
+			</td>
+			<tr class="list_head ct">
+				<td width="20">ID</td>
+				<td width="70">姓名</td>
+				<td width="150">电话</td>
+				<td width="150">地址</td>
+				<td width="100">首次发送时间</td>
+				<td width="150">发送状态</td>
+                                <td width="150">发送站点</td>
+				<td width="200">操作</td>
+			</tr>
+	    <volist name="aList" id="vo">
+			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+				<td align='center'>{$i}</td>
+				<td align='center'>{$vo.name}</td>
+				<td >{$vo.phone}</td>
+				<td >{$vo.address}</td>
+				<td >{$vo.addDate}</td>
+				<td align="center">{$vo.status}</td>
+                                <td align="center">{$vo.site}</td>
+				<td align='center'>
+					<a href="{:U('/Admin/Project/denyAgainByGB/',array('id'=>$vo['id']))}" target="_blank">发送</a>
+				</td>
+			</tr>
+	    </volist>
+		<tr class="tr">
+          <td colspan="9" class="pages">
+            {$page}
+          </td>
+        </tr>
+		</table>
+		<script>var version='{$Think.config.cms_var}';</script>
+		<include file="Index:footer" />
+</body>
+	</html>

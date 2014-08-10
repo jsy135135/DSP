@@ -1,0 +1,79 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>项目分类列表-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+</head>
+<body>
+	<table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
+		<tr>
+			<td colspan="21" class="table_title">
+				<span class="fl">查询天数</span>
+				<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/7">7天</a></span>
+				<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/30">30天</a></span>
+				<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/month">本月</a></span>
+				<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/prev">上月</a></span>
+                                <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/agotwo">5月份</a></span>
+			</td>
+			<tr class="list_head ct">
+				<td>时间</td>
+                                <td>首次一源量</td>
+                                <td>首次多源量</td>
+				<td>发送总数</td>
+				<td>发送成功数</td>
+				<td>二次发送成功</td>
+				<td>发送失败数</td>
+				<td>成功率</td>
+				<td>28成功</td>
+				<td>28失败</td>
+                                <td>28失败率</td>
+				<td>zf成功</td>
+				<td>zf失败</td>
+                                <td>zf失败率</td>
+				<td>ls成功</td>
+				<td>ls失败</td>
+                                <td>ls失败率</td>
+                                <td>wp成功</td>
+				<td>wp失败</td>
+                                <td>wp失败率</td>
+			</tr>
+			<!-- <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post"> -->
+	    	<volist name="aList" id="vo">
+			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+				<td><a href="__ROOT__/index.php/Admin/UserDealed/index/{$vo.addDate}">{$vo.addDate}</a></td>
+                                <td>{$vo.OriginalNum}</td>
+                                <td>{$vo.OriginalNumO}</td>
+				<td>{$vo.total_all}</td>
+				<td>{$vo.send_all}</td>
+				<td>{$vo.send_again}</td>
+				<td>{$vo.fail_all}</td>
+				<td>{$vo.ratio}%</td>
+				<td>{$vo.send_28}</td>
+				<td>{$vo.fail_28}</td>
+                                <td>{$vo.28ratio}%</td>
+				<td>{$vo.send_zf}</td>
+				<td>{$vo.fail_zf}</td>
+                                <td>{$vo.zfratio}%</td>
+				<td>{$vo.send_ls}</td>
+				<td>{$vo.fail_ls}</td>
+                                <td>{$vo.lsratio}%</td>
+                                <td>{$vo.send_wp}</td>
+				<td>{$vo.fail_wp}</td>
+                                <td>{$vo.wpratio}%</td>
+			</volist>
+			</tr>
+			<!-- </form> -->
+		<!-- <tr class="tr">
+          <td colspan="9" class="pages">
+            {$page}
+          </td>
+        </tr> -->
+		</table>
+		<script>var version='{$Think.config.cms_var}';</script>
+		<include file="Index:footer" />
+</body>
+	</html>

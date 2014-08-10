@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>{$title}</title>
+<link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+<link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+<script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+<script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+<script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+<base target="_blank">
+<script>
+$(function(){
+	$('#tt').datagrid({
+	    url:'__ROOT__/index.php/Admin/Data/getDataByMonth/month/{$month}',
+	    loadMsg:'数据分析中，请稍等....',
+	    remoteSort: false,
+	    rownumbers:true,
+	    striped: true,
+	    showFooter:true,
+	    columns:[[
+	        {field:'day',title:'日期',width:80,sortable:true},
+	        <volist name="site" id="vo">
+	        { field:'{$vo}_visit',title:'{$vo}访问量',width:60,sortable:true },
+	        { field:'{$vo}_get_num',title:'{$vo}抓取量',width:50,sortable:true },
+	        { field:'{$vo}_get_ratio',title:'{$vo}率',width:50,sortable:true,styler: function(value,row,index){return 'color:red';} },
+	        { field:'{$vo}_get_one',title:'{$vo}1vs1',width:50,sortable:true },
+	        { field:'{$vo}_one_ratio',title:'{$vo}1vs1率',width:50,sortable:true,styler: function(value,row,index){return 'color:blue';} }, 
+	        </volist>
+	    ]]
+	});
+});
+</script>
+<h3><p align="center">原始数据汇总</p></h3>
+<!--<a href="__ROOT__/index.php/Admin/Data/index/month/{$month}" target="_self">查看抓取情况</a>   变换month后面的参数更改月份<br/>
+<a href="__ROOT__/index.php/Admin/Project/indexJson/date/" target="_self">每天数据发送明细</a>   变换date后面的参数更改日期<br/>
+<a href="__ROOT__/index.php/Admin/DataDealed/" target="_self">数据发送汇总</a>   变换date后面的参数更改日期<br/>-->
+<table id="tt"  class="easyui-datagrid" style="width:1550px;height:550px"></table>
+</table>
+<include file="Index:footer" />
+</body>
+</html>
