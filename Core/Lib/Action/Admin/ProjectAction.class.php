@@ -461,12 +461,14 @@ class ProjectAction extends Action {
                 $aTemp["name"] = $aT["name"];
                 $aTemp["webPage"] = $aT["adWebPage"];
                 $aTemp["backCall"] = $aT["mobnum"];
-                $aTemp["needNum"] = $aT["gbookNum"];
-                $aTemp["numbers"] = $aT["gbookNum"];
+                $aTemp["needNum"] = ($aT["gbookNum"]+1);
+                $aTemp["numbers"] = ($aT["gbookNum"]+1);
                 $aTemp["level"] = 5;
                 $aTemp["site"] = "28";
                 $aTemp["catName"] = $aT["topCateName"];
                 $aTemp["subCat"] = $aT["subCateName"];
+                $aTemp["custid"] = $aT["custid"];//custid 为企业ID号
+                $aTemp["seat"] = $aT["seat"];//seat 为项目方坐席标识ID，注19位数字
                 //如果数据已经存在，则更新数据，否则就是插入数据
                 $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
                 if ($id > 0)

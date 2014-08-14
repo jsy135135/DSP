@@ -26,4 +26,10 @@ class ApiAction extends OQAction {
 //        var_dump($wx); 
         return $wx;
     }
+    function tel28($seat,$custid,$phone){
+        $rand = rand();
+        $TelUrl = "http://tel.chuangye.com/ah_400_callback.php?seat=".$seat."&custid=".$custid."&mobile=".$phone."&rand=".$rand."";
+        $stu = file_get_contents($TelUrl);
+        return $stu;
+    }
 }

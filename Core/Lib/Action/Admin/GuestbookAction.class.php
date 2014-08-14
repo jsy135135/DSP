@@ -1,4 +1,5 @@
 <?php
+
 //输出header头
 header("content-type:text/html;charset=utf-8");
 
@@ -215,7 +216,7 @@ class GuestbookAction extends OQAction {
         $aD["check"] = 0;
         $aD["regular"] = 0;
         $d->add($aD);
-        $p->where("projectID= ".$_REQUEST['projectID']." AND site = '".$_REQUEST['website']."'")->setDec('numbers');
+        $p->where("projectID= " . $_REQUEST['projectID'] . " AND site = '" . $_REQUEST['website'] . "'")->setDec('numbers');
 //        var_dump($_REQUEST);
 //        die();
         if ($_REQUEST["again"] == 1) {
@@ -255,7 +256,7 @@ class GuestbookAction extends OQAction {
     }
 
     /*
-     * 对审核过的数据进行发送
+     * 对审核过的数据进行发送   
      * Time 2014/08/01 10:37
      * By siyuan
      */
@@ -274,6 +275,11 @@ class GuestbookAction extends OQAction {
         $value = $_POST["data"];
 //        var_dump($_POST);
 //        die();
+        $Check = $d->where("id=$id")->getField("check");
+        if ($Check == 1) {
+            echo '此数据已经审核过了,请勿重复审核！！！';
+            exit;
+        }
         if ($value == 0) {
             $newdata = array();
 //            $newdata['name'] = $name;
@@ -283,7 +289,7 @@ class GuestbookAction extends OQAction {
 //            $p->where("projectID= ".$_REQUEST['projectID']." AND site = '".$_REQUEST['website']."'")->setDec('numbers');
 //            echo $projectID.$site;
 //            die();
-            $rt = $p->where("projectID = ".$projectID." AND site = '".$site."'")->setInc('numbers');
+            $rt = $p->where("projectID = " . $projectID . " AND site = '" . $site . "'")->setInc('numbers');
 //            var_dump($rt);
             echo '此数据被审核为无效';
 //            die();
@@ -340,9 +346,9 @@ class GuestbookAction extends OQAction {
         //如果返回数是负数，进行项目状态的更改
         if ($iReturnID < 0) {
             //项目numbers字段+1
-            $p->where("projectID = ".$projectID." AND site = '".$site."'")->setInc('numbers');
+            $p->where("projectID = " . $projectID . " AND site = '" . $site . "'")->setInc('numbers');
             //项目发送状态置为不可发送，状态值为0
-            $p->where("projectID=" .$projectID. " AND site = '".$site."'")->setField("sendStatus","0");
+            $p->where("projectID=" . $projectID . " AND site = '" . $site . "'")->setField("sendStatus", "0");
         }
         echo '此数据被审核有效' . ' 推送网站为：' . $sSite . "\n" . '返回数为：' . $iReturnID;
     }
@@ -480,19 +486,25 @@ class GuestbookAction extends OQAction {
      *
      * @param unknown $aData
      */
-    function sendToLS($aData) {
+    function sendToLS() {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
         $client = new PHPRPC_Client ();
         $client->useService('http://www.liansuo.com/index.php?opt=gbinf'); //接口地址
         $aNewData = array(
             // 结构如下
+            'typeofcontact' => 2, //1为留言2为400电话，直接触发企业电话
             'memberid' => $aData["project_id"], //项目id [必填]
             'trueName' => $aData["user_name"], //真是姓名[必填]
             'mobile' => $aData["phone"], //手机号码[必填]
             'ip' => $aData["ips"], //IP地址[必填]
+//            'memberid' => 140, //项目id [必填]
+//            'trueName' => 'siyuan', //真是姓名[必填]
+//            'mobile' => '18535277952', //手机号码[必填]
+//            'ip' => '192.168.200.55', //IP地址[必填]
         );
         $state_new = $client->clientSend($aNewData, 'utf-8', 'callfrommobile ', 'call$%^mobile');
         return $state_new;
+//        var_dump($state_new);
     }
 
     /**
@@ -524,6 +536,18 @@ class GuestbookAction extends OQAction {
             'ip' => $aData["ips"]
         );
         $state_new = $rpc_client->clientSend($bData, 'utf-8', 'xiancom', 'A342992b735');
+        #查询项目相关的信息，$seat和$custid
+        $p = M("project");
+        $TelData = $p->where("projectID = '" . $aData["project_id"] . "' AND site='28'")->select();
+        if ($TelData[0]["seat"] || $TelData[0]["custid"] == null)
+            ; {
+            echo '没有相关发送400电话的信息，不能发送';
+        }
+        $seat = $TelData[0]["seat"];
+        $custid = $TelData[0]["custid"];
+        $phone = $aData["phone"];
+        $Tel400 = new ApiAction();
+        $stu = $Tel400->tel28($seat, $custid, $phone);
         return $state_new;
     }
 
