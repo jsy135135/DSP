@@ -8,6 +8,8 @@ class ProjectAction extends Action {
 
     public function index() {
         //显示当前在使用的项目列表
+//        var_dump($_REQUEST);
+//        die();
         $act = ($_REQUEST["act"] == "") ? "1" : $_REQUEST["act"];
         $p = M("Project");
         $Data = M("data_dealed");
@@ -17,7 +19,7 @@ class ProjectAction extends Action {
             $aList = $p->where("status = 1 AND site !='91' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
         // $aList = $p->where("1")->order('site asc,catName asc,subCat asc')->select();
         else
-            $aList = $p->where("1")->select();
+            $aList = $p->where("status = 1 AND site !='91' AND site = '".$act."' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
         foreach ($aList as &$r) {
             if ($r["site"] == "28")
                 $r["http"] = "http://tj.28.com" . $r["webPage"];

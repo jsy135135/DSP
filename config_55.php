@@ -2,10 +2,10 @@
 
 return array(
     'db_type' => 'mysql',
-    'db_host' => '192.168.200.52',
+    'db_host' => 'localhost',
     'db_name' => '777',
-    'db_user' => '777',
-    'db_pwd' => 'MXHmVsjMurWxL9Fw',
+    'db_user' => 'root',
+    'db_pwd' => '123456',
     'db_port' => 3306,
     'db_prefix' => '',
     'web_name' => '金邦网络',
