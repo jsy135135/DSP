@@ -537,16 +537,16 @@ class GuestbookAction extends OQAction {
         );
         $state_new = $rpc_client->clientSend($bData, 'utf-8', 'xiancom', 'A342992b735');
         #查询项目相关的信息，$seat和$custid
-        $p = M("project");
-        $TelData = $p->where("projectID = '" . $aData["project_id"] . "' AND site='28'")->select();
-        if ($TelData[0]["seat"] || $TelData[0]["custid"] == null)
-            ; {
-            echo '没有相关发送400电话的信息，不能发送';
-        }
-        $seat = $TelData[0]["seat"];
-        $custid = $TelData[0]["custid"];
-        $phone = $aData["phone"];
-        $Tel400 = new ApiAction();
+//        $p = M("project");
+//        $TelData = $p->where("projectID = '" . $aData["project_id"] . "' AND site='28'")->select();
+//        if ($TelData[0]["seat"] || $TelData[0]["custid"] == null)
+//            ; {
+//            echo '没有相关发送400电话的信息，不能发送';
+//        }
+//        $seat = $TelData[0]["seat"];
+//        $custid = $TelData[0]["custid"];
+//        $phone = $aData["phone"];
+//        $Tel400 = new ApiAction();
         $stu = $Tel400->tel28($seat, $custid, $phone);
         return $state_new;
     }
