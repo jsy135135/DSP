@@ -486,7 +486,7 @@ class GuestbookAction extends OQAction {
      *
      * @param unknown $aData
      */
-    function sendToLS() {
+    function sendToLS($aData) {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
         $client = new PHPRPC_Client ();
         $client->useService('http://www.liansuo.com/index.php?opt=gbinf'); //接口地址
@@ -547,7 +547,7 @@ class GuestbookAction extends OQAction {
 //        $custid = $TelData[0]["custid"];
 //        $phone = $aData["phone"];
 //        $Tel400 = new ApiAction();
-        $stu = $Tel400->tel28($seat, $custid, $phone);
+//        $stu = $Tel400->tel28($seat, $custid, $phone);
         return $state_new;
     }
 
