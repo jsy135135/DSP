@@ -122,7 +122,7 @@ class DataDealedAction extends OQAction {
         }
 
         $dealed = M("data_dealed");
-        $aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
+        $aList = $dealed->query("SELECT COUNT(*) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
 //         echo '<pre>';
 //         echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
 //        var_dump($aList);

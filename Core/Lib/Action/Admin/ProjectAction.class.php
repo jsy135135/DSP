@@ -15,11 +15,17 @@ class ProjectAction extends Action {
         $Data = M("data_dealed");
         $Sdata = M("data_again");
         $date = date("Y-m-d");
-        if ($act == 1)
+        if ($act == 1){
             $aList = $p->where("status = 1 AND site !='91' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site !='91' AND level  >=4 order by site asc,catName asc,subCat asc");
+//            var_dump($Asum);
+        }
         // $aList = $p->where("1")->order('site asc,catName asc,subCat asc')->select();
-        else
+        else{
             $aList = $p->where("status = 1 AND site !='91' AND site = '".$act."' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site !='91' AND site = '".$act."' AND level  >=4 order by site asc,catName asc,subCat asc");
+//            var_dump($Asum);
+        }
         foreach ($aList as &$r) {
             if ($r["site"] == "28")
                 $r["http"] = "http://tj.28.com" . $r["webPage"];
@@ -42,6 +48,15 @@ class ProjectAction extends Action {
         $this->assign("countaList", $countaList);
         $this->assign("catList", $aCatList);
         $this->assign("aList", $aList);
+//        var_dump($Asum);
+        $Aalsum = $Asum[0]["Asum"];
+        $Anumbers = $Asum[0]["Anumbers"];
+        $Asends = ($Aalsum-$Anumbers);
+        $Apersent = round($Asends/$Aalsum,3) * 100;
+        $this->assign("Aalsum",$Aalsum);
+        $this->assign("Anumbers",$Anumbers);
+        $this->assign("Asends",$Asends);
+        $this->assign("Apersent",$Apersent);
         $this->display();
     }
 
