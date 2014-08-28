@@ -592,6 +592,10 @@ class ProjectAction extends Action {
                 $aTemp["clientID"] = 0;
                 $aTemp["projectID"] = $aT["projectID"];
                 $aTemp["status"] = 1;
+                //不需要dsp的项目，作为暂时调整
+                if($aTemp["projectID"] = 135557 || $aTemp["projectID"] = 135626 || $aTemp["projectID"] = 135861){
+                    $aTemp["status"] = 0;
+                }
                 $aTemp["name"] = $aT["projectName"];
                 $aTemp["webPage"] = $aT["adWebPage"];
                 $aTemp["backCall"] = $aT["link"];
