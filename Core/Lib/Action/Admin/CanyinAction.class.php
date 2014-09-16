@@ -27,7 +27,9 @@
  		$data = $project->query($SQL);
  		// $data = $project->query("select * from project left join guestbook on project.projectID = guestbook.project_id where project.catName like '餐饮%' and guestbook.add_date > '2014-01-01' and guestbook.add_date < '2014-05-01' limit 280000,10000");
  		// echo '<pre>';
- 		// var_dump($data);
+ 		 var_dump($data);
+//                 echo json_encode($data);
+                 die();
  		$datacount = count($data);
  		echo $datacount;
  		echo '输出文件：'.$shu;

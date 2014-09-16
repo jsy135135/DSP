@@ -76,15 +76,12 @@ $('#pid').on('change', function (e) {
 
 function show(pid) {
   $('#cid').html('');
-  var result = '';
   for (var i = 0; i < data.length; i++) {
     var item = data[i];
     if (pid == item.pid) {
-      result += '<option value="' + item.value + '">' + item.content + '</option>';
+      $('#cid').append('<option value="' + item.value + '">' + item.content + '</option>');
     }
   }
-
-  $('#cid').append(result);
 }
 
 </script>

@@ -6,12 +6,12 @@
  */
 	class PhoneAction extends Action{
 		public function index(){
-			$data = M("data_dealed");
-			$g = M("guestbook");
-			$file = fopen("./phone.txt","r") or exit("doudou");
+			$data = M("project");
+			$file = fopen("./pro.txt","r") or exit("doudou");
 			// $phone = fgets($file);
 			// echo $phone;
-			for ($i=0; $i<50; $i++) {
+                          echo '<table>';
+			for ($i=0; $i<60; $i++) {
 				$phone = fgets($file);
 				$phoneT = trim($phone);
 				// var_dump($phoneT);
@@ -26,18 +26,21 @@
 				// echo $i.' ';
 				// echo $phoneT.' ';
 //				echo $Data.' ';
-                                $NT = array();
-                                $NT['status'] = 888888;
-                                $NT['check'] = '1';
-                                $NT['regular'] = '1';
-				$rs = $data->where("phone = '".$phoneT."'")->save($NT);
+				$rs = $data->where("name = '".$phoneT."' AND site='ls'")->getField("projectID");
+//                                var_dump($rs);
+                                echo '<tr>';
+                                echo '<td>';
+                                echo $phoneT;
+                                echo '</td>';
+                                echo '<td>';
                                 echo $rs;
-//				echo $Gata;
-				echo '<br />';
-                                // echo $i.'&nbsp&nbsp&nbsp&nbsp';
-				// echo $ids.'&nbsp&nbsp&nbsp&nbsp';
-				// echo $Uid.'<br/>';
+//                                var_dump($rs);
+//                                die();
+                                echo '</td>';
+                                echo '</tr>';
+                              
 			}
+                          echo '</table>';
 			fclose($file);
 		}
 	}

@@ -23,7 +23,7 @@
 //            var_dump($alnums);
             $againSubmitNum = $again->where("add_date =  '".$date."' AND u_id=$uID AND status > 0")->count("DISTINCT  data_id");//个人二次发送成功数
 //            var_dump($againSubmitNum);
-            $allnums = $dealed->where("addDate = '".$date."' AND status>0")->count("DISTINCT phone");//团队一次发送成功数
+            $allnums = $dealed->where("addDate = '".$date."' AND status>0 AND u_id<>10086")->count("DISTINCT phone");//团队一次发送成功数
 //            var_dump($allnums);
             $allagainSubmitNum = $again->where("add_date =  '".$date."' AND status > 0")->count("DISTINCT  data_id");//团队二次发送成功数
 //            echo $allagainSubmitNum;

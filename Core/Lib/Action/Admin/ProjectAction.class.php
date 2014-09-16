@@ -15,21 +15,21 @@ class ProjectAction extends Action {
         $Data = M("data_dealed");
         $Sdata = M("data_again");
         $date = date("Y-m-d");
-        if ($act == 1){
-            $aList = $p->where("status = 1 AND site !='91' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
-            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site !='91' AND level  >=4 order by site asc,catName asc,subCat asc");
+        if ($act == 1) {
+            $aList = $p->where("status = 1 AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND level  >=4 order by site asc,catName asc,subCat asc");
 //            var_dump($Asum);
         }
         // $aList = $p->where("1")->order('site asc,catName asc,subCat asc')->select();
-        else{
-            $aList = $p->where("status = 1 AND site !='91' AND site = '".$act."' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
-            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site !='91' AND site = '".$act."' AND level  >=4 order by site asc,catName asc,subCat asc");
+        else {
+            $aList = $p->where("status = 1 AND site = '" . $act . "' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site = '" . $act . "' AND level  >=4 order by site asc,catName asc,subCat asc");
 //            var_dump($Asum);
         }
         foreach ($aList as &$r) {
-            if ($r["site"] == "28")
-                $r["http"] = "http://tj.28.com" . $r["webPage"];
-            else
+//            if ($r["site"] == "28")
+//                $r["http"] = "http://tj.28.com" . $r["webPage"];
+//            else
                 $r["http"] = $r["webPage"];
             if ($r["sendStatus"] == 0)
                 $r["sendStatus"] = '否';
@@ -39,6 +39,8 @@ class ProjectAction extends Action {
                 $r["status"] = '否';
             else
                 $r["status"] = '是';
+            if ($r["level"] == 4)
+                $r["level"] = '按效果付费';
         }
         $countaList = count($aList);
         for ($i = 0; $i < $countaList; $i++) {
@@ -51,12 +53,18 @@ class ProjectAction extends Action {
 //        var_dump($Asum);
         $Aalsum = $Asum[0]["Asum"];
         $Anumbers = $Asum[0]["Anumbers"];
-        $Asends = ($Aalsum-$Anumbers);
-        $Apersent = round($Asends/$Aalsum,3) * 100;
-        $this->assign("Aalsum",$Aalsum);
-        $this->assign("Anumbers",$Anumbers);
-        $this->assign("Asends",$Asends);
-        $this->assign("Apersent",$Apersent);
+        $Asends = ($Aalsum - $Anumbers);
+        $Apersent = round($Asends / $Aalsum, 3) * 100;
+        $this->assign("Aalsum", $Aalsum);
+        $this->assign("Anumbers", $Anumbers);
+        $this->assign("Asends", $Asends);
+        $this->assign("Apersent", $Apersent);
+        $BigList = $this->_listCategory(1);
+        $SmallList = D("Category")->where("pid != 0")->select();
+        $this->assign("BigList",$BigList);
+//        var_dump($BigList);
+//        var_dump($SmallList);
+        $this->assign("SmallList",$SmallList);
         $this->display();
     }
 
@@ -127,17 +135,39 @@ class ProjectAction extends Action {
         $this->display("edit");
     }
 
+//    public function update() {
+//        $aD = $_REQUEST;
+////        echo 1;
+////        die();
+//        $id = $aD["id"];
+//        $pid = $aD["pid"];
+//        $cid = $aD["cid"];
+//        $result = D("Project")->execute("update project set pid=" . $pid . ", cid=" . $cid . " where id=" . $id);
+//        if ($result) {
+//            $this->success("修改成功", U('/Admin/Project'));
+//        } else {
+//            $this->error("修改失败");
+//        }
+//    }
+    /*
+     * ajax修改分类
+     * time:2014/09/09 12:03
+     * By siyuan
+     * 
+     */
     public function update() {
+//        echo 11111;
+//        var_dump($_REQUEST);
         $aD = $_REQUEST;
-        $id = $aD["id"];
+        $id = $aD["listid"];
         $pid = $aD["pid"];
         $cid = $aD["cid"];
         $result = D("Project")->execute("update project set pid=" . $pid . ", cid=" . $cid . " where id=" . $id);
-        if ($result) {
-            $this->success("修改成功", U('/Admin/Project'));
-        } else {
-            $this->error("修改失败");
-        }
+//        if ($result) {
+//            $this->success("修改成功", U('/Admin/Project'));
+//        } else {
+//            $this->error("修改失败");
+//        }
     }
 
     public function indexJson() {
@@ -354,7 +384,7 @@ class ProjectAction extends Action {
         foreach ($data as $k => $v) {
             if ($v[‘pid’] == $pid) {
                 $data[] = $v;
-                resort($data, $v[‘id’], $level + 1);
+                resort($data, $v[‘id’] , $level + 1);
             }
         }
         return $data;
@@ -444,9 +474,8 @@ class ProjectAction extends Action {
             echo "Sync ls is ok<br/>";
         if ($this->_syncFromWP())
             echo "Sync wp is ok<br/>";
-//                        if($this->syncFrom91())
-//                                echo "Syne 91 is ok<br/>";
-//                        $this->display("index");
+        if ($this->_syncFrom91())
+            echo "Sync 91 is ok<br/>";
     }
 
     /**
@@ -478,14 +507,14 @@ class ProjectAction extends Action {
                 $aTemp["name"] = $aT["name"];
                 $aTemp["webPage"] = $aT["adWebPage"];
                 $aTemp["backCall"] = $aT["mobnum"];
-                $aTemp["needNum"] = ($aT["gbookNum"]+1);
-                $aTemp["numbers"] = ($aT["gbookNum"]+1);
+                $aTemp["needNum"] = ($aT["gbookNum"] + 1);
+                $aTemp["numbers"] = ($aT["gbookNum"] + 1);
                 $aTemp["level"] = 5;
                 $aTemp["site"] = "28";
                 $aTemp["catName"] = $aT["topCateName"];
                 $aTemp["subCat"] = $aT["subCateName"];
-                $aTemp["custid"] = $aT["custid"];//custid 为企业ID号
-                $aTemp["seat"] = $aT["seat"];//seat 为项目方坐席标识ID，注19位数字
+                $aTemp["custid"] = $aT["custid"]; //custid 为企业ID号
+                $aTemp["seat"] = $aT["seat"]; //seat 为项目方坐席标识ID，注19位数字
                 //如果数据已经存在，则更新数据，否则就是插入数据
                 $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
                 if ($id > 0)
@@ -593,7 +622,7 @@ class ProjectAction extends Action {
                 $aTemp["projectID"] = $aT["projectID"];
                 $aTemp["status"] = 1;
                 //不需要dsp的项目，作为暂时调整
-                if($aTemp["projectID"] = 135557 || $aTemp["projectID"] = 135626 || $aTemp["projectID"] = 135861){
+                if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
                     $aTemp["status"] = 0;
                 }
                 $aTemp["name"] = $aT["projectName"];
@@ -650,34 +679,43 @@ class ProjectAction extends Action {
     /**
      * 同步91加盟网的信息
      */
-    private function syncFrom91() {
+    private function _syncFrom91() {
         $p = M("project");
         $aSource = file_get_contents(C("json_91"));
-        var_dump($aSource);
-        die();
+//        var_dump($aSource);
+//        die();
         $aSource = json_decode($aSource, true);
-        echo '<pre>';
-        var_dump($aSource);
-//                    die();
+//        echo '<pre>';
+//        var_dump($aSource);
+//        die();
         header("content-type:text/html;charset=utf-8");
         $aSource = $aSource["data"];
         $aTemp = array();
         foreach ($aSource as $a => $val) {
-            $aTemp["projectID"] = $a;
-            $aTemp["name"] = $val;
+//            var_dump($val);
+            $aTemp["projectID"] = $val['pid'];
+            $aTemp["name"] = $val['project_name'];
             $aTemp["site"] = "91";
-//                        var_dump($aTemp);
             $aTemp["status"] = 1;
-//                        $aTemp["site"] = "91";
+            $aTemp["level"] = 4;
+            $aTemp["needNum"] = 5;
+            $aTemp["numbers"] = 5;
+//            if($aTemp["name"] == '微创益'){
+//                $aTemp["needNum"] = 100;
+//                $aTemp["numbers"] = 100;
+//            }
 //                        如果数据已经存在，则更新数据，否则就是插入数据
+//            var_dump($aTemp);
             $id = $p->where("projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-            if ($id > 0)
+            if ($id > 0) {
+//                echo '修改';
                 $p->where("id=" . $id)->save($aTemp);
-            else
+            } else {
+//                echo '增加';
                 $p->add($aTemp);
-            unset($aTemp);
+            }
         }
+        unset($aTemp);
         return true;
-    }
-
+    }    
 }

@@ -245,7 +245,7 @@ class GuestbookAction extends OQAction {
         $date = date("Y-m-d");
 //        $date = '2014-08-03';
         $d = M("DataDealed");
-        $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>10086 order by u_id asc");
+        $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id=10086 AND u_id<>0 order by u_id asc");
         $datalistcount = count($datalist);
 //        echo '<pre>';
 //        var_dump($datalist);
@@ -321,14 +321,13 @@ class GuestbookAction extends OQAction {
         } elseif ($sSite == "wp") {
             $sSiteName = "wp";
             $iReturnID = $this->sendTowp($aData);
-        } else {
+        } elseif ($sSite == "28") {
             $sSiteName = "28";
             $iReturnID = $this->sendTo28($aData);
+        } else {
+            $sSiteName = "91";
+            $iReturnID = $this->sendTo91($aData);
         }
-//         else {
-//             $sSiteName = "91";
-//             $iReturnID = $this->sendTo91($aData);
-//         }
 //        var_dump($iReturnID);
 //        die();
         $newdata = array();
@@ -492,19 +491,19 @@ class GuestbookAction extends OQAction {
         $client->useService('http://www.liansuo.com/index.php?opt=gbinf'); //接口地址
         $aNewData = array(
             // 结构如下
-            'typeofcontact' => 2, //1为留言2为400电话，直接触发企业电话
+            'typeofcontact' => 1, //1为留言2为400电话，直接触发企业电话
             'memberid' => $aData["project_id"], //项目id [必填]
             'trueName' => $aData["user_name"], //真是姓名[必填]
             'mobile' => $aData["phone"], //手机号码[必填]
             'ip' => $aData["ips"], //IP地址[必填]
-//            'memberid' => 140, //项目id [必填]
+//            'memberid' => 134920, //项目id [必填]
 //            'trueName' => 'siyuan', //真是姓名[必填]
-//            'mobile' => '18535277952', //手机号码[必填]
+//            'mobile' => '13354280969', //手机号码[必填]
 //            'ip' => '192.168.200.55', //IP地址[必填]
         );
         $state_new = $client->clientSend($aNewData, 'utf-8', 'callfrommobile ', 'call$%^mobile');
-        return $state_new;
 //        var_dump($state_new);
+        return $state_new;
     }
 
     /**
@@ -534,6 +533,18 @@ class GuestbookAction extends OQAction {
             'addHour' => date("H"),
             'content' => '对项目感兴趣' . $aData["content"],
             'ip' => $aData["ips"]
+//            'projectID' => 7235,
+//            'trueName' => '龙先生',
+//            'email' => '',
+//            'telephone' => '15006837889',
+//            'mobile' => '15006837889',
+//            'address' => '山东.莱芜',
+//            'postcode' => '',
+//            'addDate' => date("Y-m-d"),
+//            'addtime' => date("Y-m-d H:i:s"),
+//            'addHour' => date("H"),
+//            'content' => '对项目感兴趣' . $aData["content"],
+//            'ip' => '123.150.182.166'
         );
         $state_new = $rpc_client->clientSend($bData, 'utf-8', 'xiancom', 'A342992b735');
         #查询项目相关的信息，$seat和$custid
@@ -548,6 +559,8 @@ class GuestbookAction extends OQAction {
 //        $phone = $aData["phone"];
 //        $Tel400 = new ApiAction();
 //        $stu = $Tel400->tel28($seat, $custid, $phone);
+//        var_dump($state_new);
+//        die();
         return $state_new;
     }
 
@@ -632,37 +645,33 @@ class GuestbookAction extends OQAction {
      *
      *
      */
-//     public function sendTo91($aData) {
-//         import("phprpc_client", "Core/Lib/Widget/", ".php");
-//         $client = new PHPRPC_Client();
-//         $client->setProxy(NULL);
-// //                $client->useService('http://800.91jmw.com/index.php/welcome/pRpc');
+    public function sendTo91($aData) {
+        import("phprpc_client", "Core/Lib/Widget/", ".php");
+        $client = new PHPRPC_Client();
+        $client->setProxy(NULL);
+        $client->useService('http://800.91jmw.com/index.php/welcome/pRpc');
 //         $client->useService('http://192.168.200.61/kingboneguestbook/index.php/welcome/pRpc');
-//         $client->setKeyLength(1000);
-//         $client->setEncryptMode(3);
-//         $client->setCharset('UTF-8');
-//         $client->setTimeout(20);
-//         $bData = array(
-//             'p' => $aData["project_id"],
-//             'name' => $aData["user_name"],
-//             'mobile' => $aData["phone"],
-//             'addr' => $aData["address"],
-//             'content' => '对项目感兴趣' . $aData["content"]
-// //                                'p' => 1,
-// //				'name'	=> 'doudoumi',
-// //				'email'		=> '',
-// //				'mobile'	=> '13354260196',
-// //				'address'	=> '大同',
-// //				'content'	=> '对项目感兴趣，请联系我哈！'
-//         );
+        $client->setKeyLength(1000);
+        $client->setEncryptMode(3);
+        $client->setCharset('UTF-8');
+        $client->setTimeout(20);
+        $bData = array(
+        'p' => $aData["project_id"],
+        'name' => $aData["user_name"],
+        'mobile' => $aData["phone"],
+        'address' => $aData["address"],
+        'content' => '对项目感兴趣' . $aData["content"],
+        'ip' => $aData["ips"],
+//        's_url' => 'dsp',
+        );
 //         var_dump($bData);
-// //                die();
-//         $Rarray = $client->hi('2014KB', $bData);
-//         $state_new = $Rarray["result"];
-//         return $Rarray;
-// //                var_dump($state_new);
-// //                return $state_new;
-//     }
+        //                die();
+        $Rarray = $client->hi('2014KB', $bData);
+        $state_new = $Rarray["result"];
+//        return $Rarray['msg'];
+        //                var_dump($state_new);
+                 return $state_new;
+    }
 
     /**
      *

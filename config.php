@@ -27,6 +27,7 @@ return array(
     'xml_ls' => 'http://www.liansuo.com/index.php?act=public&opt=gb_soap&site=ls',
     'json_91' => 'http://800.91jmw.com/index.php/gbook/getProListForTel',
     'author' => 'siyuan',
+    'URL_CASE_INSENSITIVE' =>true,
     'version' => '1.0',
 );
 ?>

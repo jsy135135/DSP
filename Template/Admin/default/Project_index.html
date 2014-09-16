@@ -7,11 +7,72 @@
             <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
             <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
             <style>td{ height:22px; line-height:22px}</style>
+              <style>
+    #dialog {
+      position: fixed;
+      z-index: 200;
+      width: 400px;
+      top: 350px;
+      left: 50%;
+      margin-left: -200px;
+      background: white;
+      border-radius: 5px;
+      box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+      border: 1px solid silver;
+      display: none;
+    }
+
+    #dialog .header {
+      padding: 15px;
+      border-bottom: 1px solid silver;
+      overflow: hidden;
+    }
+
+    #dialog .header .title {
+      float: left;
+    }
+
+    #dialog .header .action {
+      float: right;
+      background: none;
+      border: none;
+      cursor: pointer;
+    }
+
+    #dialog .main {
+      padding: 30px 15px;
+      border-bottom: 1px solid silver;
+     
+    }
+    
+      #dialog .main button,
+      #dialog .main select {
+      font-size: 18px;
+     
+    }
+    
+   
+
+    #backdrop {
+      position: fixed;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.7);
+      z-index: 100;
+      display: none;
+      top: 0;
+    }
+
+    body.show-dialog #backdrop,
+    body.show-dialog #dialog {
+      display: block;
+    }
+  </style>
     </head>
     <body>
         <table id="list_table" width="98%" border="0" cellpadding="12" cellspacing="1" class="table">
             <tr>
-                <td colspan="14" class="table_title">
+                <td colspan="15" class="table_title">
                     <span class="fl">项目列表</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>项目总数：{$countaList}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="f1">总需求数：{$Aalsum}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>还需总数：{$Anumbers}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="f1">总提交数：{$Asends}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">提交百分比：{$Apersent}%</span>
@@ -21,24 +82,26 @@
                             <option value="28">28商机网</option>
                             <option value="ls">中国连锁网</option>
                             <option value="zf">致富网</option>
+                            <option value="91">91加盟网</option>
                             <option value="wp">王牌28网</option>
                         </select>
-<!--                        <select name="site">
-                                <option value="28">28商机网</option>
-                                <option value="ls">中国连锁网</option>
-                                <option value="zf">致富网</option>
-                            </select>-->
+                        <!--                        <select name="site">
+                                                        <option value="28">28商机网</option>
+                                                        <option value="ls">中国连锁网</option>
+                                                        <option value="zf">致富网</option>
+                                                    </select>-->
                         <input type="submit" value="点击查询" />
                     </form>    
-                        <!--                             <span>点击可查询：</span>
-                                                    <a href="#"><input type="button" value="全部在投项目" name="" id="" /></a>
-                                                    <a href="#"><input type="button" value="今天还可发送项目" name="" id="" /></a>-->
+                    <!--                             <span>点击可查询：</span>
+                                                <a href="#"><input type="button" value="全部在投项目" name="" id="" /></a>
+                                                <a href="#"><input type="button" value="今天还可发送项目" name="" id="" /></a>-->
                 </td>
                 <tr class="list_head ct">
                     <td>ID</td>
                     <td>所属网站</td>
                     <td>项目ID</td>
                     <td>项目名称</td>
+                    <td>level</td>
                     <td>所需量</td>
                     <td>已提量</td>
                     <td>还需量</td>
@@ -55,43 +118,90 @@
                         <td align="center">{$vo.id}</td>
                         <td align="center">{$vo.site}</td>
                         <td align="center">{$vo.projectID}</td>
-                        <td align="center"><a href="{$vo.http}" target="_blank">{$vo.name}</a></td>
+                        <td align="center"><a href="{$vo.http}" target="_blank" class="title">{$vo.name}</a></td>
+                        <if condition="${vo.level} eq '4'"> <td align="center">按效果付费</td>
+                            <else /> <td align="center">{$vo.level}</td>
+                        </if>
                         <td align="center">{$vo.needNum}</td>
                         <td align="center">{$vo.alcount}</td>
                         <td align="center">{$vo.numbers}</td>
                         <td align="center">{$vo.catName}</td>
                         <td align="center">{$vo.subCat}</td>
-                        <td align="center">{$catList[$vo["pid"]]}</td>
-                        <td align="center">{$catList[$vo["cid"]]}</td>
+                        <td align="center" class="xghfl">{$catList[$vo["pid"]]}</td>
+                        <td align="center" class="xghzl">{$catList[$vo["cid"]]}</td>
                         <td align="center">{$vo.status}</td>
                         <td align="center">{$vo.sendStatus}</td>
                         <td align='center'>
-                            <a href="{:U('/Admin/Project/edit',array("id"=>$vo[id]))}">编辑</a>
+                            <!--<a data-toggle="dialog" data-id="{$vo.id}" href="{:U('/Admin/Project/edit',array("id"=>$vo[id]))}">编辑</a>-->
+                            <a data-toggle="dialog" data-id="{$vo.id}" href="">编辑</a>
+                            <!--<a href="#" id="edit">编辑</a>-->
                             <!-- <a href="{:U('/Admin/Project/category/act/del')}">删除</a> -->
                         </td>
                     </tr>
                 </volist>
-                <!-- <tr class="tr">
-          <td colspan="11" class="pages">
-            {$page}
-          </td>
-        </tr> -->
-                <!--        <tr style="visibility: hidden;">
-                                                <td>ID</td>
-                                                <td>所属网站</td>
-                                                <td>项目ID</td>
-                                                <td>项目名称</td>
-                                                <td>所需量</td>
-                                                <td>还需数量</td>
-                                                <td>行业（父类）</td>
-                                                <td>行业（子类）</td>
-                                                <td>修改后父类</td>
-                                                <td>修改后子类</td>
-                                                <td>项目状态</td>
-                                                <td>发送状态</td>
-                                                <td>操作</td>
-                                        </tr>-->
         </table>
+        <div id="dialog">
+            <div class="header">
+                <h1 class="title">修改分类</h1>
+                <button class="action close" data-toggle="dialog">x</button>
+            </div>
+            <div class="main">
+                <form action="__ROOT__/index.php/Admin/Project/update/" method="post">
+                    <select name="pid" id="pid" class="xghfl">
+                        <volist name="BigList"  id="Bdata">
+                            <option name="cid" pid="{$Bdata.id}"value="{$Bdata.id}">{$Bdata.catname}</option>
+                        </volist>
+
+                    </select>
+                    <select name="cid" id="cid" class="xghzl">
+                        <volist name="SmallList"  id="Sdata">
+                            <option pid="{$Sdata.pid}" value="{$Sdata.id}">{$Sdata.catname}</option>
+                        </volist>
+                    </select>
+                    
+                    <input type="hidden" name="listid">
+                        <button type="submit">确定</button>
+                </form>
+            </div>
+        </div>
+
+        <div id="backdrop" data-toggle="dialog"></div>
+
+        <script>
+            $('[data-toggle="dialog"]').click(function(event) {
+                event.preventDefault();
+                
+             
+                var xghfl =  $(this).parents('tr').find('.xghfl');
+                var xghzl =  $(this).parents('tr').find('.xghzl');
+                var title =  $(this).parents('tr').find('.title').html();
+                
+                $('#dialog').data('xghfl', xghfl);
+                $('#dialog').data('xghzl', xghzl);
+                $('body').toggleClass('show-dialog');
+              
+                $('#dialog [type="hidden"]').val( $(this).attr('data-id') );
+                $('#dialog .title').html(title);
+            });
+
+            $('#dialog form').submit(function(event) {
+                event.preventDefault();
+                var data = $(this).serialize();
+                var action = $(this).attr('action');
+                
+                var xghfl = $(this).find('.xghfl option:selected').html();
+                var xghzl = $(this).find('.xghzl option:selected').html();
+
+                $( $('#dialog').data('xghfl') ).html( xghfl );
+                $( $('#dialog').data('xghzl') ).html( xghzl );
+                
+                $('body').toggleClass('show-dialog');
+                console.log(data);
+                $.post(action, data, function(res) {
+                 console.log(res);
+                });
+            });
+        </script>
         <style>
             #table-header.pin {
                 position:fixed;
@@ -103,25 +213,39 @@
                 padding: 0 10px;
             }
         </style>
-        <script>var version = '{$Think.config.cms_var}';</script>
-        <!--活动nav-->
-        <!--		<script type="text/javascript">
-                                var table = document.createElement('table');
-                                $
-                                $('.list_head').clone().appendTo(table);
-                                $('#list_table').before(table);
-                        </script>-->
-        <!--//自动定时请求刷新-->
-        <!--                <script type="text/javascript">
-                            setTimeout("querySystemNotice()",1000*60*3);//1分钟
-        
-                               function querySystemNotice()
-                               {
-        //                            alert('aaaaaaaaa');
-                                    window.location.reload();
-                               }
-                        </script>-->
+        <script>
+            var version = '{$Think.config.cms_var}';
+        </script>
         <include file="Index:footer" />
+        <script type="text/javascript">
+                                    var data = [];
+                                    $('#cid option').each(function(index, item) {
+                                        item = $(item);
+                                        data.push({
+                                            value: item.val(),
+                                            pid: item.attr('pid'),
+                                            content: item.html()
+                                        });
+                                    });
+                                    // initda
+                                    show($('#pid option').val())
+                                    $('#pid').on('change', function(e) {
+                                        var pid = this.value;
+                                        show(pid);
+                                    });
+                                    function show(pid) {
+                                        $('#cid').html('');
+                                        var result = '';
+                                        for (var i = 0; i < data.length; i++) {
+                                            var item = data[i];
+                                            if (pid == item.pid) {
+                                                result += '<option value="' + item.value + '">' + item.content + '</option>';
+                                            }
+                                        }
+
+                                        $('#cid').append(result);
+                                    }
+                                </script>
     </body>
 </html>
 <!-- 本次查询时间：{$date} -->
