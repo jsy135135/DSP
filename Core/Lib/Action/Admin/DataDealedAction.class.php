@@ -7,6 +7,7 @@
  */
 class DataDealedAction extends OQAction {
     #已经排重
+
     public function index() {
         $dealed = M("DataDealed");
         $dealAgain = D("DataAgain");
@@ -43,6 +44,7 @@ class DataDealedAction extends OQAction {
             $aList[$i]["total_wp"] = $aList_wp[$i]["t"];
             $aList[$i]["total_91"] = $aList_91[$i]["t"];
             $aList[$i]["send_all"] = $aSend[$i]["t"];
+//            $aList[$i]["transfer"] = 
             $aList[$i]["send_28"] = $aSend_28[$i]["t"];
             $aList[$i]["send_zf"] = $aSend_zf[$i]["t"];
             $aList[$i]["send_wp"] = $aSend_wp[$i]["t"];
@@ -65,10 +67,16 @@ class DataDealedAction extends OQAction {
         }
 //                echo '<pre>';
 //                var_dump($aList);
+        $transfer_date = date("Y-m-d", strtotime("7 days ago"));
+        $aList_transfer = $dealed->query("select addDate,count(*) as count from data_dealed where transfer=1 AND addDate >= '" . $transfer_date . "'group by addDate");
+//        var_dump($aList_transfer);
+        $this->assign("aList_transfer", $aList_transfer);
         $this->assign("aList", $aList);
         $this->display();
     }
+
     #没有排重
+
     public function Dindex() {
         $dealed = M("DataDealed");
         $dealAgain = D("DataAgain");
@@ -164,7 +172,9 @@ class DataDealedAction extends OQAction {
         $aData["again"] = 1;
         return D("DataDealed")->where("id=" . $id)->save($aData);
     }
- #已经排重
+
+    #已经排重
+
     private function getNumBySite($sSite = '28', $iType = 'total', $period = "7") {
         $sSQL = "1";
         $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";
@@ -250,7 +260,9 @@ class DataDealedAction extends OQAction {
         }
         return $aList;
     }
+
     #没有进行排重复的
+
     private function DgetNumBySite($sSite = '28', $iType = 'total', $period = "7") {
         $sSQL = "1";
         $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";

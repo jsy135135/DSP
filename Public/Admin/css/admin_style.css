@@ -1,8 +1,8 @@
-/* 全局css */
+/* å…¨å±€css */
 body {
 	margin:0;
 	padding:0px 0px 0px 0px;
-	text-align:center;
+	/* text-align:center; */
 	background-color: #FFFFFF;
 	cursor:default;
 	font-size:12px;
@@ -80,7 +80,7 @@ ul li {
 sup{
 	color:#333; margin:0px 5px; font-weight:bold; font-size:13px
 }
-/* 表格 */
+/* è¡¨æ ¼ */
 .table {
 	margin-bottom:5px;
 	background: #C6DCF2;
@@ -123,7 +123,7 @@ sup{
 	vertical-align:-3px;
  	*vertical-align:-5px;
 }
-/* tab切换 */
+/* tabåˆ‡æ¢ */
 .tabs_title {
 	height:30px;
 	line-height:30px;
@@ -151,7 +151,7 @@ sup{
 	border:none;
 	background:none;
 }
-/*数据录入与编辑*/
+/*æ•°æ®å½•å…¥ä¸Žç¼–è¾‘*/
 .boxadd {
 	width:98%;
 	margin:8px 0px;
@@ -165,7 +165,7 @@ sup{
 	width:100%;
 	height:30px;
 	line-height:30px;
-	padding-bottom:5px;	
+	padding-bottom:5px;
 }
 .boxadd ul li{
 	display:block
@@ -188,7 +188,7 @@ sup{
 	width:350px;
 	padding-top:2px;
 }
-/* 分页 */
+/* åˆ†é¡µ */
 .pages {
 	text-align:center;
 	padding-top:10px
@@ -257,7 +257,7 @@ textarea {
 	height:24px;
 }
 
-/*formValidator表单验证*/
+/*formValidatorè¡¨å•éªŒè¯*/
 .onShow,.onFocus,.onError,.onCorrect,.onLoad,.onTime{display:inline-block;display:-moz-inline-stack;zoom:1;*display:inline; vertical-align:middle;background:url(../images/admin/msg_bg.png) no-repeat;	color:#444;line-height:18px;padding:2px 10px 2px 23px; margin-left:10px;_margin-left:5px}
 .onShow{background-position:3px -147px;border-color:#40B3FF;color:#959595}
 .onFocus{background-position:3px -147px;border-color:#40B3FF;}

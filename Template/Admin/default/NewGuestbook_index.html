@@ -45,6 +45,7 @@
             <br /><br />
             <input class="button" type="button" value="挂机" status="4">
             <input class="button" type="button" value="停机" status="5">
+            <input id="transfer" type="button" value="转接成功" status="8">
             <br /><br />
             <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
                 姓名：<input  type="text" name="username" id="username" /><br/>
@@ -68,7 +69,7 @@
         </div>
         <script>
             //点击每条信息，进行详细信息的插入
-            $("#c_left p").click(function() {
+            $("#c_left p").click(function () {
                 $(this).addClass("dealed");
                 $("#top span").html("");
                 $("#dailPhone").val($(this).attr("dailPhone"));
@@ -90,25 +91,36 @@
                     url: '__ROOT__/index.php/Admin/Project/getProjectSendStatus/',
                     data: 'pID=' + $(this).attr('projectID') + '&site=' + $(this).attr('site'),
                     dataType: 'text',
-                    success: function(data) {
+                    success: function (data) {
                         //alert(data);
                     }
                 })
             })
-
+            //转接传值和标注
+            $("#transfer").click(function () {
+                $.ajax({
+                    type: 'post',
+                    url: '__ROOT__/index.php/Admin/Guestbook/transfer',
+                    data: $('#myform').serialize(),
+                    success: function (response) {
+                        $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+//                      console.log(response);
+                    }
+                })
+            })
             //提交处理状态数
-            $(".button").click(function() {
+            $(".button").click(function () {
                 $.ajax({
                     type: 'get',
                     url: '__ROOT__/index.php/Admin/Guestbook/dealStatus/s/' + $(this).attr("status") + '/id/' + $("#guestbook_id").val() + '/uID/{$uID}',
-                    success: function(data) {
+                    success: function (data) {
                         $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
                     }
                 })
             })
 
             //提交发送
-            $("#myform").submit(function() {
+            $("#myform").submit(function () {
                 $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
                 //return false;
             })
@@ -118,7 +130,7 @@
             //ie下防止select缓存
             document.getElementById("pid").selectedIndex = 0;
             var data = [];
-            $('#cid option').each(function(index, item) {
+            $('#cid option').each(function (index, item) {
                 item = $(item);
                 data.push({
                     value: item.val(),
@@ -132,7 +144,7 @@
             show($('#pid option').val())
 
 
-            $('#pid').on('change', function(e) {
+            $('#pid').on('change', function (e) {
                 var pid = this.value;
                 show(pid);
             });
@@ -153,12 +165,12 @@
         </script>
         <!-- 获取推荐项目列表 -->
         <script type="text/javascript">
-            $("#cid").on('change', function() {
+            $("#cid").on('change', function () {
                 var newCid = $("#cid").val();
                 $.ajax({
                     type: 'get',
                     url: '__ROOT__/index.php/Admin/NewGuestbook/getNewProject/newCid/' + newCid + '',
-                    success: function(_data) {
+                    success: function (_data) {
                         // alert(_data);
                         //返回的值是null字符串
                         if (_data == 'null') {
@@ -166,7 +178,7 @@
                             return;
                         }
                         var data = [];
-                        $.each(jQuery.parseJSON(_data), function(index, item) {
+                        $.each(jQuery.parseJSON(_data), function (index, item) {
                             if (true) {
                             }
                             ;
@@ -187,10 +199,10 @@
                         }
                         ;
 
-                        var randomData = [];
-                        $.each(randomIndex, function(index, item) {
-                            randomData.push(data[item]);
-                        });
+                        var randomData = data;
+//                        $.each(randomIndex, function (index, item) {
+//                            randomData.push(data[item]);
+//                        });
 
 
                         var template = '<input type="radio" name="newproject" ' +
@@ -203,7 +215,7 @@
 
                         var radios = '';
 
-                        $.each(randomData, function(index, item) {
+                        $.each(randomData, function (index, item) {
                             var webPage = item.webPage.indexOf('/ws') == 0 ?
                                     'http://tj.28.com' + item.webPage :
                                     item.webPage;
@@ -222,22 +234,22 @@
                 });
 
                 //推荐项目后赋值
-                $('#newproject').on('click', '[type="radio"]', function(event) {
+                $('#newproject').on('click', '[type="radio"]', function (event) {
                     $('#projectID').val($(this).attr('id'));
                     $("#toWhich").html($(this).attr("data-site"));
                     $("#website").val($(this).attr("data-site"));
                 });
             })
             //地址归属地
-            $('#c_left').on('click', 'p', function(event) {
+            $('#c_left').on('click', 'p', function (event) {
                 var phone = $(this).attr('phone');
                 $.ajax({
                     type: 'get',
                     url: '__ROOT__/index.php/Admin/Api/index/' + phone,
                     dataType: 'json',
-                    success: function(response) {
+                    success: function (response) {
                         console.log('response: ' + response);
-                        var addrs = response.data.province+'.'+response.data.city;
+                        var addrs = response.data.province + '.' + response.data.city;
 //                        console.log(response.data.sp);
                         $("#address").val(addrs);
                     }

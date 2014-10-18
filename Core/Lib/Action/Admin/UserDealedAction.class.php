@@ -28,6 +28,7 @@ class UserDealedAction extends OQAction{
 			$aList[$i]["uid"] = $i;
 			// echo $i.'<br />';
 			$aList[$i]["username"] = $user->where("username=".$i)->getField("remark");
+                        $aList[$i]["section"] = $user->where("username=".$i)->getField("section");
                         $aList[$i]["aim"] = $user->where("username=".$i)->getField("aim");
 			$aList[$i]["yunyin"] = $user->where("username=".$i)->getField("");
 			// echo $aList[$i]["username"];
@@ -55,12 +56,16 @@ class UserDealedAction extends OQAction{
 
 
 		}
+                $aList = array_values($aList);
+                $aListjson = json_encode($aList);
+//                echo $aListjson;
 		 $aListcount = count($aList);
 		// print_r($aList);
+//                var_dump($aList);
                 $this->assign('aListcount',$aListcount);
 		$this->assign('username',$username);
 		$this->assign('date',$date);
-		$this->assign('aList',$aList);
+		$this->assign('aListjson',$aListjson);
 		$this->display();
 	}
         #没有排重

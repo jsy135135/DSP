@@ -11,7 +11,7 @@
 <body>
 	<table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
 		<tr>
-			<td colspan="9" class="table_title">
+			<td colspan="10" class="table_title">
 				<span class="fl">后台用户管理</span>
 				<span class="fr">
 					<a href="{:U('/Admin/User/add')}">添加用户</a>
@@ -20,6 +20,7 @@
 			<tr class="list_head ct">
 				<td width="70">ID</td>
 				<td width="150">用户名称</td>
+                                <td width="150">业务分组</td>
 				<td width="150">角色名称</td>
 				<td >用户描述</td>
 				<td width="100">最后登录IP</td>
@@ -32,6 +33,7 @@
 			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
 				<td align='center'>{$vo.id}</td>
 				<td >{$vo.username}</td>
+                                <td >{$vo.section}</td>
 				<td >{$role[$vo['role']]}</td>
 				<td >{$vo.remark}</td>
 				<td align='center'>{$vo.last_login_ip}</td>

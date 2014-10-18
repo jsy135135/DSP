@@ -24,7 +24,9 @@ return array(
     'xml_wp' => 'http://super.wp28.com/soap/SiYuan_getProject.php',
     // 'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/zfwpro.php',
     'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/fupro_ls.php',
-    'xml_ls' => 'http://www.liansuo.com/index.php?act=public&opt=gb_soap&site=ls',
+//    'xml_ls' => 'http://www.liansuo.com/index.php?act=public&opt=gb_soap&site=ls',
+    #2014-10-15 连锁xml文档改变
+    'xml_ls' => 'http://www.liansuo.com/index.php?opt=gbinf&par1=xml&par2=callfrommobile&par3=call$%^mobile',
     'json_91' => 'http://800.91jmw.com/index.php/gbook/getProListForTel',
     'author' => 'siyuan',
     'URL_CASE_INSENSITIVE' =>true,

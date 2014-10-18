@@ -101,6 +101,7 @@ class UserAction extends AdminAction {
             if(!$id)$this->error('参数错误!');
             $role = D('Role')->getAllRole(array('status'=>1),'sort DESC');
             $info = $UserDB->getUser(array('id'=>$id));
+//            var_dump($info);
             $this->assign('tpltitle','编辑');
             $this->assign('role',$role);
             $this->assign('info',$info);

@@ -6,6 +6,7 @@
         <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
         <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
         <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+        <script type="text/javascript" src="__PUBLIC__/Admin/js/knockout-3.2.0.js"></script>
         <style>
 
             body {
@@ -26,92 +27,115 @@
                 opacity: 0.3;
                 color: lightgray;
             }
+            #shit {
+                display: none;
+            }
         </style>
+        <script>
+            var rawData = {$datalist};
+        </script>
     </head>
     <body>
-
+        <a href="__ROOT__/index.php/Admin/Guestbook/check/act/2">查看审核过的数据</a>
+        <a href="__ROOT__/index.php/Admin/Guestbook/check/act/3">查看全部数据</a>
+        <input type="text" data-bind="textInput: search" />
         <table width="98%" border="0" cellpadding="6" cellspacing="1" class="table">
-            <tr>
-                <td colspan="13" class="table_title">
-                    <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
-                    <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
-                    <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
-                    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
-                        <script>
-                            $(function() {
-                                $("#date").datepicker({});
-                                $.datepicker.regional['zh-CN'] = {
-                                    closeText: '关闭',
-                                    prevText: '&#x3c;上月',
-                                    nextText: '下月&#x3e;',
-                                    currentText: '今天',
-                                    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
-                                        '七月', '八月', '九月', '十月', '十一月', '十二月'],
-                                    monthNamesShort: ['一', '二', '三', '四', '五', '六',
-                                        '七', '八', '九', '十', '十一', '十二'],
-                                    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
-                                    dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
-                                    dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
-                                    weekHeader: '周',
-                                    dateFormat: 'yy-mm-dd',
-                                    firstDay: 1,
-                                    isRTL: false,
-                                    showMonthAfterYear: true,
-                                    yearSuffix: '年'};
-                                $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
-                            });
-                        </script>
-                        <span class="fl">当前日期:{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">共有数据：{$count}</span>
-                </td>
-            </tr>
-            <tr  class="list_head ct">
-                <td>项目ID</td>
-                <td>项目名称</td>
-                <!--<td>项目网址</td>-->
-                <td>姓名</td>
-                <td>电话</td>
-                <td>发送内容</td>
-                <td>地址</td>
-                <td>发送网站</td>
-                <td>发送状态</td>
-                <td>提交时间</td>
-                <td>客服ID</td>
-                <td>审核状态</td>
-                <td>是否有效</td>
-                <td>点击审核</td>
-                <!--                <td>录音地址</td>-->
-            </tr>
-
-            <volist name="datalist" id="vo">
-                <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
-                    <td>{$vo.projectID}</td>
-                    <td>{$vo.projectname}</td> 
-                    <!--<td><a href="{$vo.webpage}" target="_blank">{$vo.webpage}</a></td>-->
-                    <td>{$vo.name}</td>
-                    <td>{$vo.phone}</td>
-                    <td>{$vo.content}</td>
-                    <td>{$vo.address}</td>
-                    <td>{$vo.site}</td>
-                    <td>{$vo.status}</td>
-                    <td>{$vo.Thetime}</td>
-                    <td>{$vo.u_id}</td>
-                    <td class="check-status">{$vo.check}</td>
-                    <td class="check-regular">{$vo.regular}</td>
-                    <td align="center" class="btn-group">
-                        <button class="stu" value="1" data-id="{$vo.id}" data-projectID="{$vo.projectID}" data-site="{$vo.site}" style="background:green" disabled>有效</button>&nbsp;&nbsp;
-                        <button class="stu" value="0" data-id="{$vo.id}" data-projectID="{$vo.projectID}" data-site="{$vo.site}" style="background:red" disabled>无效</button>
-                        <!--                        <input type="button" class="stu" id="youxiao" value="有效" data-id="{$vo.id}" style="width: 80px;height: 30px; background:green"/>
-                                                &nbsp;&nbsp;
-                                                <input type="button" class="stu" id="wuxiao" value="无效" data-id="{$vo.id}" style="width: 80px;height: 30px; background:red"/></td>-->
-                        <!--<td><a href="{$vo.yuyin}" class="records" data-src="{$vo.yuyin}">点击播放</a></td>-->
+            <thead>
+                <tr>
+                    <td colspan="13" class="table_title">
+                        <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
+                        <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
+                        <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
+                        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+                            <script>
+            $(function () {
+                $("#date").datepicker({});
+                $.datepicker.regional['zh-CN'] = {
+                    closeText: '关闭',
+                    prevText: '&#x3c;上月',
+                    nextText: '下月&#x3e;',
+                    currentText: '今天',
+                    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                    monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                        '七', '八', '九', '十', '十一', '十二'],
+                    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                    dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                    dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                    weekHeader: '周',
+                    dateFormat: 'yy-mm-dd',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: true,
+                    yearSuffix: '年'};
+                $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+            });
+                            </script>
+                            <span class="fl">当前日期:{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">共有数据：{$count}</span>
+                    </td>
                 </tr>
-            </volist>
-            <!-- <tr class="tr">
-      <td colspan="9" class="pages">
-        {$page}
-      </td>
-    </tr> -->
+                <tr class="list_head ct">
+                    <td>项目ID</td>
+                    <td>项目名称</td>
+                    <td>姓名</td>
+                    <td>电话</td>
+                    <td>发送内容</td>
+                    <td>地址</td>
+                    <td>发送网站</td>
+                    <td>发送状态</td>
+                    <td>提交时间</td>
+                    <td>客服ID</td>
+                    <td>审核状态</td>
+                    <td>是否有效</td>
+                    <td>点击审核</td>
+                </tr>
+            </thead>
+
+            <tbody data-bind="foreach: datalist">
+                <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                    <td data-bind="text: projectID">{$vo.projectID}</td>
+                    <td data-bind="text: projectname">{$vo.projectname}</td>
+                    <td data-bind="text: name">{$vo.name}</td>
+                    <td data-bind="text: phone">{$vo.phone}</td>
+                    <td data-bind="text: content">{$vo.content}</td>
+                    <td data-bind="text: address">{$vo.address}</td>
+                    <td data-bind="text: site">{$vo.site}</td>
+                    <td data-bind="text: status">{$vo.status}</td>
+                    <td data-bind="text: Thetime">{$vo.Thetime}</td>
+                    <td data-bind="text: u_id">{$vo.u_id}</td>
+                    <td data-bind="text: check" class="check-status">{$vo.check}</td>
+                    <td data-bind="text: regular" class="check-regular">{$vo.regular}</td>
+                    <td align="center" class="btn-group">
+                        <button class="stu" value="1" data-bind="attr: { 'data-id': id, 'data-projectID': projectID, 'data-site': site }" style="background:green" disabled>有效</button>&nbsp;&nbsp;
+                        <button class="stu" value="0" data-bind="attr: { 'data-id': id, 'data-projectID': projectID, 'data-site': site }" style="background:red" disabled>无效</button>
+                    </td>
+                </tr>
+            </tbody>
         </table>
+
+        <script>
+          function Vm() {
+            var self = this;
+            self.search = ko.observable('');
+            self.rawData = rawData
+
+            self.datalist = ko.computed(function() {
+              return self.rawData.filter(function(item, index, array) {
+                var search = self.search();
+                if (search.match(/\s+/)) {
+                  return item;
+                } else {
+                  return item.u_id.indexOf(search) != -1;
+                }
+              });
+            }).extend({ rateLimit: 600 });
+          }
+
+          ko.applyBindings(new Vm());
+
+        </script>
+
+
         <script>var version = '{$Think.config.cms_var}';</script>
         <include file="Index:footer" />
         <script>
@@ -168,5 +192,7 @@
             });
 
         </script>
+
+
     </body>
 </html>

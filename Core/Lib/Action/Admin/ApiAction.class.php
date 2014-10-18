@@ -20,7 +20,9 @@ class ApiAction extends OQAction {
 
     function lsdspwx($dDate) {
 //        var_dump($dDate);
-        $url = "http://www.liansuo.com/index.php?act=public&opt=dspwx&par1=".$dDate;
+//        $url = "http://www.liansuo.com/index.php?act=public&opt=dspwx&par1=".$dDate;
+        //加入par2参数作为识别
+        $url = "http://www.liansuo.com/index.php?act=public&opt=dspwx&par2=17668&par1=".$dDate;
         $str = file_get_contents($url);
         $wx = json_decode($str,true);
 //        var_dump($wx); 

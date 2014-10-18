@@ -29,6 +29,7 @@
             <br /><br />
             <input class="button" type="button" value="挂机" status="4">
             <input class="button" type="button" value="停机" status="5">
+            <input id="transfer" type="button" value="转接成功" status="8">
             <br /><br />
             <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
                 姓名：<input  type="text" name="username" id="username" /><br/>
@@ -115,8 +116,18 @@
                     }
                 })
             })
-
-
+            //转接传值和标注
+            $("#transfer").click(function(){
+              $.ajax({
+                  type:'post',
+                  url:'__ROOT__/index.php/Admin/Guestbook/transfer',
+                  data: $('#myform').serialize(),
+                  success: function(response){
+                      $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+//                      console.log(response);
+                  }
+              })  
+            })
             $(".button").click(function() {
                 $.ajax({
                     type: 'get',

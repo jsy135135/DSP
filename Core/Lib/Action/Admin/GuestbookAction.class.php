@@ -32,7 +32,7 @@ class GuestbookAction extends OQAction {
     function callAgain() {
         $uID = session("username");
         if ($uID == "admin")
-            $uID = 826; //默认外呼标记为826       
+            $uID = 826; //默认外呼标记为826
 //$dDate = date("Y-m-d", strtotime("2 days ago"));  //昨天1 days ago
         $dDate = $_REQUEST["date"] == "" ? date("Y-m-d") : $_REQUEST["date"];
         // $dDate = "2014-05-01";
@@ -110,6 +110,16 @@ class GuestbookAction extends OQAction {
      */
     function getByMobile() {
         $sMobile = $_REQUEST["mobile"];
+        $lenth = strlen($sMobile);
+        if ($lenth < 11) {
+            $aInfo["ips"] = '';
+            $aInfo["project_id"] = '';
+            ;
+            $aInfo["site"] = '';
+            $aInfo["ids"] = '';
+            echo json_encode(array($aInfo["ips"], $aInfo["project_id"], $aInfo["site"], $aInfo["ids"]));
+            exit();
+        }
 //                $sMobile =18091386259;
         $gb = M("guestbook");
         $aInfo = $gb->where("phone = '$sMobile'")->limit(1)->order("ids desc")->find();
@@ -184,9 +194,9 @@ class GuestbookAction extends OQAction {
         $d = M("DataDealed");
         $p = M("project");
         $g = M("guestbook");
-//        $_REQUEST['projectID'] = 7329;
+//        $_REQUEST['projectID'] = 101569;
         //进行参数的接收，并且进入到待发送数据库中，进行字段的标注
-        $rs = $p->where("projectID = '" . $_REQUEST['projectID'] . "' AND status > 0 AND sendStatus > 0")->select();
+        $rs = $p->where("projectID = '" . $_REQUEST['projectID'] . "' AND level  >=4 AND status > 0 AND sendStatus > 0")->select();
 //        $rs = $p->where("projectID = 7329 AND status > 0 AND sendStatus > 0")->select();
 //        var_dump($rs);
 //        var_dump($rs[0]['numbers']);
@@ -243,12 +253,29 @@ class GuestbookAction extends OQAction {
 
     function check() {
         $date = date("Y-m-d");
-//        $date = '2014-08-03';
         $d = M("DataDealed");
-        $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id=10086 AND u_id<>0 order by u_id asc");
+        $act = $_REQUEST["act"] == "" ? 1 : $_REQUEST["act"];
+        if ($act == 1) {
+            if ($_SESSION['username'] == '10086') {
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
+            } else {
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 AND d.check = 0 AND d.regular = 0 order by u_id asc");
+            }
+        }elseif($act == 2){
+            if ($_SESSION['username'] == '10086') {
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
+            } else {
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 AND d.check = 1 order by u_id asc");
+            }
+        }elseif ($act == 3) {
+            if ($_SESSION['username'] == '10086') {
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
+            } else {
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 order by u_id asc");
+            }
+        }
         $datalistcount = count($datalist);
-//        echo '<pre>';
-//        var_dump($datalist);
+        $datalist = json_encode($datalist);
         $this->assign('date', $date);
         $this->assign('count', $datalistcount);
         $this->assign('datalist', $datalist);
@@ -256,7 +283,7 @@ class GuestbookAction extends OQAction {
     }
 
     /*
-     * 对审核过的数据进行发送   
+     * 对审核过的数据进行发送
      * Time 2014/08/01 10:37
      * By siyuan
      */
@@ -265,6 +292,7 @@ class GuestbookAction extends OQAction {
         $d = M("data_dealed");
         $p = M("project");
 //        var_dump($_POST);
+//        die();
         $id = $_POST["id"];
         $projectID = $_POST["projectID"];
 //        $name = $_POST["name"];
@@ -485,24 +513,25 @@ class GuestbookAction extends OQAction {
      *
      * @param unknown $aData
      */
-    function sendToLS($aData) {
+    function sendToLS() {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
         $client = new PHPRPC_Client ();
         $client->useService('http://www.liansuo.com/index.php?opt=gbinf'); //接口地址
         $aNewData = array(
             // 结构如下
             'typeofcontact' => 1, //1为留言2为400电话，直接触发企业电话
-            'memberid' => $aData["project_id"], //项目id [必填]
-            'trueName' => $aData["user_name"], //真是姓名[必填]
-            'mobile' => $aData["phone"], //手机号码[必填]
-            'ip' => $aData["ips"], //IP地址[必填]
-//            'memberid' => 134920, //项目id [必填]
-//            'trueName' => 'siyuan', //真是姓名[必填]
-//            'mobile' => '13354280969', //手机号码[必填]
-//            'ip' => '192.168.200.55', //IP地址[必填]
+//            'memberid' => $aData["project_id"], //项目id [必填]
+//            'trueName' => $aData["user_name"], //真是姓名[必填]
+//            'mobile' => $aData["phone"], //手机号码[必填]
+//            'ip' => $aData["ips"], //IP地址[必填]
+            'memberid' => 134920, //项目id [必填]
+            'trueName' => 'siyuan', //真是姓名[必填]
+            'mobile' => '13354280961', //手机号码[必填]
+            'ip' => '192.168.200.55', //IP地址[必填]
         );
         $state_new = $client->clientSend($aNewData, 'utf-8', 'callfrommobile ', 'call$%^mobile');
-//        var_dump($state_new);
+        var_dump($state_new);
+        die();
         return $state_new;
     }
 
@@ -600,13 +629,13 @@ class GuestbookAction extends OQAction {
      * 推送到WP
      * Time:2014/07/30 16:39
      * By siyuan
-     * 
-     * 
+     *
+     *
      */
     function sendTowp($aData) {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
         $bData = array(
-            // 结构如下     
+            // 结构如下
             'projectID' => $aData["project_id"],
             'trueName' => $aData["user_name"],
             'email' => '',
@@ -656,12 +685,12 @@ class GuestbookAction extends OQAction {
         $client->setCharset('UTF-8');
         $client->setTimeout(20);
         $bData = array(
-        'p' => $aData["project_id"],
-        'name' => $aData["user_name"],
-        'mobile' => $aData["phone"],
-        'address' => $aData["address"],
-        'content' => '对项目感兴趣' . $aData["content"],
-        'ip' => $aData["ips"],
+            'p' => $aData["project_id"],
+            'name' => $aData["user_name"],
+            'mobile' => $aData["phone"],
+            'address' => $aData["address"],
+            'content' => '对项目感兴趣' . $aData["content"],
+            'ip' => $aData["ips"],
 //        's_url' => 'dsp',
         );
 //         var_dump($bData);
@@ -670,7 +699,7 @@ class GuestbookAction extends OQAction {
         $state_new = $Rarray["result"];
 //        return $Rarray['msg'];
         //                var_dump($state_new);
-                 return $state_new;
+        return $state_new;
     }
 
     /**
@@ -692,6 +721,41 @@ class GuestbookAction extends OQAction {
             $aData["again"] = 1;
             return D("Guestbook")->save($aData);
         }
+    }
+
+    /*
+     * 前端ajax传值
+     * 收集和标注转接过的电话的信息，并入库保存
+     * Time:2014/09/18 14:45:50
+     * By:siyuan
+     */
+
+    public function transfer() {
+        $data_dealed = M("data_dealed");
+        $guestbook = M("guestbook");
+        $aData = array();
+        $gData = array();
+        $aData["g_id"] = $_REQUEST["guestbook_id"];
+        $aData["name"] = $_REQUEST["username"];
+        $aData["content"] = $_REQUEST["content"];
+        $aData["phone"] = $_REQUEST["phone"];
+        $aData["address"] = $_REQUEST["address"];
+        $aData["domain"] = $_REQUEST["website"];
+        $aData["projectID"] = $_REQUEST["projectID"];
+        $aData["site"] = $_REQUEST["website"];
+        $aData["ip"] = $_REQUEST["ip"];
+        $aData["addDate"] = date("Y-m-d");
+        $aData["Thetime"] = date("Y-m-d H:i:s");
+        $aData["u_id"] = $_REQUEST["uID"];
+        $aData["check"] = 8;
+        $aData["regular"] = 8;
+        $gData["ids"] = $_REQUEST["guestbook_id"];
+        $gData["deal_time"] = date("Y-m-d H:i:s");
+        $gData["deal_date"] = date("Y-m-d");
+        $aData["deal_status"] = 8;
+        $aData["transfer"] = 1;
+        $data_dealed->add($aData);
+        return $guestbook->save($gData);
     }
 
     function analysis() {

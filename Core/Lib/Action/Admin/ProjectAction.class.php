@@ -39,7 +39,7 @@ class ProjectAction extends Action {
                 $r["status"] = '否';
             else
                 $r["status"] = '是';
-            if ($r["level"] == 4)
+            if ($r["level"] == 5)
                 $r["level"] = '按效果付费';
         }
         $countaList = count($aList);
@@ -153,7 +153,7 @@ class ProjectAction extends Action {
      * ajax修改分类
      * time:2014/09/09 12:03
      * By siyuan
-     * 
+     *
      */
     public function update() {
 //        echo 11111;
@@ -631,28 +631,28 @@ class ProjectAction extends Action {
                 if ($aTemp["backCall"] == null) {
                     $aTemp["backCall"] = 'NO TEL';
                 }
-                switch ($aT["level"]) {
-                    case "银牌会员":
-                    case "VIP会员":
-                        $level = 3;
-                        break;
-                    case "按效果付费":
-                        $level = 5;
-                        break;
-                    case "广告客户":
-                        $level = 4;
-                        break;
-                    default:
-                        $level = 2;
-                        break;
-                }
-                $aTemp["level"] = $level;
+//                switch ($aT["level"]) {
+//                    case "银牌会员":
+//                    case "VIP会员":
+//                        $level = 3;
+//                        break;
+//                    case "按效果付费":
+//                        $level = 5;
+//                        break;
+//                    case "广告客户":
+//                        $level = 4;
+//                        break;
+//                    default:
+//                        $level = 2;
+//                        break;
+//                }
+                $aTemp["level"] = 5;
                 $aTemp["needNum"] = 3;
                 $aTemp["numbers"] = 3;
-                if ($aTemp["level"] == 4) {
-                    $aTemp["needNum"] = 1;
-                    $aTemp["numbers"] = 1;
-                }
+//                if ($aTemp["level"] == 4) {
+//                    $aTemp["needNum"] = 1;
+//                    $aTemp["numbers"] = 1;
+//                }
                 if ($aTemp["name"] == '快汇宝') {
                     $aTemp["needNum"] = 100;
                     $aTemp["numbers"] = 100;
@@ -675,6 +675,71 @@ class ProjectAction extends Action {
 //                        $this->display(index);
         return true;
     }
+//    private function _syncFromLS() {
+//        $p = M("Project");
+////                        $p-> where("site = ls")->setField('status','0');
+//        $aSource = xml2array(C("xml_ls"));
+//        for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
+//            $aT = $aSource["log"]["fields"][$i];
+//            if ($aT["projectID"] > 0) {
+//                $aTemp = array();
+//                $aTemp["clientID"] = 0;
+//                $aTemp["projectID"] = $aT["projectID"];
+//                $aTemp["status"] = 1;
+//                //不需要dsp的项目，作为暂时调整
+//                if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
+//                    $aTemp["status"] = 0;
+//                }
+//                $aTemp["name"] = $aT["projectName"];
+//                $aTemp["webPage"] = $aT["adWebPage"];
+//                $aTemp["backCall"] = $aT["link"];
+//                if ($aTemp["backCall"] == null) {
+//                    $aTemp["backCall"] = 'NO TEL';
+//                }
+//                switch ($aT["level"]) {
+//                    case "银牌会员":
+//                    case "VIP会员":
+//                        $level = 3;
+//                        break;
+//                    case "按效果付费":
+//                        $level = 5;
+//                        break;
+//                    case "广告客户":
+//                        $level = 4;
+//                        break;
+//                    default:
+//                        $level = 2;
+//                        break;
+//                }
+//                $aTemp["level"] = $level;
+//                $aTemp["needNum"] = 3;
+//                $aTemp["numbers"] = 3;
+//                if ($aTemp["level"] == 4) {
+//                    $aTemp["needNum"] = 1;
+//                    $aTemp["numbers"] = 1;
+//                }
+//                if ($aTemp["name"] == '快汇宝') {
+//                    $aTemp["needNum"] = 100;
+//                    $aTemp["numbers"] = 100;
+//                }
+//                $aTemp["site"] = ls;
+//                $aTemp["catName"] = $aT["industry"];
+//                $aTemp["subCat"] = $aT["subindustry"];
+//                //如果数据已经存在，则更新数据，否则就是插入数据
+//                $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
+////                                        var_dump($id);
+//                if ($id > 0)
+//                    $p->where("id=" . $id)->save($aTemp);
+//                else
+////						$d = $p->add($aTemp);
+//                    $d = $p->data($aTemp)->add();
+////                                        var_dump($d);
+//                unset($aTemp);
+//            }
+//        }
+////                        $this->display(index);
+//        return true;
+//    }
 
     /**
      * 同步91加盟网的信息
@@ -700,10 +765,10 @@ class ProjectAction extends Action {
             $aTemp["level"] = 4;
             $aTemp["needNum"] = 5;
             $aTemp["numbers"] = 5;
-//            if($aTemp["name"] == '微创益'){
-//                $aTemp["needNum"] = 100;
-//                $aTemp["numbers"] = 100;
-//            }
+            if($aTemp["name"] == '微创益'){
+                $aTemp["needNum"] = 100;
+                $aTemp["numbers"] = 100;
+            }
 //                        如果数据已经存在，则更新数据，否则就是插入数据
 //            var_dump($aTemp);
             $id = $p->where("projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
@@ -717,5 +782,5 @@ class ProjectAction extends Action {
         }
         unset($aTemp);
         return true;
-    }    
+    }
 }

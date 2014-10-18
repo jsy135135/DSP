@@ -1,7 +1,7 @@
 @CHARSET "UTF-8";
 
 body,h1,h2,h3,h4,h5,h6,hr,p,{margin:0;padding:0;}
-BODY{BACKGROUND:#fff;MARGIN:0;FONT:14px/1.8em 微软雅黑;COLOR:#000000;}
+BODY{BACKGROUND:#fff;MARGIN:0;FONT:14px/1.8em å¾®è½¯é›…é»‘;COLOR:#000000;}
 table{border:1px solid #ccc }
 td{border-left:1px solid #ccc;border-top:1px solid #ccc} 
 
@@ -18,7 +18,7 @@ td{border-left:1px solid #ccc;border-top:1px solid #ccc}
 }
 
 #c_left{
-	margin-left:1px;
+	margin-left: 1px;
 	height:500px;
 	width:150px;
 	border:#ccc 1px solid;
@@ -59,18 +59,23 @@ td{border-left:1px solid #ccc;border-top:1px solid #ccc}
 	background-color:#cccc;
 	width:80px;
 	height:30px;
-	font-family:微软雅黑;
+	font-family:å¾®è½¯é›…é»‘;
 }
 
 .submit{
 	background-color:red;
 	width:80px;
 	height:30px;
-	font-family:微软雅黑;
+	font-family:å¾®è½¯é›…é»‘;
 }
 .denySubmit {
 	
 }
 .h1{
 	font-size:20pt;
+}
+#transfer{
+	width:80px;
+	height:30px;
+	background-color:green;
 }
