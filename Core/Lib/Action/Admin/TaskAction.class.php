@@ -5,6 +5,29 @@
  *
  */
 class TaskAction extends Action {
+    public function sys_transfer(){
+        $url = 'http://super.28.com/soap/dsp_400_send/send.php';
+        $data = $this->getWebData($url);
+//        var_dump($data);
+        $transfer = M("transfer");
+        $datacount = count($data);
+        for($i=0;$i<$datacount;$i++){
+            $rs = $transfer->add($data[$i]);
+            var_dump($rs);
+        }
+    }
+    #curl获取url信息的方法，返回数组形式
+    public function getWebData($url){
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_HEADER, 0);
+    $output = curl_exec($ch);
+    curl_close($ch);
+    $ar = unserialize($output);
+    return $ar;
+  }
     public function sys_toCCenter(){
         $project = M("project");
         $sql = "SELECT c.id,c.catname,p.name,p.backCall FROM `project` as p  left join category as c on p.cid = c.id WHERE `site` LIKE '28' AND p.status =1 AND p.backCall <>0 order by c.id asc,p.name asc";

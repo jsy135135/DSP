@@ -21,9 +21,26 @@ class GuestbookAction extends OQAction {
 //                $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
         $aList = $gb->where("deal_status = 1 AND project_id > 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00'")->order("ids desc")->select();
+        #加入推荐的栏目列表
+        $aBigList = $this->_listCategory(1);
+        $subList = D("Category")->where("pid != 0")->select();
+        #栏目列表传到页面
+        $this->assign("aBigList", $aBigList);
+        $this->assign("subList", $subList);
         $this->assign("uID", $uID);
         $this->assign("aList", $aList);
         $this->display("indexn");
+    }
+    
+    /**
+     * 分类列表
+     */
+    private function _listCategory($bIsBig = 0) {
+        if ($bIsBig)
+            $aList = D("Category")->where("pid=0")->select();
+        else
+            $aList = D("Category")->select();
+        return $aList;
     }
 
     /**
@@ -513,25 +530,25 @@ class GuestbookAction extends OQAction {
      *
      * @param unknown $aData
      */
-    function sendToLS() {
+    function sendToLS($aData) {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
         $client = new PHPRPC_Client ();
         $client->useService('http://www.liansuo.com/index.php?opt=gbinf'); //接口地址
         $aNewData = array(
             // 结构如下
             'typeofcontact' => 1, //1为留言2为400电话，直接触发企业电话
-//            'memberid' => $aData["project_id"], //项目id [必填]
-//            'trueName' => $aData["user_name"], //真是姓名[必填]
-//            'mobile' => $aData["phone"], //手机号码[必填]
-//            'ip' => $aData["ips"], //IP地址[必填]
-            'memberid' => 134920, //项目id [必填]
-            'trueName' => 'siyuan', //真是姓名[必填]
-            'mobile' => '13354280961', //手机号码[必填]
-            'ip' => '192.168.200.55', //IP地址[必填]
+            'memberid' => $aData["project_id"], //项目id [必填]
+            'trueName' => $aData["user_name"], //真是姓名[必填]
+            'mobile' => $aData["phone"], //手机号码[必填]
+            'ip' => $aData["ips"], //IP地址[必填]
+//            'memberid' => 134920, //项目id [必填]
+//            'trueName' => 'siyuan', //真是姓名[必填]
+//            'mobile' => '13354280961', //手机号码[必填]
+//            'ip' => '192.168.200.55', //IP地址[必填]
         );
         $state_new = $client->clientSend($aNewData, 'utf-8', 'callfrommobile ', 'call$%^mobile');
-        var_dump($state_new);
-        die();
+//        var_dump($state_new);
+//        die();
         return $state_new;
     }
 
@@ -731,6 +748,14 @@ class GuestbookAction extends OQAction {
      */
 
     public function transfer() {
+//        var_dump($_REQUEST);
+        if (!isset($_SESSION['username'])) {
+            session(null);
+            redirect(C('cms_admin') . '?s=Admin/Login');
+        }
+        $uID = session("username");
+        if ($uID == "admin")
+            $uID = 826; //默认外呼标记为826
         $data_dealed = M("data_dealed");
         $guestbook = M("guestbook");
         $aData = array();
@@ -746,7 +771,7 @@ class GuestbookAction extends OQAction {
         $aData["ip"] = $_REQUEST["ip"];
         $aData["addDate"] = date("Y-m-d");
         $aData["Thetime"] = date("Y-m-d H:i:s");
-        $aData["u_id"] = $_REQUEST["uID"];
+        $aData["u_id"] = $uID;
         $aData["check"] = 8;
         $aData["regular"] = 8;
         $gData["ids"] = $_REQUEST["guestbook_id"];
@@ -754,8 +779,11 @@ class GuestbookAction extends OQAction {
         $gData["deal_date"] = date("Y-m-d");
         $aData["deal_status"] = 8;
         $aData["transfer"] = 1;
-        $data_dealed->add($aData);
-        return $guestbook->save($gData);
+        $drs = $data_dealed->add($aData);
+        $grs = $guestbook->save($gData);
+        echo $drs.$grs;
+//        var_dump($drs.$grs);
+//        var_dump($aData);
     }
 
     function analysis() {

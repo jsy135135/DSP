@@ -25,7 +25,7 @@
         备注：<input  type="text" name="content" id="content"><br />
         IP：<input  type="text" name="ip" id="ip" /><br/>
         项目ID：<input  type="text" name="projectID"  id="projectID"  value="" />   <a href="{:U('/Admin/Project')}" target="_blank">项目ID查询</a><br/>
-        <br/>
+        是否已经转接: <input class="button" style="background-color: green" status="1" type="button" value="转接成功" id="transfer"/><br/>
         <span style="color:blue;">如果提交到其他网站的项目，在填写ID之后，手动点击按钮切换提交站点</span>
         <br />
         <div id="btns">
@@ -93,6 +93,22 @@
                 var status = $(event.target).attr('status');
                 $('#website').val(status);
             });
+            //点击进行28呼叫转接
+           $("#transfer").click(function () {
+               var data = $('form').serialize();
+               alert(data);
+                $.ajax({
+                    type: 'post',
+                    url: '__ROOT__/index.php/Admin/Guestbook/transfer',
+                    data: data,
+                    
+                    success: function (response) {
+//                      $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+//                      console.log(response);
+                        alert("转接标注成功");
+                    }
+                })
+            })
         </script>
     </body>
     </html>

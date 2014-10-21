@@ -68,7 +68,7 @@ class DataDealedAction extends OQAction {
 //                echo '<pre>';
 //                var_dump($aList);
         $transfer_date = date("Y-m-d", strtotime("7 days ago"));
-        $aList_transfer = $dealed->query("select addDate,count(*) as count from data_dealed where transfer=1 AND addDate >= '" . $transfer_date . "'group by addDate");
+        $aList_transfer = $dealed->query("select addDate,count(distinct phone) as count from data_dealed where transfer=1 AND addDate >= '" . $transfer_date . "'group by addDate");
 //        var_dump($aList_transfer);
         $this->assign("aList_transfer", $aList_transfer);
         $this->assign("aList", $aList);

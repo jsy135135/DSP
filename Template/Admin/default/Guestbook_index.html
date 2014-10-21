@@ -72,16 +72,16 @@ $("#c_left p").click(function(){
 		data:'pID='+$(this).attr('projectID')+'&site='+$(this).attr('site'),
 		dataType:'json',
 		success:function(data){
-                    console.log(data);
+//                    console.log(data[0]);
 //			 alert(data);
 			// alert(data[0].status);
 			if(data[0].status==0) {
 				$("#hit_info").html("本项目不接受发送数据，为您推荐以下项目");
 				for(var i in data){
-					//alert(data[i].projectID);
-					if(data[i].site == 28)
-						var rec_url = "http://tj.28.com"+data[i].webPage;
-					else
+//					alert(data[i].projectID);
+//					if(data[i].site == 28)
+//						var rec_url = "http://tj.28.com"+data[i].webPage;
+//					else
 						var rec_url = data[i].webPage;
 					$("#hit_info").append("&nbsp;&nbsp;<input class='recommendBtn' type='radio' name='sss' value="+data[i].projectID+" site="+data[i].site+"><a href='"+rec_url+"' target='_blank'>"+data[i].name+"</a>");
 					$(".recommendBtn").click(function(){

@@ -1,73 +1,73 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>首次外呼(一对多)-{$Think.config.cms_name}</title>
-        <link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
-        <link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
-        <script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
-        <script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
-        <script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
-    </head>
-    <body>
-        <h3>
-            <div align="center">共有条数：{$nowAssignNum}条&nbsp;&nbsp;&nbsp;&nbsp;<a href="__ROOT__/index.php/Admin/Guestbook/gbForm/hefei/1" target="_blank">特殊通道</a>
-            </div>
-        </h3>
-        <div id="top">
-            推荐列表：
-            <!-- autocomplete防止fox缓存 -->
-            <select name="pid" id="pid" autocomplete="off">
-                <volist name="aBigList" id="vo">
-                    <option value="{$vo.id}">{$vo.catname}</option>
-                </volist>
-            </select>
-            <select name="cid" id="cid">
-                <volist name="subList" id="vo">
-                    <option value="{$vo.id}" pid="{$vo.pid}">{$vo.catname}</option>
-                </volist>
-            </select>
-            <div id="newproject"></div>
-            用户ID:{$uID}&nbsp;&nbsp;所属项目：<span id="ower_project"></span>&nbsp;&nbsp;来源关键词：<span id="keywords"></span> 时间：<span id="times"></span>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <title>首次外呼(一对多)-{$Think.config.cms_name}</title>
+    <link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+    <link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
+    <script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
+    <script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
+    <script src="__PUBLIC__/js/easyui-lang-zh_CN.js" type="text/javascript" language="javascript"></script>
+</head>
+<body>
+    <h3>
+        <div align="center">共有条数：{$nowAssignNum}条&nbsp;&nbsp;&nbsp;&nbsp;<a href="__ROOT__/index.php/Admin/Guestbook/gbForm/hefei/1" target="_blank">特殊通道</a>
         </div>
-        <div id="c_left">
-            <volist name="aList"  id="vo">
-                <p thisid="{$vo.ids}" url="{$vo.address}"  k="{$vo.keywords}" phone="{$vo.phone}" dailPhone="0{$vo.phone}" projectID="{$vo.project_id}"  ips="{$vo.ips}"  times="{$vo.times}"  ad="{$vo.province}" site="{$vo.site}" class="">{$i}&nbsp;{$vo.phone}</p>
+    </h3>
+    <div id="top">
+        推荐列表：
+        <!-- autocomplete防止fox缓存 -->
+        <select name="pid" id="pid" autocomplete="off">
+            <volist name="aBigList" id="vo">
+                <option value="{$vo.id}">{$vo.catname}</option>
             </volist>
-        </div>
-        <div id="c_center">
-            <iframe src="" width="600" height="800" frameborder=no></iframe>
-        </div>
-        <div id="c_right">
-            <input class="button" type="button" value="不需要"  status="7">
-            <input class="button" type="button" value="无人接听"  status="2">
-            <input class="button" type="button" value="无法接通" status="3">
-            <br /><br />
-            <input class="button" type="button" value="挂机" status="4">
-            <input class="button" type="button" value="停机" status="5">
-            <input id="transfer" type="button" value="转接成功" status="8">
-            <br /><br />
-            <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
-                姓名：<input  type="text" name="username" id="username" /><br/>
-                电话：<input  type="text" name="phone" id="phone" /><br/>
-                备注：<input  type="text" name="content" id="content"><br />
-                IP：<input  type="text" name="ip" id="ip" /><br/>
-                地址：<input  type="text" name="address" id="address" /><br/>
-                项目ID：<input  type="text" name="projectID"  id="projectID"  value=""  /><br/>
-                发送给：<span id="toWhich"></span><br/>
-                用户ID：<span>{$uID}</span>
-                <br/>
-                <input type="hidden" name="website" id="website" value="" />
-                <input type="hidden" name="uID" id="uID" value="{$uID}" />
-                <input type="text" name="guestbook_id" id="guestbook_id"><br/>
-                <input class="submit"  type="submit"  value="提交"/>
-            </form>
-            呼叫号码：<br/>
-            <input  type="text" name="dailPhone" id="dailPhone" /><br/>
-            转移号码：<br/>
-            <input  type="text" name="transferCall" id="transferCall" /><br/>
-        </div>
-        <script>
+        </select>
+        <select name="cid" id="cid">
+            <volist name="subList" id="vo">
+                <option value="{$vo.id}" pid="{$vo.pid}">{$vo.catname}</option>
+            </volist>
+        </select>
+        <div id="newproject"></div>
+        用户ID:{$uID}&nbsp;&nbsp;所属项目：<span id="ower_project"></span>&nbsp;&nbsp;来源关键词：<span id="keywords"></span> 时间：<span id="times"></span>
+    </div>
+    <div id="c_left">
+        <volist name="aList"  id="vo">
+            <p thisid="{$vo.ids}" url="{$vo.address}"  k="{$vo.keywords}" phone="{$vo.phone}" dailPhone="0{$vo.phone}" projectID="{$vo.project_id}"  ips="{$vo.ips}"  times="{$vo.times}"  ad="{$vo.province}" site="{$vo.site}" class="">{$i}&nbsp;{$vo.phone}</p>
+        </volist>
+    </div>
+    <div id="c_center">
+        <iframe src="" width="600" height="800" frameborder=no></iframe>
+    </div>
+    <div id="c_right">
+        <input class="button" type="button" value="不需要"  status="7">
+        <input class="button" type="button" value="无人接听"  status="2">
+        <input class="button" type="button" value="无法接通" status="3">
+        <br /><br />
+        <input class="button" type="button" value="挂机" status="4">
+        <input class="button" type="button" value="停机" status="5">
+        <input id="transfer" type="button" value="转接成功" status="8">
+        <br /><br />
+        <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
+            姓名：<input  type="text" name="username" id="username" /><br/>
+            电话：<input  type="text" name="phone" id="phone" /><br/>
+            备注：<input  type="text" name="content" id="content"><br />
+            IP：<input  type="text" name="ip" id="ip" /><br/>
+            地址：<input  type="text" name="address" id="address" /><br/>
+            项目ID：<input  type="text" name="projectID"  id="projectID"  value=""  /><br/>
+            发送给：<span id="toWhich"></span><br/>
+            用户ID：<span>{$uID}</span>
+            <br/>
+            <input type="hidden" name="website" id="website" value="" />
+            <input type="hidden" name="uID" id="uID" value="{$uID}" />
+            <input type="text" name="guestbook_id" id="guestbook_id"><br/>
+            <input class="submit"  type="submit"  value="提交"/>
+        </form>
+        呼叫号码：<br/>
+        <input  type="text" name="dailPhone" id="dailPhone" /><br/>
+        转移号码：<br/>
+        <input  type="text" name="transferCall" id="transferCall" /><br/>
+    </div>
+    <script>
             //点击每条信息，进行详细信息的插入
             $("#c_left p").click(function () {
                 $(this).addClass("dealed");
@@ -105,8 +105,9 @@
                     success: function (response) {
                         $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
 //                      console.log(response);
-                    }
-                })
+                        alert("转接标注成功");
+}
+})
             })
             //提交处理状态数
             $(".button").click(function () {
@@ -159,7 +160,7 @@
                         result += '<option value="' + item.value + '">' + item.content + '</option>';
                     }
                 }
-
+                result = '<option value="-1">' + '请选择' + '</option>' + result;
                 $('#cid').append(result);
             }
         </script>
@@ -205,33 +206,33 @@
 //                        });
 
 
-                        var template = '<input type="radio" name="newproject" ' +
-                                'value={{value}} ' +
-                                'id={{projectID}} ' +
-                                'data-site={{site}}>' +
-                                '<a target="_blank" data-target={{projectID}} href={{webPage}} >' +
-                                '{{name}}' +
-                                '</a>';
+var template = '<input type="radio" name="newproject" ' +
+'value={{value}} ' +
+'id={{projectID}} ' +
+'data-site={{site}}>' +
+'<a target="_blank" data-target={{projectID}} href={{webPage}} >' +
+'{{name}}' +
+'</a>';
 
-                        var radios = '';
+var radios = '';
 
-                        $.each(randomData, function (index, item) {
-                            var webPage = item.webPage.indexOf('/ws') == 0 ?
-                                    'http://tj.28.com' + item.webPage :
-                                    item.webPage;
+$.each(randomData, function (index, item) {
+    var webPage = item.webPage.indexOf('/ws') == 0 ?
+    'http://tj.28.com' + item.webPage :
+    item.webPage;
 
-                            var radio = template.replace(/{{name}}/g, item.name)
-                                    .replace(/{{value}}/g, item.name)
-                                    .replace(/{{webPage}}/g, webPage)
-                                    .replace(/{{projectID}}/g, item.projectID)
-                                    .replace(/{{site}}/g, item.site);
+    var radio = template.replace(/{{name}}/g, item.name)
+    .replace(/{{value}}/g, item.name)
+    .replace(/{{webPage}}/g, webPage)
+    .replace(/{{projectID}}/g, item.projectID)
+    .replace(/{{site}}/g, item.site);
 
-                            radios += radio;
-                        });
+    radios += radio;
+});
 
-                        $('#newproject').html(radios);
-                    }
-                });
+$('#newproject').html(radios);
+}
+});
 
                 //推荐项目后赋值
                 $('#newproject').on('click', '[type="radio"]', function (event) {
@@ -251,17 +252,17 @@
                         console.log('response: ' + response);
                         var addrs = response.data.province + '.' + response.data.city;
 //                        console.log(response.data.sp);
-                        $("#address").val(addrs);
-                    }
+$("#address").val(addrs);
+}
 //                    success: function(response) {
 ////                        console.log('response: ' + response);
 //                       var add =  response.result.att;
 //                       var addrs = add.replace("中国,","");
 //                        $("#address").val(addrs);
 //                    }
-                });
+});
             });
         </script>
-    <include file="Index:footer" />
-</body>
-</html>
+        <include file="Index:footer" />
+    </body>
+    </html>
