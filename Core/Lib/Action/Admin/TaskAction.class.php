@@ -1,12 +1,30 @@
 <?php
-
+header("Content-type: text/html; charset=utf-8");
 /**
  * 自动处理等相关
  *
  */
 class TaskAction extends Action {
+    public function transferlist(){
+        $transfer = M("transfer");
+        $date = date("Y-m-d",  strtotime("1 days ago"));
+//        echo $date;
+        $data = $transfer->where("indate = '".$date."'")->select();
+//        echo $data->getLastsql;
+        $datacount = count($data);
+        echo '<table>';
+        echo '<tr><td>记录自增ID</td><td>对应联展400电话表字段ID</td><td>手机电话</td><td>拨打日期</td><td>拨打时间</td><td>呼叫的状态</td><td>通话时长</td><td>省份</td><td>城市</td><td>标识</td></tr>';
+        for ($i = 0; $i < $datacount; $i++) {
+            echo '<tr>';
+            echo '<td>' . $data[$i]["t_id"] . '</td><td>' . $data[$i]["id"] . '</td><td>' . $data[$i]["tel"] . '</td><td>' . $data[$i]["indate"]. '</td><td>' . $data[$i]["dtime"] . '</td><td>' . $data[$i]["state"] . '</td><td>' . $data[$i]["calltime"] . '</td><td>'. $data[$i]["province"] . '</td><td>'. $data[$i]["city"] . '</td><td>'. $data[$i]["identify"] . '</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+    }
+
     public function sys_transfer(){
         $url = 'http://super.28.com/soap/dsp_400_send/send.php';
+//        $url = 'http://super.28.com/soap/dsp_400_send/send.php?dt=2014-10-2';
         $data = $this->getWebData($url);
 //        var_dump($data);
         $transfer = M("transfer");
@@ -83,7 +101,7 @@ class TaskAction extends Action {
             }
             unset($data[$i]);
         }
-        
+
     }
 
     public function sys_company() {
@@ -188,6 +206,12 @@ class TaskAction extends Action {
         }
         $this->display("blank");
     }
+
+    /**
+     *更新改变字段(幸福饰家 特殊需求)
+     *
+     *
+     */
 
     /**
      * 临时程序，更新deal_date

@@ -42,7 +42,7 @@
         <table width="98%" border="0" cellpadding="6" cellspacing="1" class="table">
             <thead>
                 <tr>
-                    <td colspan="13" class="table_title">
+                    <td colspan="14" class="table_title">
                         <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
                         <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
                         <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
@@ -72,6 +72,11 @@
             });
                             </script>
                             <span class="fl">当前日期:{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">共有数据：{$count}</span>
+                             <form action="__ROOT__/index.php/Admin/Guestbook/check/" method="post">
+                                <span class="fl">查询日期:<input type="text" name="date" id="date" /></span>
+                                <input type ="hidden" name="act" value="{$act}">
+                                <input type="submit" value="查询" />
+                            </form>
                     </td>
                 </tr>
                 <tr class="list_head ct">
@@ -79,6 +84,7 @@
                     <td>项目名称</td>
                     <td>姓名</td>
                     <td>电话</td>
+                    <td>转接或留言</td>
                     <td>发送内容</td>
                     <td>地址</td>
                     <td>发送网站</td>
@@ -97,6 +103,7 @@
                     <td data-bind="text: projectname">{$vo.projectname}</td>
                     <td data-bind="text: name">{$vo.name}</td>
                     <td data-bind="text: phone">{$vo.phone}</td>
+                    <td data-bind="text: transfer">{$vo.transfer}</td>
                     <td data-bind="text: content">{$vo.content}</td>
                     <td data-bind="text: address">{$vo.address}</td>
                     <td data-bind="text: site">{$vo.site}</td>

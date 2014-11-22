@@ -1,0 +1,261 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>发送数据量每日详细-{$Think.config.cms_name}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+            <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Admin/js/knockout-3.2.0.js"></script>
+            <style>td{ height:22px; line-height:22px}</style>
+    </head>
+    <body>
+        <script>
+            var rawData = {$aListjson};
+        </script>
+        <!--<a href="__ROOT__/index.php/Admin/UserDealed/Dindex/">未经过排重</a>-->
+        <table width="60%" border="0" cellpadding="9" cellspacing="1" class="table">
+            <tr>
+                <td colspan="13" class="table_title">
+                    <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
+                    <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
+                    <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
+                    <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+                        <script>
+            $(function () {
+                $(".date").datepicker({});
+                $.datepicker.regional['zh-CN'] = {
+                    closeText: '关闭',
+                    prevText: '&#x3c;上月',
+                    nextText: '下月&#x3e;',
+                    currentText: '今天',
+                    monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                        '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                    monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                        '七', '八', '九', '十', '十一', '十二'],
+                    dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                    dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                    dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                    weekHeader: '周',
+                    dateFormat: 'yy-mm-dd',
+                    firstDay: 1,
+                    isRTL: false,
+                    showMonthAfterYear: true,
+                    yearSuffix: '年'};
+                $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+            });
+                        </script>
+                        <!--<span class="f1"><a href="__ROOT__/index.php/Admin/Choucha/lswx/">ls无效返回数更新</a>-->
+                        <span class="fl">当前区间:{$startDate}----{$endDate}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                        <form action="__ROOT__/index.php/Admin/Check91/index/" method="post">
+                            <span class="fl">开始日期:<input type="text" name="startDate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            <span class="fl">结束日期:<input type="text" name="endDate" class="date" /></span>
+                            <input type="submit" value="查询" />
+                            <!-- <input type="reset" value="重选"> -->
+                        </form>
+                        <!-- <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/7">7天</a></span>
+                        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/30">30天</a></span>
+                        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/month">本月</a></span>
+                        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/prev">上月</a></span> -->
+                        <!--<select style="font-size:20px;"data-bind="value: filter, options: filterItems, optionsCaption: '请选择分组'"></select>-->
+                </td>
+            </tr>
+            <tr  class="list_head ct">
+                <!--<td>ID编号</td>-->
+                <!--<td>日期</td>-->
+                <td>项目名称</td>
+                <td>数量</td>
+
+                <tbody>
+                    <volist name="data" id="vo">
+                    <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                        <!--                    <td><for start="1" end="$aListcount">
+                                                    {$i}
+                                                </for></td>-->
+                        <!--<td>{$vo.addDate}</td>-->
+                        <td>{$vo.name}</td>
+                        <td>{$vo.count}</td>
+                    </tr>
+                    </volist>
+                </tbody>
+        </table>
+        <style>
+            #table-header.pin {
+                position:fixed;
+                top: 0;
+                width: 98%;
+            }
+
+            #table-header.pin td {
+                padding: 0 10px;
+            }
+        </style>
+
+        <script>
+            function Vm() {
+                var self = this;
+                self.filter = ko.observable('');
+                self.rawData = rawData;
+
+                self.filterItems = ['勤奋', '务实', '激情', '分享', '28', '新同事'];
+                self.datalist = ko.computed(function () {
+                    return self.rawData.filter(function (item, index, array) {
+                        var filter = self.filter();
+                        if (!filter) {
+                            return item;
+                        } else {
+                            return item.section == filter;
+                        }
+                    });
+                });
+
+                self.len = ko.computed(function () {
+                    return self.datalist().length;
+                });
+
+                self.t_firstCallNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.firstCallNum;
+                    });
+                    return ret;
+                });
+
+                self.t_firstSendNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.firstSendNum;
+                    });
+                    return ret;
+                });
+
+                self.t_aim = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.aim;
+                    });
+                    return ret;
+                });
+
+                self.t_firstSendOKNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.firstSendOKNum;
+                    });
+                    return ret;
+                });
+
+                self.t_firstSendOKRatio = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.firstSendOKRatio;
+                    });
+
+                    ret = (ret / self.datalist().length).toFixed(2);
+                    return ret + '%';
+                });
+
+                self.t_againCallNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.againCallNum;
+                    });
+                    return ret;
+                });
+
+                self.t_againSubmitNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.againSubmitNum;
+                    });
+                    return ret;
+                });
+
+                self.t_againSubmitOkNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.againSubmitOkNum;
+                    });
+                    return ret;
+                });
+
+                self.t_lsSunbmitNum = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.lsSunbmitNum;
+                    });
+                    return ret;
+                });
+
+                self.t_lswx = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.lswx;
+                    });
+                    return ret;
+                });
+
+                self.t_lsSunbmitOK = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.lsSunbmitOK;
+                    });
+                    ret = (ret / self.datalist().length).toFixed(2);
+                    return ret + '%';
+                });
+
+                self.t_transfer = ko.computed(function () {
+                    var ret = 0;
+                    self.datalist().forEach(function (item, index) {
+                        ret += +item.transfer;
+                    });
+                    return ret;
+                });
+            }
+
+
+
+
+
+            ko.applyBindings(new Vm());
+
+        </script>
+
+        <script type="text/javascript">
+            var tds = $('td').slice(1);
+            var colCount = $('tr:eq(1) td').length;
+
+            var resultRow = $('#table-result td');
+
+            for (var i = 1; i < colCount; i++) {
+                total(i);
+            }
+            ;
+
+            function total(colNum) {
+                var result = 0;
+                tds.each(function (index, elem) {
+
+                    var content = parseInt($(elem).html(), 10);
+                    if (index % colCount == colNum && content)
+                    {
+                        result += content;
+                    }
+                });
+                $(resultRow[colNum]).html(result);
+            }
+
+            //表头浮动
+            $(window).on('scroll', function (event) {
+                var scrollTop = document.body.scrollTop;
+                if (scrollTop > 100) {
+                    $('#table-header').addClass('pin');
+                } else {
+                    $('#table-header').removeClass('pin');
+                }
+            });
+        </script>
+        <script>var version = '{$Think.config.cms_var}';</script>
+        <include file="Index:footer" />
+    </body>
+</html>

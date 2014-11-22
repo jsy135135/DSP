@@ -134,6 +134,8 @@
             })
             //转接传值和标注
             $("#transfer").click(function () {
+                var self = $(this);
+               self.attr('disabled', true);
                 $.ajax({
                     type: 'post',
                     url: '__ROOT__/index.php/Admin/Guestbook/transfer',
@@ -141,6 +143,7 @@
                     success: function (response) {
                         $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
                       console.log(response);
+                     self.attr('disabled', false);
                         alert("转接标注成功");
                     }
                 })

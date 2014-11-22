@@ -1,3 +1,4 @@
+<meta charset='utf-8' />
 <?php
 
 /*
@@ -30,7 +31,7 @@ class ProjectAction extends Action {
 //            if ($r["site"] == "28")
 //                $r["http"] = "http://tj.28.com" . $r["webPage"];
 //            else
-                $r["http"] = $r["webPage"];
+            $r["http"] = $r["webPage"];
             if ($r["sendStatus"] == 0)
                 $r["sendStatus"] = '否';
             else
@@ -41,6 +42,8 @@ class ProjectAction extends Action {
                 $r["status"] = '是';
             if ($r["level"] == 5)
                 $r["level"] = '按效果付费';
+            if ($r["level"] == 4)
+                $r["level"] = '广告客户';
         }
         $countaList = count($aList);
         for ($i = 0; $i < $countaList; $i++) {
@@ -67,7 +70,32 @@ class ProjectAction extends Action {
         $this->assign("SmallList",$SmallList);
         $this->display();
     }
-
+    /*
+     *Time:2014-11-14 14:55:18
+     *定时同步之后，更新每个项目已经发送de数量
+     *By:siyuan
+     */
+    public function dealtotel(){
+        $p = M("project");
+        $D = M("data_dealed");
+        $d = M("data_again");
+        $date = date("Y-m-d");
+        $prolist = $p->where("status = 1 AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+        $prolistcount = count($prolist);
+        for($i=0;$i<$prolistcount;$i++){
+            $site = $prolist[$i]['site'];
+            $projectID = $prolist[$i]['projectID'];
+            $fristCount = $D->where("addDate = '" . $date . "'AND site = '" . $site . "' AND projectID = '" . $projectID . "' AND status >= 0 AND status <> 8")->count(); //此项目今日一次发送成功数
+            $scendCount = $d->where("addDate = '" . $date . "'AND site = '" . $site . "' AND project_id = '" . $projectID . "' AND status >= 0 AND status <> 8")->count(); //此项目今天二次发送成功数
+            $numbers = ($prolist["$i"]["needNum"] - $fristCount - $scendCount); //已经发送的数据量
+            $rs = $p->where("projectid = '" . $projectID . "' AND site = '" . $site . "'")->setField("numbers", $numbers);
+            if($rs){
+                echo $site.'#'.$projectID.'#'.'succsess';
+            }else{
+                echo $site.'#'.$projectID.'#'.'enero';
+            }
+        }
+    }
 //    public function index() {
 //        //显示当前在使用的项目列表
 //        $act = ($_REQUEST["act"] == "") ? "1" : $_REQUEST["act"];
@@ -94,27 +122,27 @@ class ProjectAction extends Action {
 //            else
 //                $r["status"] = '是';
 //        }
-////                        var_dump($aList);
+// //                        var_dump($aList);
 //        $countaList = count($aList);
-////                        echo $countaList;
-////                        echo $site = $aList["1"]["site"];
+// //                        echo $countaList;
+// //                        echo $site = $aList["1"]["site"];
 //        for ($i = 0; $i < $countaList; $i++) {
 //            $site = $aList["$i"]["site"];
 //            $projectID = $aList["$i"]["projectID"];
 //            $lastCount = $Data->where("addDate = '" . $date . "'AND site = '" . $site . "' AND projectID = '" . $projectID . "' AND status >= 0")->count(); //此项目今日一次发送成功数
-////            echo $lastCount;
+// //            echo $lastCount;
 //            $scendCount = $Sdata->where("addDate = '" . $date . "'AND site = '" . $site . "' AND project_id = '" . $projectID . "' AND status >= 0")->count(); //此项目今天二次发送成功数
-////            echo $scendCount;
+// //            echo $scendCount;
 //            $numbers = ($aList["$i"]["needNum"] - $lastCount - $scendCount);
-////            echo $numbers;
+// //            echo $numbers;
 //            $aList["$i"]["alcount"] = ($lastCount + $scendCont);
 //            $rs = $p->where("projectid = '" . $projectID . "' AND site = '" . $site . "'")->setField("numbers", $numbers);
-////            var_dump($rs);
+// //            var_dump($rs);
 //            $aList["$i"]{"numbers"} = $numbers;
-////                            var_dump($lastCount);
+// //                            var_dump($lastCount);
 //        }
 //        $aCatList = D("category")->where(1)->getField("id,catname");
-////                        var_dump($aList);
+// //                        var_dump($aList);
 //        $this->assign("countaList", $countaList);
 //        $this->assign("catList", $aCatList);
 //        $this->assign("aList", $aList);
@@ -229,7 +257,7 @@ class ProjectAction extends Action {
         if ($aInfo["site"] == "28") {
             $aInfo["http"] = "http://tj.28.com" . $aInfo["webPage"];
         } else
-            $aInfo["http"] = $aInfo["webPage"];
+        $aInfo["http"] = $aInfo["webPage"];
         for ($i = 0; $i < count($aSendProjectList); $i++) {
             $aSendProjectList[$i]["http"] = "http://tj.28.com" . $aSendProjectList[$i]["webPage"];
         }
@@ -350,28 +378,28 @@ class ProjectAction extends Action {
         $act = ($_REQUEST["act"] == "") ? "list" : $_REQUEST["act"];
         switch ($act) {
             case "add":
-                if (!empty($_POST))
-                    $this->_addCategory($_POST);
-                else {
-                    $aBigList = $this->_listCategory(1);
-                    $this->assign("list", $aBigList);
-                    $this->display("category_add");
-                }
-                break;
+            if (!empty($_POST))
+                $this->_addCategory($_POST);
+            else {
+                $aBigList = $this->_listCategory(1);
+                $this->assign("list", $aBigList);
+                $this->display("category_add");
+            }
+            break;
             case "list":
-                $alist = $this->_listCategory();
-                $this->assign("list", $alist);
-                $this->display("category_list");
-                break;
+            $alist = $this->_listCategory();
+            $this->assign("list", $alist);
+            $this->display("category_list");
+            break;
             case "edit":
-                $this->_editcategory();
-                break;
+            $this->_editcategory();
+            break;
             case "update":
-                $this->_updatecategory($_REQUEST);
-                break;
+            $this->_updatecategory($_REQUEST);
+            break;
             case "del":
-                $this->_delcatagory();
-                break;
+            $this->_delcatagory();
+            break;
         }
     }
 
@@ -461,9 +489,11 @@ class ProjectAction extends Action {
      */
     public function syncProject() {
         $p = M("project");
+        $data = array('status'=>'0','sendStatus'=>'1');
         $rs = $p->where(1)->setField('status', '0');
-        if (!empty($rs)) {
-            echo 'updata status is 0 succeed<br />';
+        if ($rs) {
+            echo 'update status is 0 succeed<br />';
+            echo 'update sendStatus is 1 succeed';
         }
 //                    die();
         if ($this->_syncFrom28())
@@ -607,6 +637,64 @@ class ProjectAction extends Action {
         return true;
     }
 
+
+        /**
+         * 测试同步连锁网的信息
+         */
+        public function syncFromLS() {
+            $p = M("Project");
+            //                        $p-> where("site = ls")->setField('status','0');
+            $aSource = xml2array(C("xml_ls"));
+            $j = 0;
+            for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
+                $aT = $aSource["log"]["fields"][$i];
+                if ($aT["projectID"] > 0) {
+                    $aTemp = array();
+                    $aTemp["clientID"] = 0;
+                    $aTemp["projectID"] = $aT["projectID"];
+                    $aTemp["status"] = 1;
+                            //不需要dsp的项目，作为暂时调整
+                            // if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
+                            //     $aTemp["status"] = 0;
+                            // }
+                    $aTemp["name"] = $aT["projectName"];
+                    $aTemp["webPage"] = $aT["adWebPage"];
+                    $aTemp["backCall"] = $aT["link"];
+                    if ($aTemp["backCall"] == null) {
+                        $aTemp["backCall"] = 'NO TEL';
+                    }
+                    if (!isset($aT["endtime"])){
+                        $aTemp["level"] = 5;
+                            // $aTemp["needNum"] = 5;
+                            // $aTemp["numbers"] = 5;
+                    }else{
+                       $aTemp["level"]  = 4;
+                   }
+                   $aTemp["needNum"] = $aT["dspnum"];
+                   $aTemp["numbers"] = $aT["dspnum"];
+                   $aTemp["site"] = ls;
+                   // $aTemp["catName"] = $aT["industry"];
+                   // $aTemp["subCat"] = $aT["subindustry"];
+                            //如果数据已经存在，则更新数据，否则就是插入数据
+                   $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
+                   if ($id > 0){
+                    // $j++;
+                    // var_dump($aTemp);
+                    $rs = $p->where("id=" . $id)->save($aTemp);
+                    // var_dump($rs);
+                }   else{
+                    // $j++;
+                    // var_dump($aTemp);
+                    $d = $p->add($aTemp);
+                    echo $p->getLastsql().'<br />';
+                    // var_dump($d);
+                }
+                unset($aTemp);
+            }
+            // echo $j.'<br />';
+        }
+    }
+
     /**
      * 同步连锁网的信息
      */
@@ -622,59 +710,41 @@ class ProjectAction extends Action {
                 $aTemp["projectID"] = $aT["projectID"];
                 $aTemp["status"] = 1;
                 //不需要dsp的项目，作为暂时调整
-                if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
-                    $aTemp["status"] = 0;
-                }
+                // if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
+                //     $aTemp["status"] = 0;
+                // }
                 $aTemp["name"] = $aT["projectName"];
                 $aTemp["webPage"] = $aT["adWebPage"];
                 $aTemp["backCall"] = $aT["link"];
                 if ($aTemp["backCall"] == null) {
                     $aTemp["backCall"] = 'NO TEL';
                 }
-//                switch ($aT["level"]) {
-//                    case "银牌会员":
-//                    case "VIP会员":
-//                        $level = 3;
-//                        break;
-//                    case "按效果付费":
-//                        $level = 5;
-//                        break;
-//                    case "广告客户":
-//                        $level = 4;
-//                        break;
-//                    default:
-//                        $level = 2;
-//                        break;
-//                }
-                $aTemp["level"] = 5;
-                $aTemp["needNum"] = 3;
-                $aTemp["numbers"] = 3;
-//                if ($aTemp["level"] == 4) {
-//                    $aTemp["needNum"] = 1;
-//                    $aTemp["numbers"] = 1;
-//                }
-                if ($aTemp["name"] == '快汇宝') {
-                    $aTemp["needNum"] = 100;
-                    $aTemp["numbers"] = 100;
-                }
-                $aTemp["site"] = ls;
-                $aTemp["catName"] = $aT["industry"];
-                $aTemp["subCat"] = $aT["subindustry"];
+                if (!isset($aT["endtime"])){
+                    $aTemp["level"] = 5;
+                // $aTemp["needNum"] = 5;
+                // $aTemp["numbers"] = 5;
+                }else{
+                   $aTemp["level"]  = 4;
+                   // $aTemp["needNum"] = 1;
+                   // $aTemp["numbers"] = 1;
+               }
+               $aTemp["needNum"] = $aT["dspnum"];
+               $aTemp["numbers"] = $aT["dspnum"];
+               $aTemp["site"] = ls;
+               // $aTemp["catName"] = $aT["industry"];
+               // $aTemp["subCat"] = $aT["subindustry"];
                 //如果数据已经存在，则更新数据，否则就是插入数据
-                $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-//                                        var_dump($id);
-                if ($id > 0)
-                    $p->where("id=" . $id)->save($aTemp);
-                else
-//						$d = $p->add($aTemp);
-                    $d = $p->data($aTemp)->add();
-//                                        var_dump($d);
-                unset($aTemp);
-            }
+               $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
+               if ($id > 0)
+                $p->where("id=" . $id)->save($aTemp);
+            else
+                $d = $p->data($aTemp)->add();
+            unset($aTemp);
         }
-//                        $this->display(index);
-        return true;
     }
+//                        $this->display(index);
+    return true;
+}
 //    private function _syncFromLS() {
 //        $p = M("Project");
 ////                        $p-> where("site = ls")->setField('status','0');
@@ -763,9 +833,9 @@ class ProjectAction extends Action {
             $aTemp["site"] = "91";
             $aTemp["status"] = 1;
             $aTemp["level"] = 4;
-            $aTemp["needNum"] = 5;
-            $aTemp["numbers"] = 5;
-            if($aTemp["name"] == '微创益'){
+            $aTemp["needNum"] = 1;
+            $aTemp["numbers"] = 1;
+            if($aTemp["projectID"] == '307' || $aTemp["projectID"] == '308'){
                 $aTemp["needNum"] = 100;
                 $aTemp["numbers"] = 100;
             }

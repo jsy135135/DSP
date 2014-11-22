@@ -9,7 +9,7 @@ return array(
     'db_port' => 3306,
     'db_prefix' => '',
     'web_name' => '金邦网络',
-    'web_url' => 'http://192.168.200.55/tpcms/',
+    'web_url' => 'http://localhost/tpcms/',
     'SHOW_PAGE_TRACE' => true,
     // 'SHOW_PAGE_TRACE' => false,
     'web_path' => '/',
@@ -22,11 +22,14 @@ return array(
     'web_adsensepath' => 'Public/Banner',
     'xml_28' => 'http://super.28.com/soap/project_Xml.php',
     'xml_wp' => 'http://super.wp28.com/soap/SiYuan_getProject.php',
-    // 'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/zfwpro.php',
+        // 'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/zfwpro.php',
     'xml_zf' => 'http://saas.zhifuwang.cn/soapclient/fupro_ls.php',
-    'xml_ls' => 'http://www.liansuo.com/index.php?act=public&opt=gb_soap&site=ls',
+    //    'xml_ls' => 'http://www.liansuo.com/index.php?act=public&opt=gb_soap&site=ls',
+        #2014-10-15 连锁xml文档改变
+    'xml_ls' => 'http://www.liansuo.com/index.php?opt=gbinf&par1=xml&par2=callfrommobile&par3=call$%^mobile',
     'json_91' => 'http://800.91jmw.com/index.php/gbook/getProListForTel',
     'author' => 'siyuan',
+    'URL_CASE_INSENSITIVE' =>true,
     'version' => '1.0',
-);
+    );
 ?>

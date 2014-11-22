@@ -35,6 +35,8 @@ class UserDealedAction extends OQAction{
 			//$aList[$i]["firstCallNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i")->count();	//首次外呼处理数
 			$aList[$i]["firstCallNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id= '".$i."'")->count("DISTINCT phone");	//首次外呼处理数
 			$aList[$i]["firstSendNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i")->count("DISTINCT phone");	//首次提交数
+      $aList[$i]["transfer"] = $dealed->where("addDate =  '".$date."' AND u_id=$i AND transfer = '1' ")->count("DISTINCT phone"); //28转接数量
+      $aList[$i]["transferOKNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i AND transfer = '1' AND regular = '1' ")->count("DISTINCT phone"); //28转接审核有效数
 			$aList[$i]["firstSendOKNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i AND status>0")->count("DISTINCT phone");	//首次提交成功数
 			$aList[$i]["firstSendOKRatio"] = round( $aList[$i]["firstSendOKNum"] / $aList[$i]["firstSendNum"],4) *100;	//首次提交成功比
 			/**

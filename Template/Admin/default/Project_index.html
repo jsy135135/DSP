@@ -42,16 +42,16 @@
     #dialog .main {
       padding: 30px 15px;
       border-bottom: 1px solid silver;
-     
+
     }
-    
+
       #dialog .main button,
       #dialog .main select {
       font-size: 18px;
-     
+
     }
-    
-   
+
+
 
     #backdrop {
       position: fixed;
@@ -76,7 +76,7 @@
                     <span class="fl">项目列表</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>项目总数：{$countaList}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="f1">总需求数：{$Aalsum}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>还需总数：{$Anumbers}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="f1">总提交数：{$Asends}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">提交百分比：{$Apersent}%</span>
-                    <form action="__ROOT__/index.php/Admin/Project/index/" mothod="post">	
+                    <form action="__ROOT__/index.php/Admin/Project/index/" mothod="post">
                         <select name="act">
                             <option>请选择状态</option>
                             <option value="28">28商机网</option>
@@ -91,7 +91,7 @@
                                                         <option value="zf">致富网</option>
                                                     </select>-->
                         <input type="submit" value="点击查询" />
-                    </form>    
+                    </form>
                     <!--                             <span>点击可查询：</span>
                                                 <a href="#"><input type="button" value="全部在投项目" name="" id="" /></a>
                                                 <a href="#"><input type="button" value="今天还可发送项目" name="" id="" /></a>-->
@@ -158,7 +158,7 @@
                             <option pid="{$Sdata.pid}" value="{$Sdata.id}">{$Sdata.catname}</option>
                         </volist>
                     </select>
-                    
+
                     <input type="hidden" name="listid">
                         <button type="submit">确定</button>
                 </form>
@@ -170,16 +170,16 @@
         <script>
             $('[data-toggle="dialog"]').click(function(event) {
                 event.preventDefault();
-                
-             
+
+
                 var xghfl =  $(this).parents('tr').find('.xghfl');
                 var xghzl =  $(this).parents('tr').find('.xghzl');
                 var title =  $(this).parents('tr').find('.title').html();
-                
+
                 $('#dialog').data('xghfl', xghfl);
                 $('#dialog').data('xghzl', xghzl);
                 $('body').toggleClass('show-dialog');
-              
+
                 $('#dialog [type="hidden"]').val( $(this).attr('data-id') );
                 $('#dialog .title').html(title);
             });
@@ -188,13 +188,13 @@
                 event.preventDefault();
                 var data = $(this).serialize();
                 var action = $(this).attr('action');
-                
+
                 var xghfl = $(this).find('.xghfl option:selected').html();
                 var xghzl = $(this).find('.xghzl option:selected').html();
 
                 $( $('#dialog').data('xghfl') ).html( xghfl );
                 $( $('#dialog').data('xghzl') ).html( xghzl );
-                
+
                 $('body').toggleClass('show-dialog');
                 console.log(data);
                 $.post(action, data, function(res) {

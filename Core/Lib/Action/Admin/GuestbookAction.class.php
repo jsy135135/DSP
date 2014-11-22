@@ -31,7 +31,7 @@ class GuestbookAction extends OQAction {
         $this->assign("aList", $aList);
         $this->display("indexn");
     }
-    
+
     /**
      * 分类列表
      */
@@ -269,7 +269,7 @@ class GuestbookAction extends OQAction {
      */
 
     function check() {
-        $date = date("Y-m-d");
+        $date = $_REQUEST["date"] == "" ? date("Y-m-d") : $_REQUEST["date"];
         $d = M("DataDealed");
         $act = $_REQUEST["act"] == "" ? 1 : $_REQUEST["act"];
         if ($act == 1) {
@@ -278,13 +278,13 @@ class GuestbookAction extends OQAction {
             } else {
                 $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 AND d.check = 0 AND d.regular = 0 order by u_id asc");
             }
-        }elseif($act == 2){
+        } elseif ($act == 2) {
             if ($_SESSION['username'] == '10086') {
                 $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
             } else {
                 $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 AND d.check = 1 order by u_id asc");
             }
-        }elseif ($act == 3) {
+        } elseif ($act == 3) {
             if ($_SESSION['username'] == '10086') {
                 $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
             } else {
@@ -292,7 +292,16 @@ class GuestbookAction extends OQAction {
             }
         }
         $datalistcount = count($datalist);
+        #替换，输出数据的类型
+        for ($i = 0; $i < $datalistcount; $i++) {
+            if ($datalist[$i]["transfer"] == 0) {
+                $datalist[$i]["transfer"] = '留言';
+            } else {
+                $datalist[$i]["transfer"] = '转接';
+            }
+        }
         $datalist = json_encode($datalist);
+        $this->assign('act', $act);
         $this->assign('date', $date);
         $this->assign('count', $datalistcount);
         $this->assign('datalist', $datalist);
@@ -344,6 +353,15 @@ class GuestbookAction extends OQAction {
 //        $id = 95547;
         $AData = $d->where("id = $id")->select();
         $AData = $AData[0];
+        if ($AData["transfer"] == 1) {
+            $newdata = array();
+            $newdata['status'] = 8;
+            $newdata['check'] = 1;
+            $newdata['regular'] = $value;
+            $d->where("id = $id")->save($newdata);
+            echo '此数据被审核有效' . ' 转接网站为：28';
+            exit();
+        }
         $aData = array();
         $aData["user_name"] = $AData["name"];
         $aData["project_id"] = $AData["projectID"];
@@ -352,11 +370,6 @@ class GuestbookAction extends OQAction {
         $aData["ips"] = $AData["ip"];
         $aData["address"] = $AData["address"];
         $sSite = $AData["site"];
-//        var_dump($AData);
-//        var_dump($aData);
-//        var_dump($sSite);
-//        die();
-//        var_dump($AData);
         if ($sSite == "ls") {
             $sSiteName = "ls";
             $iReturnID = $this->sendToLS($aData);
@@ -373,8 +386,6 @@ class GuestbookAction extends OQAction {
             $sSiteName = "91";
             $iReturnID = $this->sendTo91($aData);
         }
-//        var_dump($iReturnID);
-//        die();
         $newdata = array();
         $newdata['status'] = $iReturnID;
         $newdata['check'] = 1;
@@ -772,16 +783,16 @@ class GuestbookAction extends OQAction {
         $aData["addDate"] = date("Y-m-d");
         $aData["Thetime"] = date("Y-m-d H:i:s");
         $aData["u_id"] = $uID;
-        $aData["check"] = 8;
-        $aData["regular"] = 8;
+        $aData["check"] = 0;
+        $aData["regular"] = 0;
         $gData["ids"] = $_REQUEST["guestbook_id"];
         $gData["deal_time"] = date("Y-m-d H:i:s");
         $gData["deal_date"] = date("Y-m-d");
-        $aData["deal_status"] = 8;
+        $aData["status"] = 0;
         $aData["transfer"] = 1;
         $drs = $data_dealed->add($aData);
         $grs = $guestbook->save($gData);
-        echo $drs.$grs;
+        echo $drs . $grs;
 //        var_dump($drs.$grs);
 //        var_dump($aData);
     }
