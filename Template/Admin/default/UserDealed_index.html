@@ -14,6 +14,7 @@
             var rawData = {$aListjson};
         </script>
         <a href="__ROOT__/index.php/Admin/UserDealed/Dindex/">未经过排重</a>
+        <span class="f1"><a href="__ROOT__/index.php/Admin/Choucha/lswx/">ls无效返回数更新</a>
         <table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
             <tr>
                 <td colspan="15" class="table_title">
@@ -23,7 +24,7 @@
                     <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
                         <script>
             $(function () {
-                $("#date").datepicker({});
+                $(".date").datepicker({});
                 $.datepicker.regional['zh-CN'] = {
                     closeText: '关闭',
                     prevText: '&#x3c;上月',
@@ -45,10 +46,10 @@
                 $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
             });
                         </script>
-                        <span class="f1"><a href="__ROOT__/index.php/Admin/Choucha/lswx/">ls无效返回数更新</a>
-                            <span class="fl">当前日期:{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">处理数据人数:{$aListcount}</span>
+                            <span class="fl">当前日期区间:{$startdate}----{$enddate}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">处理数据人数:{$aListcount}</span>
                             <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post">
-                                <span class="fl">查询日期:<input type="text" name="date" id="date" /></span>
+                                <span class="fl">开始日期:<input type="text" name="startdate" class="date" /></span>
+                                <span class="fl">结束日期:<input type="text" name="enddate" class="date" /></span>
                                 <input type="submit" value="查询" />
                                 <!-- <input type="reset" value="重选"> -->
                             </form>

@@ -5,7 +5,7 @@
  * @author Dinglei
  *
  */
-class DataDealedAction extends OQAction {
+class DataStatisticsAction extends OQAction {
     /*
      * 单独查询28转接数量
      * Time:2014-12-1 11:06:33
@@ -25,26 +25,29 @@ class DataDealedAction extends OQAction {
         $dealed = M("DataDealed");
         $dealAgain = D("DataAgain");
         $guestbook = D("guestbook");
+        // var_dump($_REQUEST);
         $period = $_REQUEST["period"] == "" ? 7 : $_REQUEST["period"];
+        $startdate = $_REQUEST["startdate"];
+        $enddate = $_REQUEST["enddate"];
         $aList = array();
-        $aTotalList = $this->getNumBySite("all", "total", $period); //全部的成功数
-        $aList_28 = $this->getNumBySite("28", "total", $period); //28的总成功数
-        $aList_zf = $this->getNumBySite("zf", "total", $period); //致富的总成功数
-        $aList_ls = $this->getNumBySite("ls", "total", $period); //连锁的总成功数
-        $aList_wp = $this->getNumBySite("wp", "total", $period); //wp的总成功数
-        $aList_91 = $this->getNumBySite("91", "total", $period); //91的总成功数
-        $aSend = $this->getNumBySite("all", ">0", $period); //全部发送成功数
-        $aSend_28 = $this->getNumBySite("28", ">0", $period); //28发送成功数
-        $aSend_zf = $this->getNumBySite("zf", ">0", $period); //zf发送成功数
-        $aSend_ls = $this->getNumBySite("ls", ">0", $period); //ls发送成功数
-        $aSend_wp = $this->getNumBySite("wp", ">0", $period); //wp的发送成功数
-        $aSend_91 = $this->getNumBySite("91", ">0", $period); //91的发送成功数
-        $aFail = $this->getNumBySite("all", "<0", $period); //全部发送成功数
-        $aFail_28 = $this->getNumBySite("28", "<0", $period); //28发送失败数
-        $aFail_zf = $this->getNumBySite("zf", "<0", $period); //zf发送失败数
-        $aFail_ls = $this->getNumBySite("ls", "<0", $period); //ls发送失败数
-        $aFail_wp = $this->getNumBySite("wp", "<0", $period); //wp的发送失败数
-        $aFail_91 = $this->getNumBySite("91", "<0", $period); //91的发送失败数
+        $aTotalList = $this->getNumBySite("all", "total", $period,$startdate,$enddate); //全部的成功数
+        $aList_28 = $this->getNumBySite("28", "total", $period,$startdate,$enddate); //28的总成功数
+        $aList_zf = $this->getNumBySite("zf", "total", $period,$startdate,$enddate); //致富的总成功数
+        $aList_ls = $this->getNumBySite("ls", "total", $period,$startdate,$enddate); //连锁的总成功数
+        $aList_wp = $this->getNumBySite("wp", "total", $period,$startdate,$enddate); //wp的总成功数
+        $aList_91 = $this->getNumBySite("91", "total", $period,$startdate,$enddate); //91的总成功数
+        $aSend = $this->getNumBySite("all", ">0", $period,$startdate,$enddate); //全部发送成功数
+        $aSend_28 = $this->getNumBySite("28", ">0", $period,$startdate,$enddate); //28发送成功数
+        $aSend_zf = $this->getNumBySite("zf", ">0", $period,$startdate,$enddate); //zf发送成功数
+        $aSend_ls = $this->getNumBySite("ls", ">0", $period,$startdate,$enddate); //ls发送成功数
+        $aSend_wp = $this->getNumBySite("wp", ">0", $period,$startdate,$enddate); //wp的发送成功数
+        $aSend_91 = $this->getNumBySite("91", ">0", $period,$startdate,$enddate); //91的发送成功数
+        $aFail = $this->getNumBySite("all", "<0", $period,$startdate,$enddate); //全部发送成功数
+        $aFail_28 = $this->getNumBySite("28", "<0", $period,$startdate,$enddate); //28发送失败数
+        $aFail_zf = $this->getNumBySite("zf", "<0", $period,$startdate,$enddate); //zf发送失败数
+        $aFail_ls = $this->getNumBySite("ls", "<0", $period,$startdate,$enddate); //ls发送失败数
+        $aFail_wp = $this->getNumBySite("wp", "<0", $period,$startdate,$enddate); //wp的发送失败数
+        $aFail_91 = $this->getNumBySite("91", "<0", $period,$startdate,$enddate); //91的发送失败数
 
         for ($i = 0; $i < count($aTotalList); $i++) {
             $Ydate = $aTotalList[$i]["addDate"];
@@ -57,7 +60,6 @@ class DataDealedAction extends OQAction {
             $aList[$i]["total_wp"] = $aList_wp[$i]["t"];
             $aList[$i]["total_91"] = $aList_91[$i]["t"];
             $aList[$i]["send_all"] = $aSend[$i]["t"];
-//            $aList[$i]["transfer"] = 
             $aList[$i]["send_28"] = $aSend_28[$i]["t"];
             $aList[$i]["send_zf"] = $aSend_zf[$i]["t"];
             $aList[$i]["send_wp"] = $aSend_wp[$i]["t"];
@@ -79,8 +81,10 @@ class DataDealedAction extends OQAction {
             $aList[$i]["send_again"] = $dealAgain->where("add_date='" . $aList[$i]["addDate"] . "' AND status >0")->count();
         }
 //                echo '<pre>';
-//                var_dump($aList);
+               // var_dump($aList);
         $this->assign("aList", $aList);
+        $this->assign("startdate",$startdate);
+        $this->assign("enddate",$enddate);
         $this->display();
     }
 
@@ -184,7 +188,7 @@ class DataDealedAction extends OQAction {
 
     #已经排重
 
-    private function getNumBySite($sSite = '28', $iType = 'total', $period = "7") {
+    private function getNumBySite($sSite = '28', $iType = 'total', $period = "7",$startdate = "",$enddate = "") {
         $sSQL = "1";
         $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";
         $sSQL .= ($iType == "total") ? "" : " AND status $iType";
@@ -207,7 +211,13 @@ class DataDealedAction extends OQAction {
 //			$dDate_end = date("Y-m", strtotime("last month"))."-31";
             $dDate_end = "2014-05-31";
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
+        } elseif ($period == "showforday") {
+            $dDate = $startdate;
+            $dDate_end = $enddate;
+            $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         }
+        // echo $sSQL;
+        // die();
 
         $dealed = M("data_dealed");
         $aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");

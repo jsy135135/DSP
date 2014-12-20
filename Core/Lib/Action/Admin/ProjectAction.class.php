@@ -668,16 +668,16 @@ class ProjectAction extends Action {
                             // $aTemp["needNum"] = 5;
                             // $aTemp["numbers"] = 5;
                     }else{
-                       $aTemp["level"]  = 4;
-                   }
-                   $aTemp["needNum"] = $aT["dspnum"];
-                   $aTemp["numbers"] = $aT["dspnum"];
-                   $aTemp["site"] = ls;
+                     $aTemp["level"]  = 4;
+                 }
+                 $aTemp["needNum"] = $aT["dspnum"];
+                 $aTemp["numbers"] = $aT["dspnum"];
+                 $aTemp["site"] = ls;
                    // $aTemp["catName"] = $aT["industry"];
                    // $aTemp["subCat"] = $aT["subindustry"];
                             //如果数据已经存在，则更新数据，否则就是插入数据
-                   $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-                   if ($id > 0){
+                 $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
+                 if ($id > 0){
                     // $j++;
                     // var_dump($aTemp);
                     $rs = $p->where("id=" . $id)->save($aTemp);
@@ -724,18 +724,18 @@ class ProjectAction extends Action {
                 // $aTemp["needNum"] = 5;
                 // $aTemp["numbers"] = 5;
                 }else{
-                   $aTemp["level"]  = 4;
+                 $aTemp["level"]  = 4;
                    // $aTemp["needNum"] = 1;
                    // $aTemp["numbers"] = 1;
-               }
-               $aTemp["needNum"] = $aT["dspnum"];
-               $aTemp["numbers"] = $aT["dspnum"];
-               $aTemp["site"] = ls;
+             }
+             $aTemp["needNum"] = $aT["dspnum"];
+             $aTemp["numbers"] = $aT["dspnum"];
+             $aTemp["site"] = ls;
                // $aTemp["catName"] = $aT["industry"];
                // $aTemp["subCat"] = $aT["subindustry"];
                 //如果数据已经存在，则更新数据，否则就是插入数据
-               $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-               if ($id > 0)
+             $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
+             if ($id > 0)
                 $p->where("id=" . $id)->save($aTemp);
             else
                 $d = $p->data($aTemp)->add();
@@ -835,9 +835,33 @@ class ProjectAction extends Action {
             $aTemp["level"] = 4;
             $aTemp["needNum"] = 1;
             $aTemp["numbers"] = 1;
+            //煲上皇和速汇宝
             if($aTemp["projectID"] == '307' || $aTemp["projectID"] == '308'){
                 $aTemp["needNum"] = 100;
                 $aTemp["numbers"] = 100;
+            }
+            //乾通国际
+            elseif(in_array($aTemp["projectID"],array(137))){
+                $aTemp["needNum"] = 4;
+                $aTemp["numbers"] = 4;
+            }
+            #限制数量5条
+            #小粥仙(合户)=>269,sooe品位生活灯饰=>296,放鹅郎=>277 ,热狗铺子=>315 ,乐姿家电（搜易）=>218 ,乐姿家电2（搜易）=>300 ,考拉大冒险(搜易)=>287
+            elseif(in_array($aTemp["projectID"],array(269,296,277,315,218,300,287))){
+                $aTemp["needNum"] = 5;
+                $aTemp["numbers"] = 5;
+            }
+            #限制数量3条
+            #sooe爱儿乐=>313,sooe世纪学习吧=>280
+            elseif (in_array($aTemp["projectID"],array(313,280))) {
+                $aTemp["needNum"] = 3;
+                $aTemp["numbers"] = 3;
+            }
+            #限制数量2条
+            #考拉大冒险(合户)=>289
+            elseif (in_array($aTemp["projectID"],array(289))) {
+                $aTemp["needNum"] = 2;
+                $aTemp["numbers"] = 2;
             }
 //                        如果数据已经存在，则更新数据，否则就是插入数据
 //            var_dump($aTemp);

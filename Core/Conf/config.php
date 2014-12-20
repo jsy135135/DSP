@@ -29,9 +29,10 @@ $array = array(
     'VAR_LANGUAGE' => 'l', // 默认语言切换变量
     //默认发送返回参数的对照
     "site" => array("total", "ls", "zf", "28", "cc"),
-    "ls" => array("m.liansuo.com", "wap.liansuo.com", "m.xqd8888.com", "www.liansuo.com", "m.longcangxuan.com", "m.sdcf88.com", "m.muouwangluo.com"),
+    "ls" => array("m.liansuo.com", "wap.liansuo.com", "m.xqd8888.com", "www.liansuo.com", "m.longcangxuan.com", "m.sdcf88.com", "m.muouwangluo.com", "m.51s287.com"),
     "zf" => array("wap.zhifuwang.cn", "wap.sj99188.com", "wap.zft888.com", "wap.1522828.com", "wap.1562828.com", "wap.wapluntai-pifa.com", "wap.chuxueit.net", "wap.51xiaoxiao.net", "wap.luntai-pifa.com", "wap.xyk371.cn", "wap.ahhsshy.cn", "wap.zhifuwang.net.cn", "wap.yumidaba.cn", "wap.bjiso.net.cn", "wap.bjiso.net.cn", "wap.zhifuwang.org.cn", "3g.chuangye.com", "3g.1562828.com", "wap.yangdaidai.com", "wap.hungfai.com.cn", "wap.1shan.cn", "wap.800bao.cn", "wap.51t6.cn", "wap.h-bb.cn", "wap.dllvyou.net", "wap.huai-an.net", "wap.chuangye.com"),
     "WP" => array("3w.1552828.com", "3w.1882828.com", "3w.wp28.com", "sogou.28u2.com", "uc.wp28.com"),
+    "91" => array("kb.xqd8888.com", "200.1342828.com", "800.xueliong.com", "200.28u0.com"),
     "r_28_1" => "数据格式不对，传来的数据不是数组",
     "r_28_2" => "传入的客户ID、项目ID不符合基本要求",
     "r_28_3" => "必填信息项内容为空",

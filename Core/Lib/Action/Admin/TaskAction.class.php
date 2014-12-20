@@ -161,10 +161,12 @@ class TaskAction extends Action {
 //                        var_dump($aList);
         for ($i = 0; $i <= $count; $i++) {
             echo $aList[$i]["ids"] . "\n";
-            if (substr($aList[$i]["address"], 0, 4) == "http")
+            if (substr($aList[$i]["address"], 0, 4) == "http"){
                 $aUrl = parse_url(trim($aList[$i]["address"]));
-            else
+            }
+            else{
                 $aUrl = parse_url(trim("http://" . $aList[$i]["address"]));
+            }
 //                                var_dump($aUrl);
             echo $aUrl["host"] . '<br />';
 //                                $aUrl["host"] = '3w.wp28.com';
