@@ -15,9 +15,10 @@
         </script>
         <a href="__ROOT__/index.php/Admin/UserDealed/Dindex/">未经过排重</a>
         <span class="f1"><a href="__ROOT__/index.php/Admin/Choucha/lswx/">ls无效返回数更新</a>
+        <span class="f1"><a href="__ROOT__/index.php/Admin/Choucha/zfwx/">zf无效返回数更新</a>
         <table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
             <tr>
-                <td colspan="15" class="table_title">
+                <td colspan="19" class="table_title">
                     <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
                     <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
                     <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
@@ -75,8 +76,13 @@
                                 <td>二次发送提交数</td>
                                 <td>二次发送成功数</td>
                                 <td>ls提交数</td>
+                                <td>ls转接数</td>
                                 <td>ls无效返回数</td>
                                 <td>ls提交无效率</td>
+                                <td>zf提交数</td>
+                                <td>zf无效返回数</td>
+                                <td>zf提交无效率</td>
+
                                 <!--<td>语音地址</td>-->
                             </tr>
 
@@ -101,8 +107,12 @@
                                     <td data-bind="text: againSubmitNum">{$vo.againSubmitNum}</td>
                                     <td data-bind="text: againSubmitOkNum">{$vo.againSubmitOkNum}</td>
                                     <td data-bind="text: lsSunbmitNum">{$vo.lsSunbmitNum}</td>
+                                    <td data-bind="text: lstransfer">{$vo.lstransfer}</td>
                                     <td data-bind="text: lswx">{$vo.lswx}</td>
                                     <td data-bind="text: lsSunbmitOK + '%'">{$vo.lsSunbmitOK}%</td>
+                                    <td data-bind="text: zfSunbmitNum">{$vo.zfSunbmitNum}</td>
+                                    <td data-bind="text: zfwx">{$vo.zfwx}</td>
+                                    <td data-bind="text: zfSunbmitOK + '%'">{$vo.zfSunbmitOK}%</td>
                                 </tr>
                             </tbody>
                             <tfoot>
@@ -127,8 +137,12 @@
                                     <td data-bind="text: t_againSubmitNum">{$vo.againSubmitNum}</td>
                                     <td data-bind="text: t_againSubmitOkNum">{$vo.againSubmitOkNum}</td>
                                     <td data-bind="text: t_lsSunbmitNum">{$vo.lsSunbmitNum}</td>
+                                    <td data-bind="text: t_lstransfer">{$vo.lstransfer}</td>
                                     <td data-bind="text: t_lswx">{$vo.lswx}</td>
                                     <td data-bind="text: t_lsSunbmitOK">{$vo.lsSunbmitOK}%</td>
+                                    <td data-bind="text: t_zfSunbmitNum">{$vo.zfSunbmitNum}</td>
+                                    <td data-bind="text: t_zfwx">{$vo.zfwx}</td>
+                                    <td data-bind="text: t_zfSunbmitOK">{$vo.zfSunbmitOK}%</td>
 
                                 </tr>
 
@@ -150,8 +164,12 @@
                                     <td data-bind="text: (t_againSubmitNum() / len()).toFixed(2)">{$vo.againSubmitNum}</td>
                                     <td data-bind="text: (t_againSubmitOkNum() / len()).toFixed(2)">{$vo.againSubmitOkNum}</td>
                                     <td data-bind="text: (t_lsSunbmitNum() / len()).toFixed(2)">{$vo.lsSunbmitNum}</td>
+                                    <td data-bind="text: (t_lstransfer() / len()).toFixed(2)">{$vo.lstranfer}</td>
                                     <td data-bind="text: (t_lswx() / len()).toFixed(2)">{$vo.lswx}</td>
                                     <td data-bind="text: t_lsSunbmitOK">{$vo.lsSunbmitOK}%</td>
+                                    <td data-bind="text: (t_zfSunbmitNum() / len()).toFixed(2)">{$vo.zfSunbmitNum}</td>
+                                    <td data-bind="text: (t_zfwx() / len()).toFixed(2)">{$vo.zfwx}</td>
+                                    <td data-bind="text: t_zfSunbmitOK">{$vo.zfSunbmitOK}%</td>
                                 </tr>
                             </tfoot>
                             <!--            <tr id="table-result">
@@ -283,6 +301,14 @@
                                     return ret;
                                 });
 
+                                self.t_lstransfer = ko.computed(function() {
+                                    var ret = 0;
+                                    self.datalist().forEach(function(item, index) {
+                                        ret += +item.lstransfer;
+                                    });
+                                    return ret;
+                                });
+
                                 self.t_lswx = ko.computed(function() {
                                     var ret = 0;
                                     self.datalist().forEach(function(item, index) {
@@ -299,6 +325,31 @@
                                     ret = (ret / self.datalist().length).toFixed(2);
                                     return ret + '%';
                                 });
+
+                                 self.t_zfSunbmitNum = ko.computed(function() {
+                                     var ret = 0;
+                                     self.datalist().forEach(function(item, index) {
+                                         ret += +item.zfSunbmitNum;
+                                     });
+                                     return ret;
+                                 });
+
+                                 self.t_zfwx = ko.computed(function() {
+                                     var ret = 0;
+                                     self.datalist().forEach(function(item, index) {
+                                         ret += +item.zfwx;
+                                     });
+                                     return ret;
+                                 });
+
+                                 self.t_zfSunbmitOK = ko.computed(function() {
+                                     var ret = 0;
+                                     self.datalist().forEach(function(item, index) {
+                                         ret += +item.zfSunbmitOK;
+                                     });
+                                     ret = (ret / self.datalist().length).toFixed(2);
+                                     return ret + '%';
+                                 });
 
                                  self.t_transfer = ko.computed(function() {
                                     var ret = 0;
@@ -319,8 +370,12 @@
 
 
 
-
+                            try {
                             ko.applyBindings(new Vm());
+
+                            } catch(e) {
+                                console.log(e);
+                            }
 
                             </script>
 

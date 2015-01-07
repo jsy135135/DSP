@@ -26,3 +26,4 @@ getdata($url);
     $ar = unserialize ($content);
     var_dump($ar);
   }
+  echo 11111;

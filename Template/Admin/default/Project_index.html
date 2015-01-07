@@ -7,67 +7,67 @@
             <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
             <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
             <style>td{ height:22px; line-height:22px}</style>
-              <style>
-    #dialog {
-      position: fixed;
-      z-index: 200;
-      width: 400px;
-      top: 350px;
-      left: 50%;
-      margin-left: -200px;
-      background: white;
-      border-radius: 5px;
-      box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-      border: 1px solid silver;
-      display: none;
-    }
+            <style>
+                #dialog {
+                    position: fixed;
+                    z-index: 200;
+                    width: 400px;
+                    top: 350px;
+                    left: 50%;
+                    margin-left: -200px;
+                    background: white;
+                    border-radius: 5px;
+                    box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+                    border: 1px solid silver;
+                    display: none;
+                }
 
-    #dialog .header {
-      padding: 15px;
-      border-bottom: 1px solid silver;
-      overflow: hidden;
-    }
+                #dialog .header {
+                    padding: 15px;
+                    border-bottom: 1px solid silver;
+                    overflow: hidden;
+                }
 
-    #dialog .header .title {
-      float: left;
-    }
+                #dialog .header .title {
+                    float: left;
+                }
 
-    #dialog .header .action {
-      float: right;
-      background: none;
-      border: none;
-      cursor: pointer;
-    }
+                #dialog .header .action {
+                    float: right;
+                    background: none;
+                    border: none;
+                    cursor: pointer;
+                }
 
-    #dialog .main {
-      padding: 30px 15px;
-      border-bottom: 1px solid silver;
+                #dialog .main {
+                    padding: 30px 15px;
+                    border-bottom: 1px solid silver;
 
-    }
+                }
 
-      #dialog .main button,
-      #dialog .main select {
-      font-size: 18px;
+                #dialog .main button,
+                #dialog .main select {
+                    font-size: 18px;
 
-    }
+                }
 
 
 
-    #backdrop {
-      position: fixed;
-      width: 100%;
-      height: 100%;
-      background: rgba(0,0,0,0.7);
-      z-index: 100;
-      display: none;
-      top: 0;
-    }
+                #backdrop {
+                    position: fixed;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(0,0,0,0.7);
+                    z-index: 100;
+                    display: none;
+                    top: 0;
+                }
 
-    body.show-dialog #backdrop,
-    body.show-dialog #dialog {
-      display: block;
-    }
-  </style>
+                body.show-dialog #backdrop,
+                body.show-dialog #dialog {
+                    display: block;
+                }
+            </style>
     </head>
     <body>
         <table id="list_table" width="98%" border="0" cellpadding="12" cellspacing="1" class="table">
@@ -168,23 +168,42 @@
         <div id="backdrop" data-toggle="dialog"></div>
 
         <script>
-            $('[data-toggle="dialog"]').click(function(event) {
+            $('[data-toggle="dialog"]').click(function (event) {
                 event.preventDefault();
 
 
-                var xghfl =  $(this).parents('tr').find('.xghfl');
-                var xghzl =  $(this).parents('tr').find('.xghzl');
-                var title =  $(this).parents('tr').find('.title').html();
+                var xghfl = $(this).parents('tr').find('.xghfl');
+                var xghzl = $(this).parents('tr').find('.xghzl');
+                var title = $(this).parents('tr').find('.title').html();
 
                 $('#dialog').data('xghfl', xghfl);
                 $('#dialog').data('xghzl', xghzl);
+
+                if (!$('body').hasClass('show-dialog')) {
+                    $('#pid option').each(function () {
+                        if (this.textContent == xghfl[0].textContent) {
+                            $('#pid').val(this.value).trigger('change');
+                        }
+                    });
+
+                    $('#cid option').each(function () {
+                        if (this.textContent == xghzl[0].textContent) {
+                            $('#cid').val(this.value);
+
+                        }
+                    });
+                }
+
+
+
                 $('body').toggleClass('show-dialog');
 
-                $('#dialog [type="hidden"]').val( $(this).attr('data-id') );
+                $('#dialog [type="hidden"]').val($(this).attr('data-id'));
                 $('#dialog .title').html(title);
+
             });
 
-            $('#dialog form').submit(function(event) {
+            $('#dialog form').submit(function (event) {
                 event.preventDefault();
                 var data = $(this).serialize();
                 var action = $(this).attr('action');
@@ -192,13 +211,13 @@
                 var xghfl = $(this).find('.xghfl option:selected').html();
                 var xghzl = $(this).find('.xghzl option:selected').html();
 
-                $( $('#dialog').data('xghfl') ).html( xghfl );
-                $( $('#dialog').data('xghzl') ).html( xghzl );
+                $($('#dialog').data('xghfl')).html(xghfl);
+                $($('#dialog').data('xghzl')).html(xghzl);
 
                 $('body').toggleClass('show-dialog');
                 console.log(data);
-                $.post(action, data, function(res) {
-                 console.log(res);
+                $.post(action, data, function (res) {
+                    console.log(res);
                 });
             });
         </script>
@@ -218,34 +237,36 @@
         </script>
         <include file="Index:footer" />
         <script type="text/javascript">
-                                    var data = [];
-                                    $('#cid option').each(function(index, item) {
-                                        item = $(item);
-                                        data.push({
-                                            value: item.val(),
-                                            pid: item.attr('pid'),
-                                            content: item.html()
-                                        });
-                                    });
-                                    // initda
-                                    show($('#pid option').val())
-                                    $('#pid').on('change', function(e) {
-                                        var pid = this.value;
-                                        show(pid);
-                                    });
-                                    function show(pid) {
-                                        $('#cid').html('');
-                                        var result = '';
-                                        for (var i = 0; i < data.length; i++) {
-                                            var item = data[i];
-                                            if (pid == item.pid) {
-                                                result += '<option value="' + item.value + '">' + item.content + '</option>';
-                                            }
-                                        }
+            var data = [];
+            $('#cid option').each(function (index, item) {
+                item = $(item);
+                data.push({
+                    value: item.val(),
+                    pid: item.attr('pid'),
+                    content: item.html()
+                });
+            });
+            // initda
+            show($('#pid option').val());
 
-                                        $('#cid').append(result);
-                                    }
-                                </script>
+            $('#pid').on('change', function (e) {
+                var pid = this.value;
+                show(pid);
+            });
+
+            function show(pid) {
+                $('#cid').html('');
+                var result = '';
+                for (var i = 0; i < data.length; i++) {
+                    var item = data[i];
+                    if (pid == item.pid) {
+                        result += '<option value="' + item.value + '">' + item.content + '</option>';
+                    }
+                }
+
+                $('#cid').append(result);
+            }
+        </script>
     </body>
 </html>
 <!-- 本次查询时间：{$date} -->

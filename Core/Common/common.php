@@ -150,3 +150,34 @@ function get_letter($s0){
 	if($asc>=-11055 and $asc<=-10247)return "Z";
 	return 0;
 }
+//excel转换为数组
+function excelToArray($file){
+ 
+    $objReader = PHPExcel_IOFactory::createReader('Excel5');  
+ 
+    $objReader->setReadDataOnly(true);  
+ 
+    $objPHPExcel = $objReader->load($file);  
+ 
+    $objWorksheet = $objPHPExcel->getActiveSheet();  
+ 
+    $highestRow = $objWorksheet->getHighestRow();   
+ 
+    $highestColumn = $objWorksheet->getHighestColumn();   
+ 
+    $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);  
+ 
+    $excelData = array();  
+ 
+    for ($row = 2; $row <= $highestRow; ++$row) {  
+ 
+        for ($col = 0; $col <= $highestColumnIndex; ++$col) {  
+ 
+            $excelData[$row][] = $objWorksheet->getCellByColumnAndRow($col, $row)->getValue();  
+        }  
+ 
+    }  
+ 
+    return $excelData;
+    // var_dump($excelData); 
+}

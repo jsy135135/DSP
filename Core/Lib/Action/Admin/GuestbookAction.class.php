@@ -399,7 +399,7 @@ class GuestbookAction extends OQAction {
 //                $iReturnID = '3306';
         //更新项目的状态，如果返回值为负值的话，更新发送状态为0，表示不能发送
         //如果返回数是负数，进行项目状态的更改
-        if ($iReturnID < 0) {
+        if ($iReturnID < 0 && $iReturnID != '-11') {
             //项目numbers字段+1
             $p->where("projectID = " . $projectID . " AND site = '" . $site . "'")->setInc('numbers');
             //项目发送状态置为不可发送，状态值为0

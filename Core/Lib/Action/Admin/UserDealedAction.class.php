@@ -86,6 +86,7 @@ class UserDealedAction extends OQAction{
 		}
 		$dealed = D("data_dealed");
 		$lswx = D("lswx");
+		$zfwx = D("zfwx");
 		$again = D("data_again");
 		$guestbook = D("guestbook");
 		$user = D("user");
@@ -121,11 +122,15 @@ class UserDealedAction extends OQAction{
 			$aList[$i]["againSubmitNum"] = $again->where($sSQL2."AND u_id=$i")->count("DISTINCT  data_id");
 			$aList[$i]["againSubmitOkNum"] = $again->where($sSQL2."AND u_id=$i AND status > 0")->count("DISTINCT data_id");
 			$aList[$i]["lsSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'ls'")->count("DISTINCT phone");
+			$aList[$i]["lstransfer"] = $dealed->where($sSQL."AND u_id=$i AND content like '%电话咨询%' AND status>0 AND site = 'ls'")->count("DISTINCT phone");
+			$aList[$i]["zfSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'zf'")->count("DISTINCT phone");
 			$aList[$i]["lswx"] = $lswx->where($sSQL."AND u_id=$i")->count();
-			if($aList[$i]["lsws"] == 0){
-				$aList[$i]["lswx"] == "没有数据";
-			}
+			$aList[$i]["zfwx"] = $zfwx->where($sSQL."AND u_id=$i AND zfwx <> 'ok'")->count();
+			// if($aList[$i]["lsws"] == 0){
+			// 	$aList[$i]["lswx"] == "没有数据";
+			// }
 			$aList[$i]["lsSunbmitOK"] = round(($aList[$i]["lswx"]/$aList[$i]["lsSunbmitNum"]),4) * 100;
+			$aList[$i]["zfSunbmitOK"] = round(($aList[$i]["zfwx"]/$aList[$i]["zfSunbmitNum"]),4) * 100;
 			//$aList[$i]["specialOkNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i AND status > 0 AND domain='wap.28.com'")->count();
 
 

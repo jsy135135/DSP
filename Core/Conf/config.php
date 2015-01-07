@@ -32,7 +32,28 @@ $array = array(
     "ls" => array("m.liansuo.com", "wap.liansuo.com", "m.xqd8888.com", "www.liansuo.com", "m.longcangxuan.com", "m.sdcf88.com", "m.muouwangluo.com", "m.51s287.com"),
     "zf" => array("wap.zhifuwang.cn", "wap.sj99188.com", "wap.zft888.com", "wap.1522828.com", "wap.1562828.com", "wap.wapluntai-pifa.com", "wap.chuxueit.net", "wap.51xiaoxiao.net", "wap.luntai-pifa.com", "wap.xyk371.cn", "wap.ahhsshy.cn", "wap.zhifuwang.net.cn", "wap.yumidaba.cn", "wap.bjiso.net.cn", "wap.bjiso.net.cn", "wap.zhifuwang.org.cn", "3g.chuangye.com", "3g.1562828.com", "wap.yangdaidai.com", "wap.hungfai.com.cn", "wap.1shan.cn", "wap.800bao.cn", "wap.51t6.cn", "wap.h-bb.cn", "wap.dllvyou.net", "wap.huai-an.net", "wap.chuangye.com"),
     "WP" => array("3w.1552828.com", "3w.1882828.com", "3w.wp28.com", "sogou.28u2.com", "uc.wp28.com"),
-    "91" => array("kb.xqd8888.com", "200.1342828.com", "800.xueliong.com", "200.28u0.com"),
+    #一个账户对应一个域名
+    #   账户  域名
+// 百度  bj-1342828  200.1342828.com
+//     xqd88   kb.xqd8888.com
+//     16328   200.28u0.com
+//     AP-04   800.xueliong.com
+//     DY-02   800.quikio.cn
+// 360 ka52s288    360.52s288.com
+//     ka91jmw 360.91jmw.com
+//     ka28g9  360.28g9.com
+//     ka51s51 360.51s51.com
+//     创业家园2   360.xqd8888.com
+// 搜狗  51s588@sogou.com    200.51s58.com
+//     52s285@sogou.com    200.52s285.com
+//     52s289@sogou.com    200.52s289.com
+//     51s2821@sogou.com   sogou.51s282.com
+//     52s2801@sogou.com   sogou.52s280.com
+//     51s2891@sogou.com   sogou.51s289.com
+//     51s521@sogou.com    sogou.51s52.com
+//     52s2861@sogou.com   sogou.52s286.com
+
+    "jm" => array("71593.wap.sooe.cn", "200.1342828.com", "kb.xqd8888.com", "200.28u0.com", "800.xueliong.com", "800.quikio.cn", "360.52s288.com", "360.91jmw.com", "360.28g9.com", "360.51s51.com", "360.xqd8888.com", "200.51s58.com", "200.52s285.com", "200.52s289.com", "sogou.51s282.com","sogou.52s280.com", "sogou.51s289.com", "sogou.51s52.com", "sogou.52s286.com"),
     "r_28_1" => "数据格式不对，传来的数据不是数组",
     "r_28_2" => "传入的客户ID、项目ID不符合基本要求",
     "r_28_3" => "必填信息项内容为空",
@@ -46,5 +67,5 @@ $array = array(
     "r_28_21" => "单人留言条数1日内不大于3条",
     "r_28_22" => "单人留言条数10日内不大于10条",
     "r_28_38" => "判断超标与否，超标则不接收",
-);
+    );
 return array_merge($config, $array);

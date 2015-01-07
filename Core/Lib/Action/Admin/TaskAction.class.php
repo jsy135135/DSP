@@ -1,52 +1,82 @@
 <?php
+
 header("Content-type: text/html; charset=utf-8");
+
 /**
  * 自动处理等相关
  *
  */
 class TaskAction extends Action {
-    public function transferlist(){
+    /*
+     * crm [客户关系管理系统]
+     * Copyright (c) 2013
+     * Author：siyuan
+     * 模块名称：定时操作数据库，导入数据
+     */
+    #DSP数据特定项目的数据输出（此为介护宝项目）
+    public function sysforycrm() {
+        $guestbook = M("guestbook");
+        $date = date("Y-m-d", strtotime("1 days ago"));
+//        $date = '2014-12-28';
+        $data = $guestbook->query("select ids,phone,add_date from guestbook where site = '91' AND project_id = 387 AND add_date = '".$date."'");
+        $data = serialize($data);
+        echo $data;
+    }
+    #进行前一天一堆多数据的输出
+    public function sysfordcrm() {
+        $guestbook = M("guestbook");
+        $date = date("Y-m-d",strtotime("1 days ago"));
+//        $dsql = "SELECT ids,phone,add_date FROM `guestbook` WHERE `add_date` = '".$date."' AND `project_id` = ''";
+        $dsql = "SELECT ids,phone,add_date FROM guestbook WHERE add_date = '".$date."'AND project_id = '' AND ids >= ((SELECT MAX(ids) FROM guestbook)-(SELECT MIN(ids) FROM guestbook)) * RAND() + (SELECT MIN(ids) FROM guestbook)  LIMIT 300";
+        $data = $guestbook->query($dsql);
+        $data = serialize($data);
+        echo $data;
+    }
+    public function transferlist() {
         $transfer = M("transfer");
-        $date = date("Y-m-d",  strtotime("1 days ago"));
+        $date = date("Y-m-d", strtotime("1 days ago"));
 //        echo $date;
-        $data = $transfer->where("indate = '".$date."'")->select();
+        $data = $transfer->where("indate = '" . $date . "'")->select();
 //        echo $data->getLastsql;
         $datacount = count($data);
         echo '<table>';
         echo '<tr><td>记录自增ID</td><td>对应联展400电话表字段ID</td><td>手机电话</td><td>拨打日期</td><td>拨打时间</td><td>呼叫的状态</td><td>通话时长</td><td>省份</td><td>城市</td><td>标识</td></tr>';
         for ($i = 0; $i < $datacount; $i++) {
             echo '<tr>';
-            echo '<td>' . $data[$i]["t_id"] . '</td><td>' . $data[$i]["id"] . '</td><td>' . $data[$i]["tel"] . '</td><td>' . $data[$i]["indate"]. '</td><td>' . $data[$i]["dtime"] . '</td><td>' . $data[$i]["state"] . '</td><td>' . $data[$i]["calltime"] . '</td><td>'. $data[$i]["province"] . '</td><td>'. $data[$i]["city"] . '</td><td>'. $data[$i]["identify"] . '</td>';
+            echo '<td>' . $data[$i]["t_id"] . '</td><td>' . $data[$i]["id"] . '</td><td>' . $data[$i]["tel"] . '</td><td>' . $data[$i]["indate"] . '</td><td>' . $data[$i]["dtime"] . '</td><td>' . $data[$i]["state"] . '</td><td>' . $data[$i]["calltime"] . '</td><td>' . $data[$i]["province"] . '</td><td>' . $data[$i]["city"] . '</td><td>' . $data[$i]["identify"] . '</td>';
             echo '</tr>';
         }
         echo '</table>';
     }
 
-    public function sys_transfer(){
+    public function sys_transfer() {
         $url = 'http://super.28.com/soap/dsp_400_send/send.php';
 //        $url = 'http://super.28.com/soap/dsp_400_send/send.php?dt=2014-10-2';
         $data = $this->getWebData($url);
 //        var_dump($data);
         $transfer = M("transfer");
         $datacount = count($data);
-        for($i=0;$i<$datacount;$i++){
+        for ($i = 0; $i < $datacount; $i++) {
             $rs = $transfer->add($data[$i]);
             var_dump($rs);
         }
     }
+
     #curl获取url信息的方法，返回数组形式
-    public function getWebData($url){
-    $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-    curl_setopt($ch, CURLOPT_HEADER, 0);
-    $output = curl_exec($ch);
-    curl_close($ch);
-    $ar = unserialize($output);
-    return $ar;
-  }
-    public function sys_toCCenter(){
+
+    public function getWebData($url) {
+        $ch = curl_init();
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        $output = curl_exec($ch);
+        curl_close($ch);
+        $ar = unserialize($output);
+        return $ar;
+    }
+
+    public function sys_toCCenter() {
         $project = M("project");
         $sql = "SELECT c.id,c.catname,p.name,p.backCall FROM `project` as p  left join category as c on p.cid = c.id WHERE `site` LIKE '28' AND p.status =1 AND p.backCall <>0 order by c.id asc,p.name asc";
         $data = $project->query($sql);
@@ -66,17 +96,19 @@ class TaskAction extends Action {
 //        var_dump($data);
         var_dump($industrydata);
     }
-    public function sys_toCallCenter(){
+
+    public function sys_toCallCenter() {
         $this->sys_industry();
         $this->sys_company();
         echo '呼叫中心数据同步完成';
     }
+
     public function sys_industry() {
         $category = M("category");
         $sql = "SELECT id,catname FROM `category`";
         $data = $category->query($sql);
-                var_dump($data);
-                die();
+        var_dump($data);
+        die();
         foreach ($data as &$value) {
             $value["industryid"] = $value["id"];
             unset($value["id"]);
@@ -85,7 +117,7 @@ class TaskAction extends Action {
             $value["presence"] = 1;
         }
 //        var_dump($data);
-         $agent = M('industry', 'vtiger_', 'mysql://root:anlaigz@192.168.200.144:3306/crm_default');
+        $agent = M('industry', 'vtiger_', 'mysql://root:anlaigz@192.168.200.144:3306/crm_default');
 //                $dd = $agent->where("1")->select();
 //                var_dump($dd);
         $dataCount = count($data);
@@ -101,7 +133,6 @@ class TaskAction extends Action {
             }
             unset($data[$i]);
         }
-
     }
 
     public function sys_company() {
@@ -122,8 +153,8 @@ class TaskAction extends Action {
             $value["phone1"] = $value["backCall"];
             unset($value["backCall"]);
         }
-                 var_dump($data);
-                 die();
+        var_dump($data);
+        die();
         $agent = M('company', 'vtiger_', 'mysql://root:anlaigz@192.168.200.144:3306/crm_default');
 //                $dd = $agent->where("1")->select();
 //                var_dump($dd);
@@ -143,9 +174,29 @@ class TaskAction extends Action {
     }
 
     function test() {
-        $url = "//3w.1552828.com/wp/xzxlz/index.htm";
+        $url = "http://wap.zft888.com/2276-3-1240.html?utm_source=Baidu";
         $urldata = parse_url($url);
-        var_dump($urldata);
+        // var_dump($urldata);
+        $path = str_replace("/", "", $urldata["path"]);
+        $path = str_replace(".html", "", $path);
+        $pathdata = explode("-", $path);
+        // var_dump($pathdata);
+        $iPID = $pathdata[0];
+        // echo $projectID;
+        // $iPID = substr($urldata["query"], strpos($urldata["query"], "=") + 1);
+        var_dump($iPID);
+        $value = is_numeric($iPID);
+        var_dump($value);
+        // var_dump($urldata);
+    }
+
+    function jsy() {
+        $url = "http://800.quikio.cn/qmy/wap/?830";
+        $content = file_get_contents($url);
+        // <input type="hidden" name="p" value="301">
+        preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
+        $iPID = $matches[1][0];
+        $site = "91";
     }
 
     /**
@@ -161,10 +212,9 @@ class TaskAction extends Action {
 //                        var_dump($aList);
         for ($i = 0; $i <= $count; $i++) {
             echo $aList[$i]["ids"] . "\n";
-            if (substr($aList[$i]["address"], 0, 4) == "http"){
+            if (substr($aList[$i]["address"], 0, 4) == "http") {
                 $aUrl = parse_url(trim($aList[$i]["address"]));
-            }
-            else{
+            } else {
                 $aUrl = parse_url(trim("http://" . $aList[$i]["address"]));
             }
 //                                var_dump($aUrl);
@@ -183,6 +233,14 @@ class TaskAction extends Action {
             } elseif (in_array($aUrl["host"], C("zf"))) {
 //                            echo 'zf'.'<br />';
                 $iPID = substr($aUrl["query"], strpos($aUrl["query"], "=") + 1);
+                $flag = is_numeric($iPID);
+                if (!$flag) {
+                    $path = str_replace("/", "", $aUrl["path"]);
+                    $path = str_replace(".html", "", $path);
+                    $pathdata = explode("-", $path);
+                    // var_dump($pathdata);
+                    $iPID = $pathdata[0];
+                }
                 $site = "zf";
             } elseif (in_array($aUrl["host"], C("WP"))) {
 //                            echo 'wp'.'<br />';
@@ -196,10 +254,20 @@ class TaskAction extends Action {
                 var_dump($projectID);
                 $iPID = $projectID;
                 $site = "wp";
+            } elseif (in_array($aUrl["host"], C("jm"))) {
+                echo "i am 91 site";
+                $content = file_get_contents($aList[$i]["address"]);
+                // $content = file_get_contents($url);
+                // <input type="hidden" name="p" value="301">
+                preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
+                $iPID = $matches[1][0];
+                $site = "91";
             } else {
+                echo '不知道';
                 $iPID = str_replace(".html", "", substr($aUrl["path"], strrpos($aUrl["path"], "_") + 1));
                 $site = "28";
             }
+            // var_dump(C("jm"));
             $aData["ids"] = $aList[$i]["ids"];
             $aData["project_id"] = intval($iPID);
             $aData["site"] = $site;
@@ -210,7 +278,7 @@ class TaskAction extends Action {
     }
 
     /**
-     *更新改变字段(幸福饰家 特殊需求)
+     * 更新改变字段(幸福饰家 特殊需求)
      *
      *
      */
@@ -403,6 +471,7 @@ class TaskAction extends Action {
     }
 
     /**
+     *
      * 每天设置发送状态为1，表示可以接受,每天执行一次，而且只能执行一次
      */
     public function setSendStatusByDay() {
