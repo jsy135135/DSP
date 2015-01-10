@@ -46,18 +46,18 @@ class ExAction extends Action {
         }
     }
 
-    public function JSY() {
-        $g = M("guestbook");
-        //星期六儿童乐园的来源网址页面
-        $address = array('http://wap.kxjh88.com/195_6_7207.html','http://m.liansuo.com/p/index/102480.html',)
-        $data = $g->query("SELECT site,count(site) as t  FROM `guestbook` WHERE `add_date` <= '2013-12-31' group by site");
-//        echo '<pre>';
-//        var_dump($data);
-        $datacount = count($data);
-        for($i=0;$i<$datacount;$i++){
-           echo $data[$i]['site'].'&nbsp&nbsp&nbsp&nbsp'.$data[$i]['t'].'<br />';
-        }
-    }
+//    public function JSY() {
+//        $g = M("guestbook");
+//        //星期六儿童乐园的来源网址页面
+//        $address = array('http://wap.kxjh88.com/195_6_7207.html','http://m.liansuo.com/p/index/102480.html',)
+//        $data = $g->query("SELECT site,count(site) as t  FROM `guestbook` WHERE `add_date` <= '2013-12-31' group by site");
+////        echo '<pre>';
+////        var_dump($data);
+//        $datacount = count($data);
+//        for($i=0;$i<$datacount;$i++){
+//           echo $data[$i]['site'].'&nbsp&nbsp&nbsp&nbsp'.$data[$i]['t'].'<br />';
+//        }
+//    }
     #特殊客户的数据导出
         public function phone() {
             $project = M("guestbook");
@@ -86,5 +86,3 @@ class ExAction extends Action {
                 echo '输出文件：' . $shu . '<br />';
             }
         }
-
-}

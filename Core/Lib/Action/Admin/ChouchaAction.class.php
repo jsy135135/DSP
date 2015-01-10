@@ -63,16 +63,17 @@ class ChouchaAction extends OQAction {
         }
 //        echo '<pre>';
 //        var_dump($uidlist);
-        $this->assign('count',$statuslistcount);
+        $this->assign('count', $statuslistcount);
         $this->assign('date', $dDate);
         $this->assign('list', $uidlist);
         $this->display();
     }
-    public function zfwx(){
+
+    public function zfwx() {
         // $date = date("Y-m-d", strtotime("7 days ago"));
         $date = $_REQUEST["date"] == "" ? $date = date("Y-m-d") : $_REQUEST["date"];
         $data_dealed = M("data_dealed");
-        $data = $data_dealed->where("addDate = '".$date."' AND site = 'zf' AND status > 0 AND regular = '1'")->select();
+        $data = $data_dealed->where("addDate = '" . $date . "' AND site = 'zf' AND status > 0 AND regular = '1'")->select();
         // var_dump($data);
         // die();
         import("phprpc_client", "Core/Lib/Widget/", ".php");
@@ -82,30 +83,34 @@ class ChouchaAction extends OQAction {
         // echo $datacount;
         // die();
         $zfwx = M("zfwx");
-        for($i=0;$i<$datacount;$i++){
+        for ($i = 0; $i < $datacount; $i++) {
             $aData = array(
-            // 'id' => 1293483,
+                // 'id' => 1293483,
                 'id' => $data[$i]["status"]
-                );
-        // var_dump($aData);
-        // die();
-        // print_r($client->clientSend($aData,'utf-8','liansuotozfw','zfwLianSuo2012@$^'));//账号密码用现有的.不变
-        $restatus = $client->clientSend($aData,'utf-8','liansuotozfw','zfwLianSuo2012@$^');//账号密码用现有的.不变
-        $restatus = mb_convert_encoding($restatus, "UTF-8", "GBK");
-        // echo $restatus.'</br>';
-        $rsdata = $data_dealed->where("id = '".$data[$i]["id"]."'")->select();
-        $rsdata = $rsdata[0];
-        $rsdata["zfwx"] = $restatus;
-        // var_dump($rsdata);
-        $zfwx->add($rsdata);
-        // die();
+            );
+            // var_dump($aData);
+            // die();
+            // print_r($client->clientSend($aData,'utf-8','liansuotozfw','zfwLianSuo2012@$^'));//账号密码用现有的.不变
+            $restatus = $client->clientSend($aData, 'utf-8', 'liansuotozfw', 'zfwLianSuo2012@$^'); //账号密码用现有的.不变
+            $restatus = mb_convert_encoding($restatus, "UTF-8", "GBK");
+            // echo $restatus.'</br>';
+            $rsdata = $data_dealed->where("id = '" . $data[$i]["id"] . "'")->select();
+            $rsdata = $rsdata[0];
+            $rsdata["zfwx"] = $restatus;
+            $zfwx_rs = $zfwx->where("id = '" . $rsdata["id"] . "'")->select();
+            if ($zfwx_rs) {
+                $zfwx->where("id = '" . $rsdata["id"] . "'")->save($rsdata);
+            } else {
+                $zfwx->add($rsdata);
+            }
         }
-        $list = $zfwx->where("addDate = '".$date."' AND zfwx <>'ok'")->select();
+        $list = $zfwx->where("addDate = '" . $date . "' AND zfwx <>'ok'")->select();
         $listcount = count($list);
-        $this->assign('count',$listcount);
+        $this->assign('count', $listcount);
         $this->assign('date', $date);
         $this->assign('list', $list);
         // var_dump($list);
         $this->display();
     }
+
 }

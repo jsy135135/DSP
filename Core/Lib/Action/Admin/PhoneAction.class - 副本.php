@@ -34,5 +34,4 @@
 			}
 			fclose($file);
 		}
-		public
 	}
