@@ -125,6 +125,7 @@ class UserDealedAction extends OQAction{
 			$aList[$i]["lstransfer"] = $dealed->where($sSQL."AND u_id=$i AND content like '%电话咨询%' AND status>0 AND site = 'ls'")->count("DISTINCT phone");
 			$aList[$i]["zfSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'zf'")->count("DISTINCT phone");
 			$aList[$i]["lswx"] = $lswx->where($sSQL."AND u_id=$i")->count();
+                        $aList[$i]["lszjwx"] = $lswx->where($sSQL."AND u_id = $i AND content like '%电话咨询%'")->count();
 			$aList[$i]["zfwx"] = $zfwx->where($sSQL."AND u_id=$i AND zfwx <> 'ok'")->count();
 			// if($aList[$i]["lsws"] == 0){
 			// 	$aList[$i]["lswx"] == "没有数据";
