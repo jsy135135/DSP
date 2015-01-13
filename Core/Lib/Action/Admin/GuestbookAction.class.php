@@ -552,6 +552,7 @@ class GuestbookAction extends OQAction {
             'trueName' => $aData["user_name"], //真是姓名[必填]
             'mobile' => $aData["phone"], //手机号码[必填]
             'ip' => $aData["ips"], //IP地址[必填]
+            'content' => $aData["content"], //留言内容 [必填]
 //            'memberid' => 134920, //项目id [必填]
 //            'trueName' => 'siyuan', //真是姓名[必填]
 //            'mobile' => '13354280961', //手机号码[必填]
