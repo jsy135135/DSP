@@ -836,7 +836,7 @@ class ProjectAction extends Action {
             $aTemp["needNum"] = 1;
             $aTemp["numbers"] = 1;
             #DSP手动暂停项目
-            if(in_array($aTemp["projectID"],array(151,296,134,315))){
+            if(in_array($aTemp["projectID"],array(151,296,134,270,300,315))){
                 $aTemp["status"] = 0;
             }
             //煲上皇和速汇宝
