@@ -72,7 +72,7 @@
     <body>
         <table id="list_table" width="98%" border="0" cellpadding="12" cellspacing="1" class="table">
             <tr>
-                <td colspan="15" class="table_title">
+                <td colspan="18" class="table_title">
                     <span class="fl">项目列表</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>项目总数：{$countaList}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="f1">总需求数：{$Aalsum}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>还需总数：{$Anumbers}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="f1">总提交数：{$Asends}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">提交百分比：{$Apersent}%</span>
@@ -104,9 +104,12 @@
                     <td>项目ID</td>
                     <td>项目名称</td>
                     <td>level</td>
-                    <td>所需量</td>
-                    <td>已提量</td>
-                    <td>还需量</td>
+                    <td>留言所需量</td>
+                    <td>留言已提量</td>
+                    <td>留言还需量</td>
+                    <td>转接所需量</td>
+                    <td>转接已提量</td>
+                    <td>转接还需量</td>
                     <td>行业（父类）</td>
                     <td>行业（子类）</td>
                     <td>修改后父类</td>
@@ -127,6 +130,9 @@
                         <td align="center">{$vo.needNum}</td>
                         <td align="center">{$vo.alcount}</td>
                         <td align="center">{$vo.numbers}</td>
+                        <td align="center">{$vo.tneed}</td>
+                        <td align="center">{$vo.talcount}</td>
+                        <td align="center">{$vo.tnum}</td>
                         <td align="center">{$vo.catName}</td>
                         <td align="center">{$vo.subCat}</td>
                         <td align="center" class="xghfl">{$catList[$vo["pid"]]}</td>

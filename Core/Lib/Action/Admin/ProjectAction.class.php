@@ -9,8 +9,6 @@ class ProjectAction extends Action {
 
     public function index() {
         //显示当前在使用的项目列表
-//        var_dump($_REQUEST);
-//        die();
         $act = ($_REQUEST["act"] == "") ? "1" : $_REQUEST["act"];
         $p = M("Project");
         $Data = M("data_dealed");
@@ -19,18 +17,12 @@ class ProjectAction extends Action {
         if ($act == 1) {
             $aList = $p->where("status = 1 AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
             $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND level  >=4 order by site asc,catName asc,subCat asc");
-//            var_dump($Asum);
         }
-        // $aList = $p->where("1")->order('site asc,catName asc,subCat asc')->select();
         else {
             $aList = $p->where("status = 1 AND site = '" . $act . "' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
             $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site = '" . $act . "' AND level  >=4 order by site asc,catName asc,subCat asc");
-//            var_dump($Asum);
         }
         foreach ($aList as &$r) {
-//            if ($r["site"] == "28")
-//                $r["http"] = "http://tj.28.com" . $r["webPage"];
-//            else
             $r["http"] = $r["webPage"];
             if ($r["sendStatus"] == 0)
                 $r["sendStatus"] = '否';
@@ -47,13 +39,13 @@ class ProjectAction extends Action {
         }
         $countaList = count($aList);
         for ($i = 0; $i < $countaList; $i++) {
-            $aList["$i"]["alcount"] = ($aList["$i"]["needNum"] - $aList["$i"]["numbers"]);
+            $aList["$i"]["alcount"] = ($aList["$i"]["needNum"] - $aList["$i"]["numbers"]);//留言已经提交数
+            $aList["$i"]["talcount"] = ($aList["$i"]["tneed"] - $aList["$i"]["tnum"]);//转接已经提交数
         }
         $aCatList = D("category")->where(1)->getField("id,catname");
         $this->assign("countaList", $countaList);
         $this->assign("catList", $aCatList);
         $this->assign("aList", $aList);
-//        var_dump($Asum);
         $Aalsum = $Asum[0]["Asum"];
         $Anumbers = $Asum[0]["Anumbers"];
         $Asends = ($Aalsum - $Anumbers);
@@ -65,8 +57,6 @@ class ProjectAction extends Action {
         $BigList = $this->_listCategory(1);
         $SmallList = D("Category")->where("pid != 0")->select();
         $this->assign("BigList",$BigList);
-//        var_dump($BigList);
-//        var_dump($SmallList);
         $this->assign("SmallList",$SmallList);
         $this->display();
     }
@@ -598,7 +588,6 @@ class ProjectAction extends Action {
      */
     private function _syncFromZF() {
         $p = M("Project");
-//                        $p-> where("site = zf")->setField('status','0');
         $aSource = xml2array(C("xml_zf"));
         for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
             $aT = $aSource["log"]["fields"][$i];
@@ -611,14 +600,21 @@ class ProjectAction extends Action {
                 } else {
                     $aTemp["status"] = 0;
                 }
-//                                        if($aT["gbookNumMax"] > 0){
-//                                            $aTemp["status"]  = 1;
-//                                        }else{
-//                                            $aTemp["status"]  = 0;
-//                                        }
+                $huibo_flag = $aT["huibo_flag"];
+                if($aT["huibo_flag"] == 'no'){
+                    $huibo_flag = 0;
+                }else{
+                    $huibo_flag = 1;
+                }
+                $aTemp["tneed"] = $aT["cha_huibo"];
+                $aTemp["tnum"] = $aT["cha_huibo"];
+                if($huibo_flag == 0){
+                    $aTemp["tneed"] = 0;
+                    $aTemp["tnum"] = 0;
+                }
+                $aTemp["transfer"] = $huibo_flag;
                 $aTemp["name"] = $aT["projectName"];
                 $aTemp["webPage"] = $aT["web"];
-//					$aTemp["backCall"] = $aT["tel"];
                 $aTemp["needNum"] = $aT["num"];
                 $aTemp["numbers"] = $aT["num"];
                 $aTemp["level"] = 5;
@@ -836,7 +832,7 @@ class ProjectAction extends Action {
             $aTemp["needNum"] = 1;
             $aTemp["numbers"] = 1;
             #DSP手动暂停项目
-            if(in_array($aTemp["projectID"],array(151,296,134,170,270,300,315))){
+            if(in_array($aTemp["projectID"],array(151,296,134,170,270,277,300,315))){
                 $aTemp["status"] = 0;
             }
             //煲上皇和速汇宝
