@@ -5,63 +5,64 @@
     <title>项目分类列表-{$Think.config.cms_name}</title>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+    <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/font-awesome.min.css' />
     <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
     <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
     <style>
-    td {
-        height: 22px;
-        line-height: 22px
-    }
+        td {
+            height: 22px;
+            line-height: 22px
+        }
     </style>
     <style>
-    #dialog {
-        position: fixed;
-        z-index: 200;
-        width: 400px;
-        top: 350px;
-        left: 50%;
-        margin-left: -200px;
-        background: white;
-        border-radius: 5px;
-        box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
-        border: 1px solid silver;
-        display: none;
-    }
-    #dialog .header {
-        padding: 15px;
-        border-bottom: 1px solid silver;
-        overflow: hidden;
-    }
-    #dialog .header .title {
-        float: left;
-    }
-    #dialog .header .action {
-        float: right;
-        background: none;
-        border: none;
-        cursor: pointer;
-    }
-    #dialog .main {
-        padding: 30px 15px;
-        border-bottom: 1px solid silver;
-    }
-    #dialog .main button,
-    #dialog .main select {
-        font-size: 18px;
-    }
-    #backdrop {
-        position: fixed;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.7);
-        z-index: 100;
-        display: none;
-        top: 0;
-    }
-    body.show-dialog #backdrop,
-    body.show-dialog #dialog {
-        display: block;
-    }
+        #dialog {
+            position: fixed;
+            z-index: 200;
+            width: 400px;
+            top: 350px;
+            left: 50%;
+            margin-left: -200px;
+            background: white;
+            border-radius: 5px;
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid silver;
+            display: none;
+        }
+        #dialog .header {
+            padding: 15px;
+            border-bottom: 1px solid silver;
+            overflow: hidden;
+        }
+        #dialog .header .title {
+            float: left;
+        }
+        #dialog .header .action {
+            float: right;
+            background: none;
+            border: none;
+            cursor: pointer;
+        }
+        #dialog .main {
+            padding: 30px 15px;
+            border-bottom: 1px solid silver;
+        }
+        #dialog .main button,
+        #dialog .main select {
+            font-size: 18px;
+        }
+        #backdrop {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            z-index: 100;
+            display: none;
+            top: 0;
+        }
+        body.show-dialog #backdrop,
+        body.show-dialog #dialog {
+            display: block;
+        }
     </style>
 </head>
 
@@ -72,37 +73,36 @@
                 <span class="fl">项目列表</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>项目总数：{$countaList}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="f1">总需求数：{$Aalsum}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>还需总数：{$Anumbers}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <span class="f1">总提交数：{$Asends}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">提交百分比：{$Apersent}%</span>
-                <span class="f1"><a href="__ROOT__/index.php/Admin/Project/syncProject">更新项目列表</a></span>
-                <span class="f1"><a href="__ROOT__/index.php/Admin/Project/dealtotel">更新已经提交数</a></span>
-                <form action="__ROOT__/index.php/Admin/Project/index/" mothod="post">
-                    <select name="act">
-                        <option>请选择状态</option>
-                        <option value="28">28商机网</option>
-                        <option value="ls">中国连锁网</option>
-                        <option value="zf">致富网</option>
-                        <option value="91">91加盟网</option>
-                        <option value="wp">王牌28网</option>
-                    </select>
+                <if condition="($_SESSION['username'] eq admin) or ($_SESSION['username'] eq weitao)">&nbsp&nbsp&nbsp&nbsp<span class="f1"><a href="__ROOT__/index.php/Admin/Project/syncProject">更新项目列表</a></span><span class="f1"><a href="__ROOT__/index.php/Admin/Project/dealtotel">更新已经提交数</a></span></if>
+                    <form action="__ROOT__/index.php/Admin/Project/index/" mothod="post">
+                        <select name="act">
+                            <option>请选择状态</option>
+                            <option value="28">28商机网</option>
+                            <option value="ls">中国连锁网</option>
+                            <option value="zf">致富网</option>
+                            <option value="91">91加盟网</option>
+                            <option value="wp">王牌28网</option>
+                        </select>
                     <!--                        <select name="site">
                                                         <option value="28">28商机网</option>
                                                         <option value="ls">中国连锁网</option>
                                                         <option value="zf">致富网</option>
                                                     </select>-->
-                    <input type="submit" value="点击查询" />
-                </form>
+                                                    <input type="submit" value="点击查询" />
+                                                </form>
                 <!--                             <span>点击可查询：</span>
                                                 <a href="#"><input type="button" value="全部在投项目" name="" id="" /></a>
                                                 <a href="#"><input type="button" value="今天还可发送项目" name="" id="" /></a>-->
-            </td>
-            <tr class="list_head ct">
-                <td>ID</td>
-                <td>所属网站</td>
-                <td>项目ID</td>
-                <td>项目名称</td>
-                <td>level</td>
-                <td>留言所需量</td>
-                <td>留言已提量</td>
-                <td>留言还需量</td>
+                                            </td>
+                                            <tr class="list_head ct">
+                                                <td>ID</td>
+                                                <td>所属网站</td>
+                                                <td>项目ID</td>
+                                                <td>项目名称</td>
+                                                <td>level</td>
+                                                <td>留言所需量</td>
+                                                <td>留言已提量</td>
+                                                <td>留言还需量</td>
                 <!-- <td>转接所需量</td>
                 <td>转接已提量</td>
                 <td>转接还需量</td> -->
@@ -112,6 +112,7 @@
                 <td>修改后子类</td>
                 <td>项目状态</td>
                 <td>发送状态</td>
+                <td>转接状态</td>
                 <td>操作</td>
             </tr>
             <volist name="aList" id="vo">
@@ -137,7 +138,8 @@
                     <td align="center" class="xghfl">{$catList[$vo["pid"]]}</td>
                     <td align="center" class="xghzl">{$catList[$vo["cid"]]}</td>
                     <td align="center">{$vo.status}</td>
-                    <td align="center">{$vo.sendStatus}</td>
+                    <td align="center"><if condition="$vo.sendStatus eq '是'"><i class="fa fa-send" style="color:green;margin:10px"></i><else /><i class="fa fa-send" style="color:red;margin:10px"></i></if>{$vo.sendStatus}</td>
+                    <td align="center"><if condition="$vo.transfer eq '是'"><i class="fa fa-phone" style="color:green;margin:10px;font-weight:bold"></i><else /><i class="fa fa-phone" style="color:red;margin:10px;font-weight:bold"></i></if>{$vo.transfer}</td>
                     <td align='center'>
                         <!--<a data-toggle="dialog" data-id="{$vo.id}" href="{:U('/Admin/Project/edit',array("id"=>$vo[id]))}">编辑</a>-->
                         <a data-toggle="dialog" data-id="{$vo.id}" href="">编辑</a>
@@ -146,89 +148,89 @@
                     </td>
                 </tr>
             </volist>
-    </table>
-    <div id="dialog">
-        <div class="header">
-            <h1 class="title">修改分类</h1>
-            <button class="action close" data-toggle="dialog">x</button>
+        </table>
+        <div id="dialog">
+            <div class="header">
+                <h1 class="title">修改分类</h1>
+                <button class="action close" data-toggle="dialog">x</button>
+            </div>
+            <div class="main">
+                <form action="__ROOT__/index.php/Admin/Project/update/" method="post">
+                    <select name="pid" id="pid" class="xghfl">
+                        <volist name="BigList" id="Bdata">
+                            <option name="cid" pid="{$Bdata.id}" value="{$Bdata.id}">{$Bdata.catname}</option>
+                        </volist>
+
+                    </select>
+                    <select name="cid" id="cid" class="xghzl">
+                        <volist name="SmallList" id="Sdata">
+                            <option pid="{$Sdata.pid}" value="{$Sdata.id}">{$Sdata.catname}</option>
+                        </volist>
+                    </select>
+
+                    <input type="hidden" name="listid">
+                    <button type="submit">确定</button>
+                </form>
+            </div>
         </div>
-        <div class="main">
-            <form action="__ROOT__/index.php/Admin/Project/update/" method="post">
-                <select name="pid" id="pid" class="xghfl">
-                    <volist name="BigList" id="Bdata">
-                        <option name="cid" pid="{$Bdata.id}" value="{$Bdata.id}">{$Bdata.catname}</option>
-                    </volist>
 
-                </select>
-                <select name="cid" id="cid" class="xghzl">
-                    <volist name="SmallList" id="Sdata">
-                        <option pid="{$Sdata.pid}" value="{$Sdata.id}">{$Sdata.catname}</option>
-                    </volist>
-                </select>
+        <div id="backdrop" data-toggle="dialog"></div>
 
-                <input type="hidden" name="listid">
-                <button type="submit">确定</button>
-            </form>
-        </div>
-    </div>
-
-    <div id="backdrop" data-toggle="dialog"></div>
-
-    <script>
-    $('[data-toggle="dialog"]').click(function(event) {
-        event.preventDefault();
+        <script>
+            $('[data-toggle="dialog"]').click(function(event) {
+                event.preventDefault();
 
 
-        var xghfl = $(this).parents('tr').find('.xghfl');
-        var xghzl = $(this).parents('tr').find('.xghzl');
-        var title = $(this).parents('tr').find('.title').html();
+                var xghfl = $(this).parents('tr').find('.xghfl');
+                var xghzl = $(this).parents('tr').find('.xghzl');
+                var title = $(this).parents('tr').find('.title').html();
 
-        $('#dialog').data('xghfl', xghfl);
-        $('#dialog').data('xghzl', xghzl);
+                $('#dialog').data('xghfl', xghfl);
+                $('#dialog').data('xghzl', xghzl);
 
-        if (!$('body').hasClass('show-dialog')) {
-            $('#pid option').each(function() {
-                if (this.textContent == xghfl[0].textContent) {
-                    $('#pid').val(this.value).trigger('change');
+                if (!$('body').hasClass('show-dialog')) {
+                    $('#pid option').each(function() {
+                        if (this.textContent == xghfl[0].textContent) {
+                            $('#pid').val(this.value).trigger('change');
+                        }
+                    });
+
+                    $('#cid option').each(function() {
+                        if (this.textContent == xghzl[0].textContent) {
+                            $('#cid').val(this.value);
+
+                        }
+                    });
                 }
+
+
+
+                $('body').toggleClass('show-dialog');
+
+                $('#dialog [type="hidden"]').val($(this).attr('data-id'));
+                $('#dialog .title').html(title);
+
             });
 
-            $('#cid option').each(function() {
-                if (this.textContent == xghzl[0].textContent) {
-                    $('#cid').val(this.value);
+$('#dialog form').submit(function(event) {
+    event.preventDefault();
+    var data = $(this).serialize();
+    var action = $(this).attr('action');
 
-                }
-            });
-        }
+    var xghfl = $(this).find('.xghfl option:selected').html();
+    var xghzl = $(this).find('.xghzl option:selected').html();
 
+    $($('#dialog').data('xghfl')).html(xghfl);
+    $($('#dialog').data('xghzl')).html(xghzl);
 
-
-        $('body').toggleClass('show-dialog');
-
-        $('#dialog [type="hidden"]').val($(this).attr('data-id'));
-        $('#dialog .title').html(title);
-
+    $('body').toggleClass('show-dialog');
+    console.log(data);
+    $.post(action, data, function(res) {
+        console.log(res);
     });
-
-    $('#dialog form').submit(function(event) {
-        event.preventDefault();
-        var data = $(this).serialize();
-        var action = $(this).attr('action');
-
-        var xghfl = $(this).find('.xghfl option:selected').html();
-        var xghzl = $(this).find('.xghzl option:selected').html();
-
-        $($('#dialog').data('xghfl')).html(xghfl);
-        $($('#dialog').data('xghzl')).html(xghzl);
-
-        $('body').toggleClass('show-dialog');
-        console.log(data);
-        $.post(action, data, function(res) {
-            console.log(res);
-        });
-    });
-    </script>
-    <style>
+});
+</script>
+<style>
     #table-header.pin {
         position: fixed;
         top: 0;
@@ -237,12 +239,12 @@
     #table-header.pin td {
         padding: 0 10px;
     }
-    </style>
-    <script>
+</style>
+<script>
     var version = '{$Think.config.cms_var}';
-    </script>
-    <include file="Index:footer" />
-    <script type="text/javascript">
+</script>
+<include file="Index:footer" />
+<script type="text/javascript">
     var data = [];
     $('#cid option').each(function(index, item) {
         item = $(item);
@@ -272,7 +274,7 @@
 
         $('#cid').append(result);
     }
-    </script>
+</script>
 </body>
 
 </html>

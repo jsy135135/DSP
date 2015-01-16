@@ -122,7 +122,7 @@ class UserDealedAction extends OQAction{
 			$aList[$i]["againSubmitNum"] = $again->where($sSQL2."AND u_id=$i")->count("DISTINCT  data_id");
 			$aList[$i]["againSubmitOkNum"] = $again->where($sSQL2."AND u_id=$i AND status > 0")->count("DISTINCT data_id");
 			$aList[$i]["lsSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'ls'")->count("DISTINCT phone");
-			$aList[$i]["lstransfer"] = $dealed->where($sSQL."AND u_id=$i AND (content like '%电话咨询%' or content like '%电话联系过了%') AND status>0 AND site = 'ls'")->count("DISTINCT phone");
+			$aList[$i]["lstransfer"] = $dealed->where($sSQL."AND u_id=$i AND (content like '%电话咨询%' or content like '%电话联系过了%' or transfer = '1') AND status>0 AND site = 'ls'")->count("DISTINCT phone");
 			$aList[$i]["zfSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'zf'")->count("DISTINCT phone");
 			$aList[$i]["lswx"] = $lswx->where($sSQL."AND u_id=$i")->count();
                         $aList[$i]["lszjwx"] = $lswx->where($sSQL."AND u_id = $i AND (content like '%电话咨询%' or content like '%电话联系过了%')")->count();

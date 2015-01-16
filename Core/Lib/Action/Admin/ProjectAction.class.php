@@ -36,6 +36,10 @@ class ProjectAction extends Action {
                 $r["level"] = '按效果付费';
             if ($r["level"] == 4)
                 $r["level"] = '广告客户';
+            if ($r["transfer"] == 1){
+                $r["transfer"] = '是';
+            }else
+                $r["transfer"] = '否';
         }
         $countaList = count($aList);
         for ($i = 0; $i < $countaList; $i++) {
