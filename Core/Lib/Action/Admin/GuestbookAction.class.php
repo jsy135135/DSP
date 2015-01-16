@@ -271,6 +271,7 @@ class GuestbookAction extends OQAction {
 
         public function transfer() {
     //        var_dump($_REQUEST);
+          $p = M("project");
           if (!isset($_SESSION['username'])) {
             session(null);
             redirect(C('cms_admin') . '?s=Admin/Login');
@@ -303,6 +304,8 @@ class GuestbookAction extends OQAction {
               $gData["deal_date"] = date("Y-m-d");
               $aData["status"] = 0;
               $aData["transfer"] = 1;
+              //实时标注转接量
+              $p->where("projectID= " . $_REQUEST['projectID'] . " AND site = '" . $_REQUEST['website'] . "'")->setDec('numbers');
               $drs = $data_dealed->add($aData);
               $grs = $guestbook->save($gData);
               echo $drs . $grs;
@@ -628,7 +631,7 @@ class GuestbookAction extends OQAction {
      *
      *
      */
-    function sendToZF_t(){
+    function sendToZF_t($aData){
       import("phprpc_client", "Core/Lib/Widget/", ".php");
       $client = new PHPRPC_Client('http://saas.zhifuwang.cn/soap/server_dhb.php');
       $aData = array(

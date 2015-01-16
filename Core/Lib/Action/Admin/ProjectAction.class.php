@@ -606,12 +606,12 @@ class ProjectAction extends Action {
                 }else{
                     $huibo_flag = 1;
                 }
-                $aTemp["tneed"] = $aT["cha_huibo"];
-                $aTemp["tnum"] = $aT["cha_huibo"];
-                if($huibo_flag == 0){
-                    $aTemp["tneed"] = 0;
-                    $aTemp["tnum"] = 0;
-                }
+                // $aTemp["tneed"] = $aT["cha_huibo"];
+                // $aTemp["tnum"] = $aT["cha_huibo"];
+                // if($huibo_flag == 0){
+                //     $aTemp["tneed"] = 0;
+                //     $aTemp["tnum"] = 0;
+                // }
                 $aTemp["transfer"] = $huibo_flag;
                 $aTemp["name"] = $aT["projectName"];
                 $aTemp["webPage"] = $aT["web"];
