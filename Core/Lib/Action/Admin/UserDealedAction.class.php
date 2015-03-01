@@ -76,13 +76,13 @@ class UserDealedAction extends OQAction{
 		$date = date("Y-m-d");
 		if($_REQUEST["startdate"]|| $REQUEST["enddate"]){
 				#各个表中相同的属性字段名不一样，所以这里定义三条
-				$sSQL = "addDate >= '".$startdate."' AND addDate <= '".$enddate."'";
-				$sSQL1 = "deal_date >= '".$startdate."' AND deal_date <= '".$enddate."'";
-				$sSQL2 = "add_date >= '".$startdate."' AND add_date <= '".$enddate."'";
+			$sSQL = "addDate >= '".$startdate."' AND addDate <= '".$enddate."'";
+			$sSQL1 = "deal_date >= '".$startdate."' AND deal_date <= '".$enddate."'";
+			$sSQL2 = "add_date >= '".$startdate."' AND add_date <= '".$enddate."'";
 		}else{
-				$sSQL = "addDate = '".$date."'";
-				$sSQL1 = "deal_date = '".$date."'";
-				$sSQL2 = "add_date = '".$date."'";
+			$sSQL = "addDate = '".$date."'";
+			$sSQL1 = "deal_date = '".$date."'";
+			$sSQL2 = "add_date = '".$date."'";
 		}
 		$dealed = D("data_dealed");
 		$lswx = D("lswx");
@@ -108,8 +108,8 @@ class UserDealedAction extends OQAction{
 			//$aList[$i]["firstCallNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i")->count();	//首次外呼处理数
 			$aList[$i]["firstCallNum"] = $guestbook->where($sSQL1."AND u_id= '".$i."'")->count("DISTINCT phone");	//首次外呼处理数
 			$aList[$i]["firstSendNum"] = $dealed->where($sSQL."AND u_id=$i")->count("DISTINCT phone");	//首次提交数
-      $aList[$i]["transfer"] = $dealed->where($sSQL."AND u_id=$i AND transfer = '1' ")->count("DISTINCT phone"); //28转接数量
-      $aList[$i]["transferOKNum"] = $dealed->where($sSQL."AND u_id=$i AND transfer = '1' AND regular = '1' ")->count("DISTINCT phone"); //28转接审核有效数
+      $aList[$i]["transfer"] = $dealed->where($sSQL."AND u_id=$i AND transfer = '1' AND site = '28' ")->count("DISTINCT phone"); //28转接数量
+      $aList[$i]["transferOKNum"] = $dealed->where($sSQL."AND u_id=$i AND transfer = '1' AND site = '28' AND regular = '1' ")->count("DISTINCT phone"); //28转接审核有效数
 			$aList[$i]["firstSendOKNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0")->count("DISTINCT phone");	//首次提交成功数
 			$aList[$i]["firstSendOKRatio"] = round( $aList[$i]["firstSendOKNum"] / $aList[$i]["firstSendNum"],4) *100;	//首次提交成功比
 			/**
@@ -124,8 +124,10 @@ class UserDealedAction extends OQAction{
 			$aList[$i]["lsSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'ls'")->count("DISTINCT phone");
 			$aList[$i]["lstransfer"] = $dealed->where($sSQL."AND u_id=$i AND (content like '%电话咨询%' or content like '%电话联系过了%' or transfer = '1') AND status>0 AND site = 'ls'")->count("DISTINCT phone");
 			$aList[$i]["zfSunbmitNum"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'zf'")->count("DISTINCT phone");
+			$aList[$i]["zftransfer"] = $dealed->where($sSQL."AND u_id=$i AND status>0 AND site = 'zf' AND transfer = '1'")->count("DISTINCT phone");
 			$aList[$i]["lswx"] = $lswx->where($sSQL."AND u_id=$i")->count();
-                        $aList[$i]["lszjwx"] = $lswx->where($sSQL."AND u_id = $i AND (content like '%电话咨询%' or content like '%电话联系过了%')")->count();
+//                        var_dump($aList[$i]["lswx"]);
+			$aList[$i]["lszjwx"] = $lswx->where($sSQL."AND u_id = $i AND (content like '%电话咨询%' or content like '%电话联系过了%' or content like '%转接%')")->count();
 			$aList[$i]["zfwx"] = $zfwx->where($sSQL."AND u_id=$i AND zfwx <> 'ok'")->count();
 			// if($aList[$i]["lsws"] == 0){
 			// 	$aList[$i]["lswx"] == "没有数据";

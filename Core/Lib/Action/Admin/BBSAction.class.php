@@ -12,6 +12,12 @@
             $this->assign("aList",$aList);
             $this->display();
         }
+        public function tobeijing(){
+          $d = M("data_dealed");
+          $sql = "SELECT site,count(*) as total  FROM `data_dealed` WHERE status > 0 AND addDate >= '2014-04-01' AND addDate <= '2014-04-30' group by site";
+          $data = $d->query($sql);
+          var_dump($data);
+        }
         public function shuju(){
           $g = M("guestbook");
           $sql = "select address from guestbook where add_date = '2014-11-06'";

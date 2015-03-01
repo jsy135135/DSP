@@ -55,13 +55,19 @@ class GuestbookAction extends OQAction {
         // $dDate = "2014-05-01";
           $gb = M("guestbook");
         //所有的处理过，但返回状态不为0和7的，7表示不需要
-          $iNoAssignCount = $gb->where("u_id=$uID AND deal_status<>0 and deal_status <>7 AND  add_date='" . $dDate . "' AND again=1 AND send_status =''")->count();
+          $iNoAssignCount = $gb->where("u_id=$uID AND deal_status not in (0,1,7,8) AND  add_date='" . $dDate . "' AND again=1 AND send_status =''")->count();
         //if($iNoAssignCount > 0)
-          $aList = $gb->where("u_id=$uID AND deal_status<>0 and deal_status <>7 AND  add_date='" . $dDate . "' AND again=1 AND send_status =''")->order(" ids asc ")->limit(100)->select();
+          $aList = $gb->where("u_id=$uID AND deal_status not in (0,1,7,8) AND  add_date='" . $dDate . "' AND again=1 AND send_status =''")->order(" ids asc ")->limit(100)->select();
         //else {
         //$gb->where("deal_status<>0 and deal_status <>7 AND  add_date<='".$dDate."' AND again=0 AND send_status<0")->limit(100)->setField("u_id",$uID);
         //$aList = $gb->where("u_id=$uID AND deal_status<>0 and deal_status <>7 AND  add_date>='".$dDate."' AND again=0 AND  send_status =''")->limit(100)->select();
         //}
+        // var_dump($iNoAssignCount);
+        $aBigList = $this->_listCategory(1);
+        $subList = D("Category")->where("pid != 0")->select();
+        #栏目列表传到页面
+        $this->assign("aBigList", $aBigList);
+        $this->assign("subList", $subList);
           $this->assign("dDate", $dDate);
           $this->assign("uID", $uID);
           $this->assign("iNoAssignCount", $iNoAssignCount);
@@ -302,6 +308,7 @@ class GuestbookAction extends OQAction {
               $gData["ids"] = $_REQUEST["guestbook_id"];
               $gData["deal_time"] = date("Y-m-d H:i:s");
               $gData["deal_date"] = date("Y-m-d");
+              $gData["deal_status"] = 8;//在G表标注已经转接的号码
               $aData["status"] = 0;
               $aData["transfer"] = 1;
               //实时标注转接量
@@ -366,6 +373,7 @@ class GuestbookAction extends OQAction {
      */
 
     function sendToBJ() {
+      $checker = $_SESSION['username'];
       $d = M("data_dealed");
       $p = M("project");
 //        var_dump($_POST);
@@ -390,6 +398,7 @@ class GuestbookAction extends OQAction {
 //            $newdata['name'] = $name;
         $newdata['check'] = 1;
         $newdata['regular'] = 0;
+        $newdata['checker'] = $checker;
         $d->where("id=$id")->save($newdata);
 //            $p->where("projectID= ".$_REQUEST['projectID']." AND site = '".$_REQUEST['website']."'")->setDec('numbers');
 //            echo $projectID.$site;
@@ -462,6 +471,7 @@ class GuestbookAction extends OQAction {
       $newdata['status'] = $iReturnID;
       $newdata['check'] = 1;
       $newdata['regular'] = $value;
+      $newdata['checker'] = $checker;
 //        $aaa = $d->where("id = $id")->select();
       $d->where("id = $id")->save($newdata);
 //        $p->where("projectID = ".$projectID." AND site = '".$site."'")->setInc('numbers');

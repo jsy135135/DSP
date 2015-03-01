@@ -53,6 +53,9 @@ class InAction extends Action {
             // $uID = 814;
             // $iNowNum = 20;
             $aList = $gb->Distinct(true)->field('phone', 'ids')->where("project_id > 0  AND add_date>='" . $dDate . "' AND u_id=0 AND deal_time='0000-00-00 00:00:00'")->limit($iNowNum)->order("ips asc")->select();
+            echo $gb->getLastSql();
+            var_dump($aList);
+            die();
             $aListCount = count($aList);
             echo $uID . '分配到的数量：' . $aListCount . '<br />';
             // echo $uID.'分配到的数量：'.$aListCount;
@@ -72,7 +75,7 @@ class InAction extends Action {
             #记录每条数据的分配时间
             $aData["Thetime"] = $Thetime;
             $aData["Thedate"] = $TheDate;
-            $gb->where("ids in ($idArray)")->save($aData);
+            // $gb->where("ids in ($idArray)")->save($aData);
         }
         echo '一对一数据分配完毕！';
     }
@@ -85,8 +88,8 @@ class InAction extends Action {
     }
     /*
      * 一对多分配方法
-     * 
-     * 
+     *
+     *
      */
 
     public function FPD() {

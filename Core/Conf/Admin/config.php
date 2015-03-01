@@ -23,5 +23,15 @@ return array (
   'cms_url' => 'http://www.kingbone.cn',
   'cms_var' => '1.0.2',
   'cms_admin' => 'index.php',
+   //邮件配置
+   // 配置邮件发送服务器
+    'MAIL_HOST' =>'smtp.exmail.qq.com',//smtp服务器的名称
+    'MAIL_SMTPAUTH' =>TRUE, //启用smtp认证
+    'MAIL_USERNAME' =>'732677288@qq.com',//你的邮箱名
+    'MAIL_FROM' =>'732677288@qq.com',//发件人地址
+    'MAIL_FROMNAME'=>'贾思远',//发件人姓名
+    'MAIL_PASSWORD' =>'jsy135135',//邮箱密码
+    'MAIL_CHARSET' =>'utf-8',//设置邮件编码
+    'MAIL_ISHTML' =>TRUE, // 是否HTML格式邮件
 );
 ?>
