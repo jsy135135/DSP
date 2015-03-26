@@ -129,6 +129,7 @@ class UserDealedAction extends OQAction{
 //                        var_dump($aList[$i]["lswx"]);
 			$aList[$i]["lszjwx"] = $lswx->where($sSQL."AND u_id = $i AND (content like '%电话咨询%' or content like '%电话联系过了%' or content like '%转接%')")->count();
 			$aList[$i]["zfwx"] = $zfwx->where($sSQL."AND u_id=$i AND zfwx <> 'ok'")->count();
+                        $aList[$i]["zfzjwx"] = $zfwx->where($sSQL."AND u_id = $i AND zfwx <> 'ok' AND content like '%转接%'")->count();
 			// if($aList[$i]["lsws"] == 0){
 			// 	$aList[$i]["lswx"] == "没有数据";
 			// }

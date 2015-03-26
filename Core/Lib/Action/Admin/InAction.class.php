@@ -15,6 +15,46 @@ class InAction extends Action {
 //            var_dump($data);
         $this->display();
     }
+    
+    /*
+     * 查询特殊项目的链接，分配给特点的业务账号查看
+     * Time：2015年3月12日13:35:32
+     * By：siyuan
+     * 目前项目为雪之丘冰激凌项目
+     */
+    
+    public function TFP(){
+        $gb = M("guestbook");
+        $TheDate = date("Y-m-d");
+        $Thetime = date("Y-m-d H:i:s");
+        $dDate = date("Y-m-d", strtotime("2 days ago"));
+        $uID = '888';
+        $sql = "select ids from guestbook where address like '%http://200.1342828.com/xzq_$t2/wap%' or address like '%http://300.xmjm88.com/xzqbql-m%' or address like '%http://3w.wp28.com/wp/xzqjj%' or address like '%http://www.win-in-domain.com/xzqbql-m%' AND deal_time='0000-00-00 00:00:00'";
+        $dataArray = $gb->query($sql);
+        $Nums = count($dataArray);
+        echo '特殊业务现有数据：' . $Nums . '<br />'; //查看特殊现有的数量
+        #日志文件记录数据分配情况
+            $sFileName = "./Log/xzq-" . $TheDate . ".txt";
+            $fp = fopen($sFileName, "a+");
+            fwrite($fp, date("Y-m-d H:i:s") . "#" . "分配到的数量：" . $Nums . "#" . $uID . "#" . $idArray . "\n");
+            fclose($fp);
+            #对分配过的数据在guestbook表中进行标注
+            $aData["deal_status"] = 1;
+            $aData["u_id"] = $uID;
+            #记录每条数据的分配时间
+            $aData["Thetime"] = $Thetime;
+            $aData["Thedate"] = $TheDate;
+            #进行组织获取分配到的数据id，重组数据，用来进行数据库的标记
+            $idArray = "0";
+            for ($j = 0; $j < $Nums; $j++) {
+                    $idArray = $idArray . "," . $dataArray[$j]["ids"];
+            }
+            $stu = $gb->where("ids in ($idArray)")->save($aData);
+//            echo $gb->getLastsql();
+            var_dump($stu);
+       echo '特殊业务分配数据完毕';
+        
+    }
 
     /*
      * 计算一对一的源数据量，并进行批量的分配
@@ -53,9 +93,6 @@ class InAction extends Action {
             // $uID = 814;
             // $iNowNum = 20;
             $aList = $gb->Distinct(true)->field('phone', 'ids')->where("project_id > 0  AND add_date>='" . $dDate . "' AND u_id=0 AND deal_time='0000-00-00 00:00:00'")->limit($iNowNum)->order("ips asc")->select();
-            echo $gb->getLastSql();
-            var_dump($aList);
-            die();
             $aListCount = count($aList);
             echo $uID . '分配到的数量：' . $aListCount . '<br />';
             // echo $uID.'分配到的数量：'.$aListCount;
@@ -75,7 +112,7 @@ class InAction extends Action {
             #记录每条数据的分配时间
             $aData["Thetime"] = $Thetime;
             $aData["Thedate"] = $TheDate;
-            // $gb->where("ids in ($idArray)")->save($aData);
+            $gb->where("ids in ($idArray)")->save($aData);
         }
         echo '一对一数据分配完毕！';
     }
@@ -88,8 +125,8 @@ class InAction extends Action {
     }
     /*
      * 一对多分配方法
-     *
-     *
+     * 
+     * 
      */
 
     public function FPD() {

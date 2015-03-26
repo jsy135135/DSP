@@ -16,10 +16,12 @@ class ProjectAction extends Action {
         $date = date("Y-m-d");
         if ($act == 1) {
             $aList = $p->where("status = 1 AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+//            $aList = $p->query("SELECT count(g.ids) as rtt ,p.* FROM `project` as p left join guestbook as g on p.site = g.site and p.projectID = g.project_id where p.status > 0 AND g.add_date = '".$date."' group by p.projectID order by p.site asc,p.catName asc,p.subCat asc");
             $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND level  >=4 order by site asc,catName asc,subCat asc");
         }
         else {
             $aList = $p->where("status = 1 AND site = '" . $act . "' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+//            $aList = $p->query("SELECT count(g.ids) as rtt ,p.* FROM `project` as p left join guestbook as g on p.site = g.site and p.projectID = g.project_id where p.status > 0 AND g.add_date = '".$date."' AND p.site = '".$act."'group by p.projectID order by p.site asc,p.catName asc,p.subCat asc");
             $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site = '" . $act . "' AND level  >=4 order by site asc,catName asc,subCat asc");
         }
         foreach ($aList as &$r) {
@@ -836,11 +838,11 @@ class ProjectAction extends Action {
             $aTemp["needNum"] = 1;
             $aTemp["numbers"] = 1;
             #DSP手动暂停项目
-            if(in_array($aTemp["projectID"],array(64,65,82,97,120,123,151,192,296,134,135,137,170,258,269,267,270,277,278,287,300,311,315,437,308,280,247,249,304,309,316,305,389))){
+            if(in_array($aTemp["projectID"],array(64,65,82,97,120,123,151,192,296,134,135,137,170,258,269,267,270,277,278,287,300,311,315,437,308,280,247,249,304,309,316,305,389,289,456,136,313,290,197))){
                 $aTemp["status"] = 0;
             }
             //煲上皇和速汇宝
-            if($aTemp["projectID"] == '307' || $aTemp["projectID"] == '308'){
+            if($aTemp["projectID"] == '307' || $aTemp["projectID"] == '308' || $aTemp["projectID"] == '491' || $aTemp["projectID"] == '487'){
                 $aTemp["needNum"] = 100;
                 $aTemp["numbers"] = 100;
             }
@@ -855,7 +857,7 @@ class ProjectAction extends Action {
             }
             #限制数量5条
             #小粥仙(合户)=>269,sooe品位生活灯饰=>296,放鹅郎=>277 ,热狗铺子=>315 ,乐姿家电（搜易）=>218 ,乐姿家电2（搜易）=>300 ,考拉大冒险(搜易)=>287
-            elseif(in_array($aTemp["projectID"],array(267,269,296,277,305,218,300,287,389))){
+            elseif(in_array($aTemp["projectID"],array(267,269,296,277,305,218,300,287,389,290,483))){
                 $aTemp["needNum"] = 5;
                 $aTemp["numbers"] = 5;
             }

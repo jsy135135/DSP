@@ -1,7 +1,11 @@
 <?php
-
+/*
+ * 对于内外的一个产品接口
+ * Time：2015年3月12日13:45:04
+ * By：siyuan
+ * 
+ */
 class ApiAction extends OQAction {
-
     function index($number = null) {
 // var_dump($_REQUEST);
         $number = $_REQUEST['_URL_']['3'];
@@ -17,7 +21,29 @@ class ApiAction extends OQAction {
         $rs = file_get_contents($url);
         echo $rs;
     }
-
+    /*
+     * 此方法作为新对接的呼叫系统的查询信息接口
+     * 传入一个电话号码参数
+     */
+    function phoneinfo(){
+        if($_REQUEST['phone']){
+        $phone = $_REQUEST['phone'];
+//        $phone = '18365112833';
+        $gb = M("guestbook");
+        $data = $gb->where("phone = '".$phone."'")->find();
+        $phoneinfo['phone'] = $data['phone'];
+        $phoneinfo['ip'] = $data['ips'];
+        $phoneinfo['url'] = $data['address'];
+        $phoneinfo['time'] = $data['times'];
+        $phoneinfo['projectID'] = $data['project_id'];
+        $phoneinfo['site'] = $data['site'];
+        echo json_encode($phoneinfo);
+        }else{
+            echo '请传入需要查询的电话号码';
+        }
+//        var_dump($phoneinfo);
+    }
+    //获取连锁定期返回DSP数据的无效情况
     function lsdspwx($dDate) {
 //        var_dump($dDate);
 //        $url = "http://www.liansuo.com/index.php?act=public&opt=dspwx&par1=".$dDate;

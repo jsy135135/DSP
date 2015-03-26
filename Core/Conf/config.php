@@ -52,8 +52,8 @@ $array = array(
 //     51s2891@sogou.com   sogou.51s289.com
 //     51s521@sogou.com    sogou.51s52.com
 //     52s2861@sogou.com   sogou.52s286.com
-
-    "jm" => array("71593.wap.sooe.cn", "200.1342828.com", "kb.xqd8888.com", "200.28u0.com", "800.xueliong.com", "800.quikio.cn", "360.52s288.com", "360.91jmw.com", "360.28g9.com", "360.51s51.com", "360.xqd8888.com", "200.51s58.com", "200.52s285.com", "200.52s289.com", "sogou.51s282.com","sogou.52s280.com", "sogou.51s289.com", "sogou.51s52.com", "sogou.52s286.com"),
+//zk.28s0.com   sm.51s283.com 为sooe现在投放域名
+    "jm" => array("71593.wap.sooe.cn", "200.1342828.com", "kb.xqd8888.com", "200.28u0.com", "800.dianka999.com", "sm.51s283.com", "800.chun-ge.com", "800.xueliong.com", "800.it-sanda.com", "800.quikio.cn", "360.52s288.com", "360.91jmw.com", "360.28g9.com", "360.51s51.com", "360.xqd8888.com", "200.51s58.com", "200.52s285.com", "200.52s289.com", "sogou.51s282.com","sogou.52s280.com", "sogou.51s289.com", "sogou.51s52.com", "sogou.52s286.com", "zk.28s0.com", "sm.51s283.com"),
     "r_28_1" => "数据格式不对，传来的数据不是数组",
     "r_28_2" => "传入的客户ID、项目ID不符合基本要求",
     "r_28_3" => "必填信息项内容为空",

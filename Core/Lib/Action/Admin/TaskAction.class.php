@@ -27,7 +27,7 @@ class TaskAction extends Action {
         $guestbook = M("guestbook");
         $date = date("Y-m-d",strtotime("1 days ago"));
 //        $dsql = "SELECT ids,phone,add_date FROM `guestbook` WHERE `add_date` = '".$date."' AND `project_id` = ''";
-        $dsql = "SELECT ids,phone,add_date FROM guestbook WHERE add_date = '".$date."'AND project_id = '' AND ids >= ((SELECT MAX(ids) FROM guestbook)-(SELECT MIN(ids) FROM guestbook)) * RAND() + (SELECT MIN(ids) FROM guestbook)  LIMIT 300";
+        $dsql = "SELECT ids,phone,add_date FROM guestbook WHERE add_date = '".$date."'AND project_id = '' AND ids >= ((SELECT MAX(ids) FROM guestbook)-(SELECT MIN(ids) FROM guestbook)) * RAND() + (SELECT MIN(ids) FROM guestbook)  LIMIT 400";
         $data = $guestbook->query($dsql);
         $data = serialize($data);
         echo $data;
@@ -206,7 +206,7 @@ class TaskAction extends Action {
         $gb = M("Guestbook");
         $project = M("project");
         $aList = $gb->where("site =''")->field("ids,address")->limit(20000)->select();
-//                        $aList = $gb->where("project_id =0 AND add_date = '2014-09-22'")->field("ids,address")->limit(20000)->select();
+//                        $aList = $gb->where("project_id =0 AND add_date = '2015-03-26'")->field("ids,address")->limit(20000)->select();
         $count = count($aList);
 //                        $count = 3;
 //                        var_dump($aList);
@@ -259,7 +259,8 @@ class TaskAction extends Action {
                 $content = file_get_contents($aList[$i]["address"]);
                 // $content = file_get_contents($url);
                 // <input type="hidden" name="p" value="301">
-                preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
+//                preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
+                preg_match_all('/<input.*?name="p" value="(\d+)"/', $content, $matches);
                 $iPID = $matches[1][0];
                 $site = "91";
             } else {

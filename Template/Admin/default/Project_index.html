@@ -99,6 +99,7 @@
                                                 <td>所属网站</td>
                                                 <td>项目ID</td>
                                                 <td>项目名称</td>
+                                                <td>源量</td>
                                                 <td>level</td>
                                                 <td>留言所需量</td>
                                                 <td>留言已提量</td>
@@ -122,6 +123,7 @@
                     <td align="center">{$vo.projectID}</td>
                     <td align="center"><a href="{$vo.http}" target="_blank" class="title">{$vo.name}</a>
                     </td>
+                    <td align="center">{$vo.rtt}</td>
                     <if condition="${vo.level} eq '4'">
                         <td align="center">按效果付费</td>
                         <else />

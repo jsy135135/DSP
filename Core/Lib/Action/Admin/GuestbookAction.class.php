@@ -16,7 +16,7 @@ class GuestbookAction extends OQAction {
     $uID = session("username");
     if ($uID == "admin")
             $uID = 826; //默认外呼标记为826
-        $dDate = date("Y-m-d", strtotime("2 days ago"));  //昨天1 days ago
+        $dDate = date("Y-m-d", strtotime("30 days ago"));  //昨天1 days ago
 //		$TheDate = date("Y-m-d");
 //                $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
@@ -429,8 +429,9 @@ class GuestbookAction extends OQAction {
           $newdata['status'] = 8;
           $lstatus = 8;
         }elseif ($AData["site"] == 'ls') {
-          $aData["content"] = '我已经电话联系过了，请尽快发送招商资料';
-          $newdata['status'] = $this->sendToLS($aData);
+//          $aData["content"] = '我已经电话联系过了，请尽快发送招商资料';
+//          $newdata['status'] = $this->sendToLS($aData);
+          $newdata['status'] = 8;
           $lstatus = $newdata['status'];
         }elseif ($AData["site"] == 'zf') {
           $newdata['status'] = $this->sendToZF_t($aData);

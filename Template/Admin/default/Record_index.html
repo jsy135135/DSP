@@ -61,7 +61,7 @@
                 <td>项目名称</td>
                 <!--<td>项目网址</td>-->
                 <td>姓名</td>
-                <td>电话</td> 
+                <td>电话</td>
                 <td>地址</td>
                 <td>发送网站</td>
                 <td>提交客服号码</td>
@@ -74,7 +74,7 @@
                     <td>{$vo.pname}</td>
                     <!--<td><a href="{$vo.webpage}" target="_blank">{$vo.webpage}</a></td>-->
                     <td>{$vo.name}</td>
-                    <td>{$vo.phone}</td> 
+                    <td>{$vo.phone}</td>
                     <td>{$vo.address}</td>
                     <td>{$vo.site}</td>
                     <td>{$vo.u_id}</td>
@@ -135,7 +135,10 @@
         </style>
 
         <div id="audio-modal" class="modal">
-            <audio src="" id="player" controls></audio>
+            <!-- <embed src="http://192.168.200.144/RECORDINGS/GSW/999/2015-03-24/8026-20150324-090658_13813810129-all.WAV" type="" /> -->
+           <!--  <audio src="" id="player" controls>
+                <source src="http://192.168.200.144/RECORDINGS/GSW/999/2015-03-24/8026-20150324-090658_13813810129-all.WAV" type="audio/wav"/>
+            </audio> -->
             <button type="button" data-click="closeModal">关闭窗口</button><br />
             <font size="6"><a href="" id="ftpDownload" target="_blank">下载录音</a></font>
         </div>
@@ -166,15 +169,17 @@
             }
 
             $('.records').on('click', function(event) {
-                event.preventDefault();
-                var href = $(this).attr('data-src');
-                $.get(href, function(response) {
-                    var ftpSrc = response;
-                    player.attr('src', ftpSrc);
-                    ftpDownload.attr('href', ftpSrc);
-                    openModal();
+                // event.preventDefault();
+                // var href = $(this).attr('data-src');
+                    // openModal();
+                    // player.attr('src', href)
+                // $.get(href, function(response) {
+                //     var ftpSrc = response;
+                //     player.attr('src', ftpSrc);
+                //     ftpDownload.attr('href', ftpSrc);
+                //     openModal();
 
-                });
+                // });
             });
         </script>
 
