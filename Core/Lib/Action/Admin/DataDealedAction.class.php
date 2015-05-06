@@ -150,6 +150,8 @@ class DataDealedAction extends OQAction {
 
     /**
      * 数据二次处理
+     * 对于连锁返回数据的，二次审核
+     * 
      */
     public function again() {
         $uID = session("username");
@@ -158,13 +160,8 @@ class DataDealedAction extends OQAction {
 
         $dDate = $_REQUEST["date"] == "" ? date("Y-m-d", strtotime("1 days ago")) : $_REQUEST["date"];
         // $dToday = "2014-05-01";
-        $iCount = D("DataDealed")->where("again = 0 AND status <0 AND u_id=" . $uID . " AND addDate = '" . $dDate . "'")->count();
-        /* if($iCount == 0)
-          {
-          $aData["u_id"] = $uID;
-          D("DataDealed")->where("again = 0 AND status <0 AND u_id=0 AND addDate >= '".$dDate."'")->order(" id asc ")->limit(100)->save($aData);
-          } */
-        $aList = D("DataDealed")->where("again = 0 AND status <0 AND u_id=$uID AND addDate = '" . $dDate . "'")->limit(100)->select();
+        $iCount = D("lswx")->where("again = 0 AND status >0 AND u_id=" . $uID . " AND addDate = '" . $dDate . "'")->count();
+        $aList = D("lswx")->where("again = 0 AND status >0 AND u_id=$uID AND addDate = '" . $dDate . "'")->limit(100)->select();
         $this->assign("iCount", $iCount);
         $this->assign("uID", $uID);
         $this->assign("dDate", $dDate);

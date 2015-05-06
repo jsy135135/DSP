@@ -6,6 +6,65 @@
  *
  */
 class DataStatisticsAction extends OQAction {
+    /**
+     * 源量来源分析
+     * Time:2015-3-30 14:44:41
+     * By:siyuan
+     */
+    
+    public function OriginalNum(){
+        $g = M("guestbook");
+//        var_dump($_REQUEST);
+//        die();
+        $startday = $_REQUEST['startdate'] == "" ? date("Y-m-d", strtotime("7 days ago")) : $_REQUEST['startdate'];
+//        $startday = '2015-03-28';
+        $endday = $_REQUEST['enddate'] == "" ? date("Y-m-d") : $_REQUEST['enddate'];
+//        $endday = '2015-03-30';
+        $totol = $g->query("select add_date,count(*) as t from guestbook where add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量
+        $Ytotol = $g->query("select add_date,count(*) as t from guestbook where project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量
+        $Ntotol = $g->query("select add_date,count(*) as t from guestbook where project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量
+        $totol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 28
+        $Ytotol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 28
+        $Ntotol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 28
+        $totol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 ls
+        $Ytotol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 ls
+        $Ntotol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 ls
+        $totol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 zf
+        $Ytotol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 zf
+        $Ntotol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 zf
+        $totol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 wp
+        $Ytotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 wp
+        $Ntotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 wp
+        $totol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 91
+        $Ytotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 28
+        $Ntotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 
+        $totolcount = count($totol);
+//        var_dump($totol);
+        for($i=0;$i<$totolcount;$i++){
+            $tdate = $totol[$i]['add_date'];
+            $totol[$i]['totol'] = $totol[$i]['t'];
+            $totol[$i]['Ytotol'] = $Ytotol[$i]['t'];
+            $totol[$i]['Ntotol'] = $Ntotol[$i]['t'];
+            $totol[$i]['totol_28'] = $totol_28[$i]['t'];
+            $totol[$i]['Ytotol_28'] = $Ytotol_28[$i]['t'];
+            $totol[$i]['Ntotol_28'] = $Ntotol_28[$i]['t'];
+            $totol[$i]['totol_ls'] = $totol_ls[$i]['t'];
+            $totol[$i]['Ytotol_ls'] = $Ytotol_ls[$i]['t'];
+            $totol[$i]['Ntotol_ls'] = $Ntotol_ls[$i]['t'];
+            $totol[$i]['totol_zf'] = $totol_zf[$i]['t'];
+            $totol[$i]['Ytotol_zf'] = $Ytotol_zf[$i]['t'];
+            $totol[$i]['Ntotol_zf'] = $Ntotol_zf[$i]['t'];
+            $totol[$i]['totol_wp'] = $totol_wp[$i]['t'];
+            $totol[$i]['Ytotol_wp'] = $Ytotol_wp[$i]['t'];
+            $totol[$i]['Ntotol_wp'] = $Ntotol_wp[$i]['t'];
+            $totol[$i]['totol_91'] = $totol_91[$i]['t'];
+            $totol[$i]['Ytotol_91'] = $Ytotol_91[$i]['t'];
+            $totol[$i]['Ntotol_91'] = $Ntotol_91[$i]['t'];
+        }
+//        var_dump($totol);
+        $this->assign("totol",$totol);
+        $this->display();
+    }
     /*
      * 单独查询28转接数量
      * Time:2014-12-1 11:06:33

@@ -18,4 +18,21 @@ class Check91Action extends Action {
         $this->assign("data" , $data);
         $this->display();
     }
+    public function vip(){
+        $g = M("guestbook");
+        $data = $g->where("address like '%vip_anhuizhonghua%'")->select();
+        echo '<table align="center">';
+        echo '<tr><td>电话</td><td>ip</td><td>来源网址</td><td>日期</td></tr>';
+        foreach ($data as $key => $value) {
+            echo '<tr>';
+            echo '<td>'.$value['phone'].'</td>';
+            echo '<td>'.$value['ips'].'</td>';
+            echo '<td>'.$value['address'].'</td>';
+            echo '<td>'.$value['add_date'].'</td>';
+            echo '</tr>';
+        }
+        echo '</table>';
+//        echo $g->getLastSql();
+//        var_dump($data);
+    }
 }

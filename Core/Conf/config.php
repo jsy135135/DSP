@@ -29,9 +29,9 @@ $array = array(
     'VAR_LANGUAGE' => 'l', // 默认语言切换变量
     //默认发送返回参数的对照
     "site" => array("total", "ls", "zf", "28", "cc"),
-    "ls" => array("m.liansuo.com", "wap.liansuo.com", "m.liansuo.net", "m.xqd8888.com", "www.liansuo.com", "m.longcangxuan.com", "m.sdcf88.com", "m.muouwangluo.com", "m.51s287.com"),
-    "zf" => array("wap.zhifuwang.cn", "wap.sj99188.com", "wap.zft888.com", "wap.1522828.com", "wap.1562828.com", "wap.wapluntai-pifa.com", "wap.chuxueit.net", "wap.51xiaoxiao.net", "wap.luntai-pifa.com", "wap.xyk371.cn", "wap.ahhsshy.cn", "wap.zhifuwang.net.cn", "wap.yumidaba.cn", "wap.bjiso.net.cn", "wap.bjiso.net.cn", "wap.zhifuwang.org.cn", "3g.chuangye.com", "3g.1562828.com", "wap.yangdaidai.com", "wap.hungfai.com.cn", "wap.1shan.cn", "wap.800bao.cn", "wap.51t6.cn", "wap.h-bb.cn", "wap.dllvyou.net", "wap.huai-an.net", "wap.chuangye.com"),
-    "WP" => array("3w.1552828.com", "3w.1882828.com", "3w.wp28.com", "sogou.28u2.com", "uc.wp28.com"),
+    "ls" => array("m.liansuo.com", "wap.liansuo.com", "m.liansuo.net", "m.xqd8888.com", "www.liansuo.com", "m.longcangxuan.com", "m.sdcf88.com", "m.muouwangluo.com", "m.51s287.com", "m.51s51.com", "m.51s53.com", "m.52s287.com", "m.523liansuo.com"),
+    "zf" => array("wap.zhifuwang.cn", "wap.sj99188.com", "wap.zft888.com", "wap.1522828.com", "wap.1562828.com", "wap.wapluntai-pifa.com", "wap.chuxueit.net", "wap.51xiaoxiao.net", "wap.luntai-pifa.com", "wap.xyk371.cn", "wap.ahhsshy.cn", "wap.zhifuwang.net.cn", "wap.yumidaba.cn", "wap.bjiso.net.cn", "wap.bjiso.net.cn", "wap.zhifuwang.org.cn", "3g.chuangye.com", "3g.1562828.com", "wap.yangdaidai.com", "wap.hungfai.com.cn", "wap.1shan.cn", "wap.800bao.cn", "wap.51t6.cn", "wap.h-bb.cn", "wap.dllvyou.net", "wap.huai-an.net", "wap.chuangye.com", "uc.zhifuwang.cn", "ucwap.biz178.com","wap.98t.cn", "wap.dz888.net", "wap.jsy135.com", "wap.wzzj8.cn", "wap360.biz178.com"),
+    "WP" => array("3w.1552828.com", "3w.1882828.com", "3w.wp28.com", "sogou.28u2.com", "uc.wp28.com", "sogou.28u2.com"),
     #一个账户对应一个域名
     #   账户  域名
 // 百度  bj-1342828  200.1342828.com
@@ -52,8 +52,8 @@ $array = array(
 //     51s2891@sogou.com   sogou.51s289.com
 //     51s521@sogou.com    sogou.51s52.com
 //     52s2861@sogou.com   sogou.52s286.com
-//zk.28s0.com   sm.51s283.com 为sooe现在投放域名
-    "jm" => array("71593.wap.sooe.cn", "200.1342828.com", "kb.xqd8888.com", "200.28u0.com", "800.dianka999.com", "sm.51s283.com", "800.chun-ge.com", "800.xueliong.com", "800.it-sanda.com", "800.quikio.cn", "360.52s288.com", "360.91jmw.com", "360.28g9.com", "360.51s51.com", "360.xqd8888.com", "200.51s58.com", "200.52s285.com", "200.52s289.com", "sogou.51s282.com","sogou.52s280.com", "sogou.51s289.com", "sogou.51s52.com", "sogou.52s286.com", "zk.28s0.com", "sm.51s283.com"),
+//zk.28s0.com   sm.51s283.com  zk.hbmpu.com 为sooe现在投放域名
+    "jm" => array("zk.hbmpu.com", "71593.wap.sooe.cn", "200.1342828.com", "kb.xqd8888.com", "200.28u0.com", "800.dianka999.com", "sm.51s283.com", "800.chun-ge.com", "800.xueliong.com", "800.it-sanda.com", "800.quikio.cn", "360.52s288.com", "360.91jmw.com", "360.28g9.com", "360.51s51.com", "360.xqd8888.com", "200.51s58.com", "200.52s285.com", "200.52s289.com", "sogou.51s282.com","sogou.52s280.com", "sogou.51s289.com", "sogou.51s52.com", "sogou.52s286.com", "sm.51s285.com", "zk.28s0.com", "sm.51s283.com", "200.28cyz.com", "200.28liansuo.com", "200.91zfb.com", "200.duang168.com", "200.gh28gh.com", "200.jjskw.cn", "200.jmw91.com", "200.jsk321.com", "200.k1001.cn", "200.lost8.cn", "200.wangp91.com", "800.08vw.com", "800.8580808.com", "sm.52s288.com", "200.hehe13.com", "200.ly0009.com", "sogou.bishi.net.cn", "sogou.szpingnet.com.cn", "sogou.webmay.com.cn", "200.3dyz.net", "200.16cool.com", "200.9191jm.com", "200.chuangy168.com", "200.jhb91.com", "200.jmw28.com", "200.jmz188.com", "200.16dgg.cn", "shangkeyou.315xyz.com", "sogou.cnlongdingtea.com", "sogou.shanhuwan.com.cn", "200.52lians.com", "200.98liansuo.com", "200.chye188.com", "200.cyz91.com",),
     "r_28_1" => "数据格式不对，传来的数据不是数组",
     "r_28_2" => "传入的客户ID、项目ID不符合基本要求",
     "r_28_3" => "必填信息项内容为空",

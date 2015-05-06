@@ -5,6 +5,53 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <link rel="stylesheet" href="__PUBLIC__/Admin/css/admin-login.css" />
 <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+<script type="text/javascript">
+		var userAgent = navigator.userAgent, // userAgent
+		rMsie = /.*(msie) ([\w.]+).*/, // ie
+		rFirefox = /.*(firefox)\/([\w.]+).*/, // firefox
+		rOpera = /(opera).+version\/([\w.]+)/, // opera
+		rChrome = /.*(chrome)\/([\w.]+).*/, // chrome
+		rSafari = /.*version\/([\w.]+).*(safari).*/;// safari
+		jMeteor={};
+		jMeteor.browser = {};
+		var ua = userAgent.toLowerCase();
+		function uaMatch(ua) {
+			var match = rMsie.exec(ua);
+			if (match != null) {
+				return { browser : match[1] || "", version : match[2] || "0" };
+			}
+			var match = rFirefox.exec(ua);
+			if (match != null) {
+				return { browser : match[1] || "", version : match[2] || "0" };
+			}
+			var match = rOpera.exec(ua);
+			if (match != null) {
+				return { browser : match[1] || "", version : match[2] || "0" };
+			}
+			var match = rChrome.exec(ua);
+			if (match != null) {
+				return { browser : match[1] || "", version : match[2] || "0" };
+			}
+			var match = rSafari.exec(ua);
+			if (match != null) {
+				return { browser : match[2] || "", version : match[1] || "0" };
+			}
+			if (match != null) {
+				return { browser : "", version : "0" };
+			}
+		}
+		var browserMatch = uaMatch(userAgent.toLowerCase());
+		if (browserMatch.browser) {
+			jMeteor.browser[browserMatch.browser] = true;
+			jMeteor.browserName = browserMatch.browser;
+			jMeteor.browser.version = browserMatch.version;
+			jMeteor.browser.language = (navigator.language ? navigator.language
+					: navigator.userLanguage || "");
+		}
+		if(jMeteor.browser.msie && jMeteor.browser.version <20){
+			location="{:U('Admin/Login/brower')}";
+		}
+		</script>
 <script>
 var count = 0;
 var blur = 0;

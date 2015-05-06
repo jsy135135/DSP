@@ -69,16 +69,16 @@
                 }
             });
 
-            $.ajax({
-                type: 'get',
-                url: '__ROOT__/index.php/Admin/Api/index/' + $("#mobile").val(),
-                dataType: 'json',
-                success: function(response) {
-                    console.log('response: ' + response);
-                    var addrs = response.data.province+'.'+response.data.city;
-                    $("#address").val(addrs);
-                }
-            });
+//            $.ajax({
+//                type: 'get',
+//                url: '__ROOT__/index.php/Admin/Api/index/' + $("#mobile").val(),
+//                dataType: 'json',
+//                success: function(response) {
+//                    console.log('response: ' + response);
+//                    var addrs = response.data.province+'.'+response.data.city;
+//                    $("#address").val(addrs);
+//                }
+//            });
         });
 
 

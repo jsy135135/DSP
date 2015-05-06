@@ -164,26 +164,26 @@
                 //return false;
             });
             //地址归属地
-            $('#c_left').on('click', 'p', function (event) {
-                var phone = $(this).attr('phone');
-                $.ajax({
-                    type: 'get',
-                    url: '__ROOT__/index.php/Admin/Api/index/' + phone,
-                    dataType: 'json',
-                    success: function (response) {
-                        console.log('response: ' + response);
-                        var addrs = response.data.province + '.' + response.data.city;
-//                        console.log(response.data.sp);
-                        $("#address").val(addrs);
-                    }
-//                    success: function(response) {
-////                        console.log('response: ' + response);
-//                       var add =  response.result.att;
-//                       var addrs = add.replace("中国,","");
+//            $('#c_left').on('click', 'p', function (event) {
+//                var phone = $(this).attr('phone');
+//                $.ajax({
+//                    type: 'get',
+//                    url: '__ROOT__/index.php/Admin/Api/index/' + phone,
+//                    dataType: 'json',
+//                    success: function (response) {
+//                        console.log('response: ' + response);
+//                        var addrs = response.data.province + '.' + response.data.city;
+////                        console.log(response.data.sp);
 //                        $("#address").val(addrs);
 //                    }
-                });
-            });
+////                    success: function(response) {
+//////                        console.log('response: ' + response);
+////                       var add =  response.result.att;
+////                       var addrs = add.replace("中国,","");
+////                        $("#address").val(addrs);
+////                    }
+//                });
+//            });
         </script>
 
         <script type="text/javascript">

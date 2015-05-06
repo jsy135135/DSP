@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>发送数据量每日详细-{$Think.config.cms_name}</title>
+        <title>数据每日分配情况-{$Think.config.cms_name}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
             <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
@@ -46,9 +46,9 @@
             });
                         </script>
                         <!--<span class="f1"><a href="__ROOT__/index.php/Admin/Choucha/lswx/">ls无效返回数更新</a>-->
-                        <span class="f1"><a href="__ROOT__/index.php/Admin/Check91/vip/">vip_anhuizhonghua</span>
+                        <!--<span class="f1"><a href="__ROOT__/index.php/Admin/UserDealed/show/">vip_anhuizhonghua</span>-->
                         <span class="fl">当前区间:{$startDate}----{$endDate}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <form action="__ROOT__/index.php/Admin/Check91/index/" method="post">
+                        <form action="__ROOT__/index.php/Admin/UserDealed/show/" method="post">
                             <span class="fl">开始日期:<input type="text" name="startDate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                             <span class="fl">结束日期:<input type="text" name="endDate" class="date" /></span>
                             <input type="submit" value="查询" />
@@ -64,8 +64,8 @@
             <tr  class="list_head ct">
                 <!--<td>ID编号</td>-->
                 <!--<td>日期</td>-->
-                <td>项目名称</td>
-                <td>数量</td>
+                <td>用户</td>
+                <td>分配数量</td>
 
                 <tbody>
                     <volist name="data" id="vo">
@@ -74,8 +74,8 @@
                                                     {$i}
                                                 </for></td>-->
                         <!--<td>{$vo.addDate}</td>-->
-                        <td>{$vo.name}</td>
-                        <td>{$vo.count}</td>
+                        <td>{$vo.u_id}&nbsp;&nbsp;{$vo.name}</td>
+                        <td>{$vo.tp_count}</td>
                     </tr>
                     </volist>
                 </tbody>

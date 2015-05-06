@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
     <head>
-        <title>项目分类列表-{$Think.config.cms_name}</title>
+        <title>源量详细列表-{$Think.config.cms_name}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
             <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
             <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
@@ -9,9 +9,8 @@
             <style>td{ height:22px; line-height:22px}</style>
     </head>
     <body>
-        <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/OriginalNum">源量详细数据</a></span>
-        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/Dindex">未经过排重</a></span>
-        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/transfer_list">28转接详细查看</a></span>
+<!--        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/Dindex">未经过排重</a></span>
+        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/transfer_list">28转接详细查看</a></span>-->
         <table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
                 <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
                 <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
@@ -44,89 +43,62 @@
             <tr>
                 <td colspan="23" class="table_title">
                 <span class="fl">当前区间:{$startdate}----{$enddate}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                <form action="__ROOT__/index.php/Admin/DataStatistics/index/period/showforday" method="post">
+                <form action="__ROOT__/index.php/Admin/DataStatistics/OriginalNum" method="post">
                     <span class="fl">开始日期:<input type="text" name="startdate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                     <span class="fl">结束日期:<input type="text" name="enddate" class="date" /></span>
                     <input type="submit" value="查询" />
                     <!-- <input type="reset" value="重选"> -->
                 </form>
-                    <span class="fl">查询天数</span>
+<!--                    <span class="fl">查询天数</span>
                     <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/7">7天</a></span>
                     <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/30">30天</a></span>
                     <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/month">本月</a></span>
-                    <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/prev">上月</a></span>
+                    <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/prev">上月</a></span>-->
                     <!--<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/agotwo">5月份</a></span>-->
                 </td>
-                <if condition="$_SESSION['username'] == guanyutong">
-                    <tr class="list_head ct">
-                    <td>时间</td>
-                    <td>91成功</td>
-                    <td>91失败</td>
-                    <td>91失败率</td>
-                </tr>
-                <!-- <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post"> -->
-                <volist name="aList" id="vo">
-                    <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
-                        <td><a href="__ROOT__/index.php/Admin/UserDealed/index/{$vo.addDate}">{$vo.addDate}</a></td>
-                        <td>{$vo.send_91}</td>
-                        <td>{$vo.fail_91}</td>
-                        <td>{$vo.91ratio}%</td>
-                </volist>
-            </tr>
-                    <else />
                 <tr class="list_head ct">
                     <td>时间</td>
-                    <td>首次一源量</td>
-                    <td>首次多源量</td>
-                    <td>发送总数</td>
-                    <td>发送成功数</td>
-                    <td>二次发送成功</td>
-                    <td>发送失败数</td>
-                    <td>成功率</td>
-                    <!--<td>28转接数</td>-->
-                    <td>28成功</td>
-                    <td>28失败</td>
-                    <td>28失败率</td>
-                    <td>zf成功</td>
-                    <td>zf失败</td>
-                    <td>zf失败率</td>
-                    <td>ls成功</td>
-                    <td>ls失败</td>
-                    <td>ls失败率</td>
-                    <td>wp成功</td>
-                    <td>wp失败</td>
-                    <td>wp失败率</td>
-                    <td>91成功</td>
-                    <td>91失败</td>
-                    <td>91失败率</td>
+                    <td>源量总</td>
+                    <td>1v1源量</td>
+                    <td>1vN源量</td>
+                    <td>28源量</td>
+                    <td>28 1v1</td>
+                    <td>28 1vN</td>
+                    <td>ls源量</td>
+                    <td>ls 1v1</td>
+                    <td>ls 1vN</td>
+                    <td>zf源量</td>
+                    <td>zf 1v1</td>
+                    <td>zf 1vN</td>
+                    <td>wp源量</td>
+                    <td>wp 1v1</td>
+                    <td>wp 1vN</td>
+                    <td>91源量</td>
+                    <td>91 1v1</td>
+                    <td>91 1vN</td>
                 </tr>
                 <!-- <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post"> -->
-                <volist name="aList" id="vo">
+                <volist name="totol" id="vo">
                     <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
-                        <td><a href="__ROOT__/index.php/Admin/UserDealed/index/{$vo.addDate}">{$vo.addDate}</a></td>
-                        <td>{$vo.OriginalNum}</td>
-                        <td>{$vo.OriginalNumO}</td>
-                        <td>{$vo.total_all}</td>
-                        <td>{$vo.send_all}</td>
-                        <td>{$vo.send_again}</td>
-                        <td>{$vo.fail_all}</td>
-                        <td>{$vo.ratio}%</td>
-                        <!--<td>{$vo.transfer}</td>-->
-                        <td>{$vo.send_28}</td>
-                        <td>{$vo.fail_28}</td>
-                        <td>{$vo.28ratio}%</td>
-                        <td>{$vo.send_zf}</td>
-                        <td>{$vo.fail_zf}</td>
-                        <td>{$vo.zfratio}%</td>
-                        <td>{$vo.send_ls}</td>
-                        <td>{$vo.fail_ls}</td>
-                        <td>{$vo.lsratio}%</td>
-                        <td>{$vo.send_wp}</td>
-                        <td>{$vo.fail_wp}</td>
-                        <td>{$vo.wpratio}%</td>
-                        <td>{$vo.send_91}</td>
-                        <td>{$vo.fail_91}</td>
-                        <td>{$vo.91ratio}%</td>
+                        <td>{$vo.add_date}</a></td>
+                        <td>{$vo.totol}</td>
+                        <td>{$vo.Ytotol}</td>
+                        <td>{$vo.Ntotol}</td>
+                        <td>{$vo.totol_28}</td>
+                        <td>{$vo.Ytotol_28}</td>
+                        <td>{$vo.Ntotol_28}</td>
+                        <td>{$vo.totol_ls}</td>
+                        <td>{$vo.Ytotol_ls}</td>
+                        <td>{$vo.Ntotol_ls}</td>
+                        <td>{$vo.totol_zf}</td>
+                        <td>{$vo.Ytotol_zf}</td>
+                        <td>{$vo.Ntotol_zf}</td>
+                        <td>{$vo.totol_wp}</td>
+                        <td>{$vo.Ytotol_wp}</td>
+                        <td>{$vo.Ntotol_wp}</td>
+                        <td>{$vo.totol_91}</td>
+                        <td>{$vo.Ytotol_91}</td>
+                        <td>{$vo.Ntotol_91}</td>
                 </volist>
             </tr>
                     </if>

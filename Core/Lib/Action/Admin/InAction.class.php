@@ -15,45 +15,97 @@ class InAction extends Action {
 //            var_dump($data);
         $this->display();
     }
-    
+
+    public function TFP() {
+        $this->display();
+    }
+
+    /*
+     * 查询特殊项目的链接，分配给特点的业务账号查看
+     * Time：2015-4-6 11:54:21
+     * By：siyuan
+     * 目前项目为考拉大冒险项目
+     */
+
+    public function TFP_kaola() {
+        $gb = M("guestbook");
+        $TheDate = date("Y-m-d");
+        $Thetime = date("Y-m-d H:i:s");
+        $dDate = date("Y-m-d", strtotime("2 days ago"));
+        $uID = '666';
+//        $sql = "SELECT *  FROM `guestbook` WHERE ((`project_id` = 550 AND site = '91') or (`project_id` = 289 AND site = '91') or (`project_id` = 137334 AND site = 'ls') or (`project_id` = 146179 AND site = 'ls') or (`project_id` = 7207 AND `site` LIKE '28') or (`project_id` = 1743 AND `site` LIKE 'zf') or (`project_id` = 47697 AND `site` LIKE 'ls') or (`project_id` = 6633 AND `site` LIKE '28') or (`project_id` = 7091 AND `site` LIKE '28') or (`project_id` = 7720 AND `site` LIKE '28') or (`project_id` = 2233 AND `site` LIKE 'zf') or (`project_id` = 7778 AND `site` LIKE '28') or (`project_id` = 138226 AND `site` LIKE 'ls') or (`project_id` = 7539 AND `site` LIKE 'wp') or (`project_id` = 7519 AND `site` LIKE 'wp') or (`project_id` = 305 AND `site` LIKE '91') or (`project_id` = 2356 AND `site` LIKE 'zf') or (`project_id` = 6644 AND `site` LIKE '28') or (`project_id` = 490 AND `site` LIKE '91')) AND add_date >= '" . $dDate . "' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0";
+        $sql = "SELECT *  FROM `guestbook` WHERE ((`project_id` = 1606 AND site = 'zf') or (`project_id` = 7460 AND site = 'wp') or (`project_id` = 145186 AND site = 'ls') or (`project_id` = 98314 AND site = 'ls') or (`project_id` = 2137 AND site = 'zf') or (`project_id` = 1288 AND site = 'zf') or (`project_id` = 146947 AND site = 'ls') or (`project_id` = 146714 AND site = 'ls') or (`project_id` = 135385 AND site = 'ls') or (`project_id` = 102480 AND site = 'ls') or (`project_id` = 7622 AND site = '28') or (`project_id` = 550 AND site = '91') or (`project_id` = 289 AND site = '91') or (`project_id` = 137334 AND site = 'ls') or (`project_id` = 146179 AND site = 'ls') or (`project_id` = 7207 AND `site` LIKE '28') or (`project_id` = 1743 AND `site` LIKE 'zf') or (`project_id` = 47697 AND `site` LIKE 'ls') or (`project_id` = 6633 AND `site` LIKE '28') or (`project_id` = 7091 AND `site` LIKE '28') or (`project_id` = 7720 AND `site` LIKE '28') or (`project_id` = 2233 AND `site` LIKE 'zf') or (`project_id` = 7778 AND `site` LIKE '28') or (`project_id` = 138226 AND `site` LIKE 'ls') or (`project_id` = 7539 AND `site` LIKE 'wp') or (`project_id` = 7519 AND `site` LIKE 'wp') or (`project_id` = 305 AND `site` LIKE '91') or (`project_id` = 2356 AND `site` LIKE 'zf') or (`project_id` = 6644 AND `site` LIKE '28') or (`project_id` = 490 AND `site` LIKE '91')) AND add_date >= '" . $dDate . "' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0";
+        $dataArray = $gb->query($sql);
+        $Nums = count($dataArray);
+        echo '特殊业务现有数据：' . $Nums . '<br />'; //查看特殊现有的数量
+        #对分配过的数据在guestbook表中进行标注
+        $aData["deal_status"] = 1;
+        $aData["u_id"] = $uID;
+        #记录每条数据的分配时间
+        $aData["Thetime"] = $Thetime;
+        $aData["Thedate"] = $TheDate;
+        #进行组织获取分配到的数据id，重组数据，用来进行数据库的标记
+        $idArray = "0";
+        for ($j = 0; $j < $Nums; $j++) {
+            $idArray = $idArray . "," . $dataArray[$j]["ids"];
+        }
+        $stu = $gb->where("ids in ($idArray)")->save($aData);
+         #日志文件记录数据分配情况
+        $sFileName = "./Log/kaola-" . $TheDate . ".txt";
+        $fp = fopen($sFileName, "a+");
+        fwrite($fp, date("Y-m-d H:i:s") . "#" . "分配到的数量：" . $Nums . "#" . $uID . "#" . $idArray . "\n");
+        fclose($fp);
+//            echo $gb->getLastsql();
+        var_dump($stu);
+        echo '特殊业务分配数据完毕';
+    }
+
     /*
      * 查询特殊项目的链接，分配给特点的业务账号查看
      * Time：2015年3月12日13:35:32
      * By：siyuan
      * 目前项目为雪之丘冰激凌项目
      */
-    
-    public function TFP(){
+
+    public function TFP_xzq() {
         $gb = M("guestbook");
         $TheDate = date("Y-m-d");
         $Thetime = date("Y-m-d H:i:s");
         $dDate = date("Y-m-d", strtotime("2 days ago"));
-        $uID = '888';
-        $sql = "select ids from guestbook where address like '%http://200.1342828.com/xzq_$t2/wap%' or address like '%http://300.xmjm88.com/xzqbql-m%' or address like '%http://3w.wp28.com/wp/xzqjj%' or address like '%http://www.win-in-domain.com/xzqbql-m%' AND deal_time='0000-00-00 00:00:00'";
+        $uIDarray = array('888');
+        $uIDcount = count($uIDarray);
+        $sql = "select ids from guestbook where address like '%xzq_$t2%' or address like '%xzqjj%' or address like '%xzqbql-m%' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0 ";
         $dataArray = $gb->query($sql);
         $Nums = count($dataArray);
         echo '特殊业务现有数据：' . $Nums . '<br />'; //查看特殊现有的数量
-        #日志文件记录数据分配情况
-            $sFileName = "./Log/xzq-" . $TheDate . ".txt";
-            $fp = fopen($sFileName, "a+");
-            fwrite($fp, date("Y-m-d H:i:s") . "#" . "分配到的数量：" . $Nums . "#" . $uID . "#" . $idArray . "\n");
-            fclose($fp);
+        echo '有员工数量：' . $uIDcount . '<br />';
+        $iNowNum = floor($Nums/$uIDcount);
+        echo '每人分配：' . $iNowNum . '<br />';
+        for ($i = 0; $i < $uIDcount; $i++) {
+            $ssql = "select ids from guestbook where address like '%xzq_$t2%' or address like '%xzqjj%' or address like '%xzqbql-m%' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0 order by ips asc limit ".$iNowNum."";
+            $alist = $gb->query($ssql);
+            $alistcount = count($alist);
             #对分配过的数据在guestbook表中进行标注
             $aData["deal_status"] = 1;
-            $aData["u_id"] = $uID;
+            $aData["u_id"] = $uIDarray[$i];
             #记录每条数据的分配时间
             $aData["Thetime"] = $Thetime;
             $aData["Thedate"] = $TheDate;
             #进行组织获取分配到的数据id，重组数据，用来进行数据库的标记
             $idArray = "0";
-            for ($j = 0; $j < $Nums; $j++) {
-                    $idArray = $idArray . "," . $dataArray[$j]["ids"];
+            for ($j = 0; $j < $alistcount; $j++) {
+                $idArray = $idArray . "," . $dataArray[$j]["ids"];
             }
             $stu = $gb->where("ids in ($idArray)")->save($aData);
+            #日志文件记录数据分配情况
+            $sFileName = "./Log/xzq-" . $TheDate . ".txt";
+            $fp = fopen($sFileName, "a+");
+            fwrite($fp, date("Y-m-d H:i:s") . "#" . "分配到的数量：" . $iNowNum . "#" . $uIDarray[$i] . "#" . $idArray . "\n");
+            fclose($fp);
 //            echo $gb->getLastsql();
             var_dump($stu);
-       echo '特殊业务分配数据完毕';
-        
+            echo '特殊业务分配数据完毕';
+        }
     }
 
     /*
@@ -68,7 +120,7 @@ class InAction extends Action {
         $TheDate = date("Y-m-d");
         $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
-        $dDate = date("Y-m-d", strtotime("2 days ago"));
+        $dDate = date("Y-m-d", strtotime("15 days ago"));
         $Nums = $gb->where("project_id > 0 AND u_id=0 AND add_date>='" . $dDate . "'AND deal_time='0000-00-00 00:00:00'")->count();
         echo '现有数据：' . $Nums . '<br />'; //查看一对一现有的数量
         #每天需要定量分配数据的客服号码
@@ -117,12 +169,13 @@ class InAction extends Action {
         echo '一对一数据分配完毕！';
     }
 
-    public function BEFPD(){
+    public function BEFPD() {
         $user = M('user');
         $data = $user->where("role=5")->field('username,remark')->select();
         $this->assign('data', $data);
         $this->display(DD);
     }
+
     /*
      * 一对多分配方法
      * 

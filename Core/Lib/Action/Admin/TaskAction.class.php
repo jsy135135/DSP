@@ -206,7 +206,8 @@ class TaskAction extends Action {
         $gb = M("Guestbook");
         $project = M("project");
         $aList = $gb->where("site =''")->field("ids,address")->limit(20000)->select();
-//                        $aList = $gb->where("project_id =0 AND add_date = '2015-03-26'")->field("ids,address")->limit(20000)->select();
+//        $aList = $gb->where("site =''")->field("ids,address")->limit(100000)->select();
+//                        $aList = $gb->where("site = '' AND add_date >= '2015-03-26'")->field("ids,address")->limit(20000)->select();
         $count = count($aList);
 //                        $count = 3;
 //                        var_dump($aList);
@@ -272,17 +273,15 @@ class TaskAction extends Action {
             $aData["ids"] = $aList[$i]["ids"];
             $aData["project_id"] = intval($iPID);
             $aData["site"] = $site;
+            //如果不是致富网数据，就表示已经经过查重了
+            if($site != 'zf'){
+                $aData["repeat_check"] = 1;
+            }
             $gb->save($aData);
             unset($aData);
         }
         $this->display("blank");
     }
-
-    /**
-     * 更新改变字段(幸福饰家 特殊需求)
-     *
-     *
-     */
 
     /**
      * 临时程序，更新deal_date
@@ -303,7 +302,29 @@ class TaskAction extends Action {
         }
         $this->display("index");
     }
-
+    /***
+     * 更新数据库里致富网的数据，通过查询接口，如果重复，进行标注
+     * Time：2015年3月26日15:37:07
+     * By:siyuan
+     * 
+     */
+    function zf_repeat(){
+        $date = date("Y-m-d");
+        $g = M("guestbook");
+        $data = $g->query("select ids,phone from guestbook where add_date = '".$date."' AND site = 'zf' AND repeat_check = 0 limit 20");
+//var_dump($data);
+        $datacount = count($data);
+        $Api = new ApiAction();
+        for($i=0;$i<$datacount;$i++){
+           $repeat_phone = $Api->repeat_phone($data[$i]['phone']);
+           $newdata['ids'] = $data[$i]['ids'];
+           $newdata['repeat_check'] = 1;
+           $newdata["repeat_phone"] = $repeat_phone;
+           $rs = $g->save($newdata);
+           var_dump($rs);
+        }
+//        var_dump($data);
+    }
     /**
      * 同步项目信息
      * @param unknown $sSite
