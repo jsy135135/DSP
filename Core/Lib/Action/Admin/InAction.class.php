@@ -74,7 +74,7 @@ class InAction extends Action {
         $dDate = date("Y-m-d", strtotime("2 days ago"));
         $uIDarray = array('888');
         $uIDcount = count($uIDarray);
-        $sql = "select ids from guestbook where address like '%xzq_$t2%' or address like '%xzqjj%' or address like '%xzqbql-m%' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0 ";
+        $sql = "select ids from guestbook where address like '%xzq_$t2%' or address like '%xzqjj%' or address like '%xzqbql-m%' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0 AND add_date >= '".$dDate."'";
         $dataArray = $gb->query($sql);
         $Nums = count($dataArray);
         echo '特殊业务现有数据：' . $Nums . '<br />'; //查看特殊现有的数量
@@ -82,7 +82,7 @@ class InAction extends Action {
         $iNowNum = floor($Nums/$uIDcount);
         echo '每人分配：' . $iNowNum . '<br />';
         for ($i = 0; $i < $uIDcount; $i++) {
-            $ssql = "select ids from guestbook where address like '%xzq_$t2%' or address like '%xzqjj%' or address like '%xzqbql-m%' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0 order by ips asc limit ".$iNowNum."";
+            $ssql = "select ids from guestbook where address like '%xzq_$t2%' or address like '%xzqjj%' or address like '%xzqbql-m%' AND deal_time = '0000-00-00 00:00:00' AND deal_status = 0 AND add_date >= '".$dDate."' order by ips asc limit ".$iNowNum."";
             $alist = $gb->query($ssql);
             $alistcount = count($alist);
             #对分配过的数据在guestbook表中进行标注
