@@ -35,4 +35,20 @@ class Check91Action extends Action {
 //        echo $g->getLastSql();
 //        var_dump($data);
     }
+    //特殊客户查看dsp源数据(特定项目)
+    public function dspforc_show(){
+        $startDate = $_REQUEST["startDate"] == "" ? date("Y-m-d") : $_REQUEST["startDate"];
+        $endDate = $_REQUEST["endDate"] == "" ? date("Y-m-d") : $_REQUEST["endDate"];
+        $gb_c = M("gb_c");
+        $user = M("user");
+        $date = $date = date("Y-m-d");
+        $project_id = $user->where("role = '13'")->getField("remark");
+        $data = $gb_c->where("project_id = '".$project_id."' AND site = '91' AND add_date >= '".$startDate."'AND add_date <= '".$endDate."'")->select();
+        $datacount = count($data);
+        $this->assign("startDate" , $startDate);
+        $this->assign("endDate" , $endDate);
+        $this->assign("data" , $data);
+        $this->assign("datacount" ,$datacount);
+        $this->display();
+    }
 }

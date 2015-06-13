@@ -15,7 +15,7 @@ class NewGuestbookAction extends OQAction {
         $dDate = date("Y-m-d", strtotime("30 days ago"));  //昨天1 days ago
 //                echo $dDate;
         $gb = M("guestbook");
-        $aList = $gb->where("deal_status = 1 AND project_id = 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00' AND repeat_phone = 0")->order("ids desc")->select();
+        $aList = $gb->where("deal_status = 1 AND project_id = 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00' AND repeat_phone = 0")->order("Thetime desc")->select();
         $iNowNum = count($aList);
         #加入推荐的栏目列表
         $aBigList = $this->_listCategory(1);

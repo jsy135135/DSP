@@ -7,31 +7,118 @@ header("Content-type: text/html; charset=utf-8");
  *
  */
 class TaskAction extends Action {
+
+    public function up_phone() {
+        $guestbook = M("guestbook");
+        $data = $guestbook->where("phone like '%s%'")->select();
+//        var_dump($data);
+        $datacount = count($data);
+        for ($i = 0; $i < $datacount; $i++) {
+            $data[$i]['phone'] = str_replace('s', '', $data[$i]['phone']);
+            $rs = $guestbook->where("ids = '" . $data[$i]['ids'] . "'")->save($data[$i]);
+//            echo $guestbook->getLastSql();
+            var_dump($rs);
+//            echo $rs;
+        }
+    }
+
+    /*
+     * 获取远程数据库的数据，并导入到本地数据库
+     * Time:2015-6-12 14:40:00
+     * By：siyuan
+     */
+
+    public function sync_s2() {
+        $master = M("guestbook");
+        $salver = M("gbook", "", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/gbook");
+        $iMaxID = $master->query("SELECT MAX(s2_id) as maxid FROM guestbook where 1");
+        $iMaxID = $iMaxID[0]['maxid'];
+//        echo $iMaxID;
+        $data = $salver->query("SELECT phone,id,ip,r,keywords,time FROM gbook WHERE id > " . $iMaxID . " group by phone order by id asc LIMIT 20000");
+//        var_dump($data);
+//        die();
+//        echo $salver->getLastSql();
+        $datacount = count($data);
+        for ($i = 0; $i < $datacount; $i++) {
+            //如果来源链接为空，则作废，跳出循环，不做入库操作
+            if(empty($data[$i]['r'])){
+                continue;
+            }
+            $data[$i]['phone'] = trim($data[$i]['phone']);
+//            echo $data[$i]['phone'].'<br />';
+            $starttime = date("Y-m-d H:m:s", strtotime("$datetime-1 hour"));
+            $endtime = date("Y-m-d H:m:s", strtotime("$datetime+1 hour"));
+//            $rs = $master->where("phone = '" . $data[$i]['phone'] . "' AND times <='" . $starttime . "' AND times >='" . $endtime . "'")->select();
+            $rs = $master->where("phone = '" . $data[$i]['phone'] ."'")->select();
+//            echo $master->getLastSql();
+//            var_dump($rs).'<br />';
+            //如果存在的话，就跳出此次循环，不进行本地数据库的插入操作
+            if ($rs) {
+                echo '库里号码重复了';
+                continue;
+            }
+            $aData = array();
+            $aData['phone'] = $data[$i]['phone'];
+            $aData['s2_id'] = $data[$i]['id'];
+            $aData['source'] = '1';
+            $aData['ips'] = $data[$i]['ip'];
+            $aData['address'] = $data[$i]['r'];
+            $aData['province'] = '';
+            $aData['keywords'] = $data[$i]['keywords'];
+            $aData['times'] = $data[$i]['time'];
+            $date = date("Y-m-d", strtotime($data[$i]['time']));
+            $aData['add_date'] = $date;
+            $aData['update_date'] = $date;
+            $re = $master->add($aData);
+            unset($aData);
+            echo $re.'<br />';
+        }
+//        var_dump($data);
+    }
+
     /*
      * crm [客户关系管理系统]
      * Copyright (c) 2013
      * Author：siyuan
      * 模块名称：定时操作数据库，导入数据
      */
+
+    //定时从源数据总库，查出规定的项目的数据
+    public function dspforc() {
+        $guestbook = M("guestbook");
+        $gb_c = M("gb_c");
+        $user = M("user");
+        $date = $date = date("Y-m-d");
+        $imax = $gb_c->query("select max(ids) as max from gb_c");
+        $imax = $imax[0]['max'];
+        $project_id = $user->where("role = '13'")->getField("remark");
+        $data = $guestbook->where("project_id = '" . $project_id . "' AND site = '91' AND add_date = '" . $date . "' AND ids >'" . $imax . "'")->select();
+        echo $gb_c->addAll($data);
+    }
+
     #DSP数据特定项目的数据输出（此为介护宝项目）
+
     public function sysforycrm() {
         $guestbook = M("guestbook");
         $date = date("Y-m-d", strtotime("1 days ago"));
 //        $date = '2014-12-28';
-        $data = $guestbook->query("select ids,phone,add_date from guestbook where site = '91' AND project_id = 387 AND add_date = '".$date."'");
+        $data = $guestbook->query("select ids,phone,add_date from guestbook where site = '91' AND project_id = 387 AND add_date = '" . $date . "'");
         $data = serialize($data);
         echo $data;
     }
+
     #进行前一天一堆多数据的输出
+
     public function sysfordcrm() {
         $guestbook = M("guestbook");
-        $date = date("Y-m-d",strtotime("1 days ago"));
+        $date = date("Y-m-d", strtotime("1 days ago"));
 //        $dsql = "SELECT ids,phone,add_date FROM `guestbook` WHERE `add_date` = '".$date."' AND `project_id` = ''";
-        $dsql = "SELECT ids,phone,add_date FROM guestbook WHERE add_date = '".$date."'AND project_id = '' AND ids >= ((SELECT MAX(ids) FROM guestbook)-(SELECT MIN(ids) FROM guestbook)) * RAND() + (SELECT MIN(ids) FROM guestbook)  LIMIT 400";
+        $dsql = "SELECT ids,phone,add_date FROM guestbook WHERE add_date = '" . $date . "'AND project_id = '' AND ids >= ((SELECT MAX(ids) FROM guestbook)-(SELECT MIN(ids) FROM guestbook)) * RAND() + (SELECT MIN(ids) FROM guestbook)  LIMIT 400";
         $data = $guestbook->query($dsql);
         $data = serialize($data);
         echo $data;
     }
+
     public function transferlist() {
         $transfer = M("transfer");
         $date = date("Y-m-d", strtotime("1 days ago"));
@@ -191,25 +278,25 @@ class TaskAction extends Action {
     }
 
     function jsy() {
-        $url = "http://800.quikio.cn/qmy/wap/?830";
+        $url = "http://800.quikio.cn/hbx/wap/?830";
         $content = file_get_contents($url);
         // <input type="hidden" name="p" value="301">
         preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
         $iPID = $matches[1][0];
         $site = "91";
+        var_dump($iPID);
     }
 
     /**
      * 定时计划的第二步,对数据进行分析，生成各种ID号码
      */
     function step1() {
+//        $Api = new ApiAction;
         $gb = M("Guestbook");
         $project = M("project");
         $aList = $gb->where("site =''")->field("ids,address")->limit(20000)->select();
-//        $aList = $gb->where("site =''")->field("ids,address")->limit(100000)->select();
-//                        $aList = $gb->where("site = '' AND add_date >= '2015-03-26'")->field("ids,address")->limit(20000)->select();
         $count = count($aList);
-//                        $count = 3;
+//                        $count = 50;
 //                        var_dump($aList);
         for ($i = 0; $i <= $count; $i++) {
             echo $aList[$i]["ids"] . "\n";
@@ -256,7 +343,7 @@ class TaskAction extends Action {
                 $iPID = $projectID;
                 $site = "wp";
             } elseif (in_array($aUrl["host"], C("jm"))) {
-                echo "i am 91 site";
+//                echo "i am 91 site";
                 $content = file_get_contents($aList[$i]["address"]);
                 // $content = file_get_contents($url);
                 // <input type="hidden" name="p" value="301">
@@ -273,8 +360,12 @@ class TaskAction extends Action {
             $aData["ids"] = $aList[$i]["ids"];
             $aData["project_id"] = intval($iPID);
             $aData["site"] = $site;
+//            $aList[$i]['phone'] = trim($aList[$i]['phone']);
+//            $phoneSp = $Api->index($aList[$i]['phone']);
+//            $aData["province"] = $phoneSp['province'] . ' ' . $phoneSp['city'];
+//            $aData["sp"] = $phoneSp['sp'];
             //如果不是致富网数据，就表示已经经过查重了
-            if($site != 'zf'){
+            if ($site != 'zf') {
                 $aData["repeat_check"] = 1;
             }
             $gb->save($aData);
@@ -302,29 +393,32 @@ class TaskAction extends Action {
         }
         $this->display("index");
     }
-    /***
+
+    /*     * *
      * 更新数据库里致富网的数据，通过查询接口，如果重复，进行标注
      * Time：2015年3月26日15:37:07
      * By:siyuan
      * 
      */
-    function zf_repeat(){
+
+    function zf_repeat() {
         $date = date("Y-m-d");
         $g = M("guestbook");
-        $data = $g->query("select ids,phone from guestbook where add_date = '".$date."' AND site = 'zf' AND repeat_check = 0 limit 20");
+        $data = $g->query("select ids,phone from guestbook where add_date = '" . $date . "' AND site = 'zf' AND repeat_check = 0 limit 20");
 //var_dump($data);
         $datacount = count($data);
         $Api = new ApiAction();
-        for($i=0;$i<$datacount;$i++){
-           $repeat_phone = $Api->repeat_phone($data[$i]['phone']);
-           $newdata['ids'] = $data[$i]['ids'];
-           $newdata['repeat_check'] = 1;
-           $newdata["repeat_phone"] = $repeat_phone;
-           $rs = $g->save($newdata);
-           var_dump($rs);
+        for ($i = 0; $i < $datacount; $i++) {
+            $repeat_phone = $Api->repeat_phone($data[$i]['phone']);
+            $newdata['ids'] = $data[$i]['ids'];
+            $newdata['repeat_check'] = 1;
+            $newdata["repeat_phone"] = $repeat_phone;
+            $rs = $g->save($newdata);
+            var_dump($rs);
         }
 //        var_dump($data);
     }
+
     /**
      * 同步项目信息
      * @param unknown $sSite

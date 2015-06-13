@@ -20,7 +20,20 @@ class GuestbookAction extends OQAction {
 //		$TheDate = date("Y-m-d");
 //                $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
-        $aList = $gb->where("deal_status = 1 AND project_id > 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00' AND repeat_phone = 0")->order("ids desc")->select();
+        $aList = $gb->where("deal_status = 1 AND project_id > 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00' AND repeat_phone = 0")->order("Thetime desc")->select();
+        $aListcount = count($aList);
+        for ($i = 0; $i < $aListcount; $i++) {
+            $str_re = array(
+                'ndn_$t2/' => 'ndn_$t2_ding/',
+                'ndn_$t2/' => 'ndn_$t2_ding/',
+                'xyq_$t2/' => 'xyq_$t2_ding/',
+                '100dufei_$t2/' => '100dufei_$t2_ding/',
+                'miaoge_$t2/' => 'miaoge_$t2_ding/',
+                'yknm_$t2/' => 'yknm_$t2_ding/',
+                'lwx_$t2/' => 'lwx_$t2_ding/'
+            );
+            $aList[$i]['address'] = strtr($aList[$i]['address'], $str_re);
+        }
         #加入推荐的栏目列表
         $aBigList = $this->_listCategory(1);
         $subList = D("Category")->where("pid != 0")->select();
@@ -595,7 +608,8 @@ class GuestbookAction extends OQAction {
             'mobile' => $aData["phone"], //手机号码[必填]
             'ip' => $aData["ips"], //IP地址[必填]
             'content' => $aData["content"], //留言内容 [必填]
-            'owner' => $owner
+            'owner' => $owner, //
+            'address' => $aData["address"],
 //            'memberid' => 134920, //项目id [必填]
 //            'trueName' => 'siyuan', //真是姓名[必填]
 //            'mobile' => '13354280961', //手机号码[必填]
@@ -604,9 +618,9 @@ class GuestbookAction extends OQAction {
         $state_new = $client->clientSend($aNewData, 'utf-8', 'callfrommobile ', 'call$%^mobile');
         #进行记录，查看报错信息的格式
         $sFileName = "./Log/ls_cuowu.txt";
-            $fp = fopen($sFileName, "a+");
-            fwrite($fp, date("Y-m-d H:i:s") . "#" . "项目ID：" . $aData["project_id"] . "#" . $aData["phone"] . "#" . $aData["uid"] . "#" . $state_new ."\n");
-            fclose($fp);
+        $fp = fopen($sFileName, "a+");
+        fwrite($fp, date("Y-m-d H:i:s") . "#" . "项目ID：" . $aData["project_id"] . "#" . $aData["phone"] . "#" . $aData["uid"] . "#" . $state_new . "\n");
+        fclose($fp);
 //        var_dump($state_new);
 //        die();
         return $state_new;

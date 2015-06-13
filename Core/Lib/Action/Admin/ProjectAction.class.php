@@ -838,7 +838,7 @@ class ProjectAction extends Action {
             $aTemp["needNum"] = 1;
             $aTemp["numbers"] = 1;
             #DSP手动暂停项目
-            if(in_array($aTemp["projectID"],array(64,65,82,97,120,123,151,192,296,134,135,137,170,258,269,267,270,277,278,287,300,311,315,437,308,280,247,249,304,309,316,305,389,289,456,136,313,290,197))){
+            if(in_array($aTemp["projectID"],array(64,65,82,97,120,123,151,192,296,134,135,137,170,258,269,267,270,277,278,287,300,311,315,437,308,280,247,249,304,309,316,305,389,289,456,136,313,290,197,460))){
                 $aTemp["status"] = 0;
             }
             //煲上皇和速汇宝
@@ -846,7 +846,7 @@ class ProjectAction extends Action {
                 $aTemp["needNum"] = 100;
                 $aTemp["numbers"] = 100;
             }
-            if(in_array($aTemp["projectID"],array(270,483,482))){
+            if(in_array($aTemp["projectID"],array(270,483,482,465,687))){
                 $aTemp["needNum"] = 15;
                 $aTemp["numbers"] = 15;
             }
@@ -857,7 +857,7 @@ class ProjectAction extends Action {
             }
             #限制数量5条
             #小粥仙(合户)=>269,sooe品位生活灯饰=>296,放鹅郎=>277 ,热狗铺子=>315 ,乐姿家电（搜易）=>218 ,乐姿家电2（搜易）=>300 ,考拉大冒险(搜易)=>287
-            elseif(in_array($aTemp["projectID"],array(267,269,296,277,305,218,300,287,389,290))){
+            elseif(in_array($aTemp["projectID"],array(267,269,296,277,305,218,300,287,389,290,459,460,461,462,463,464,467))){
                 $aTemp["needNum"] = 5;
                 $aTemp["numbers"] = 5;
             }

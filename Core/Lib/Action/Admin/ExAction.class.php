@@ -8,6 +8,59 @@
 
 class ExAction extends Action {
 
+    public function chadianhua() {
+        $Api = new ApiAction;
+        $file = fopen("./phone.txt", "r");
+        $data = array();
+        $i = 0;    
+        while (!feof($file)) {
+            $line = fgets($file);
+            $line = trim($line);
+            $data[$i]['phone'] = $line;
+            $yys = $Api->index($line);
+            $data[$i]['yys'] = $yys;
+            $i++;
+        }
+        fclose($file);
+//        var_dump($data);
+       $data_char = serialize($data);
+       file_put_contents('./sp.txt', $data_char,FILE_APPEND);
+    }
+
+    public function aliyuntoex() {
+//        $startdate = date("Y-m-d 9:00:00", strtotime("1 days ago"));
+//        $enddate = date("Y-m-d 9:00:00");
+        $startdate = '2015-05-31 00:00:00';
+        $enddate = '2015-06-07 00:00:00';
+        $data_52 = M("guestbook")->where("times >= '" . $startdate . "' AND times <='" . $enddate . "' AND site='91'")->getField('phone', true);
+        $data_52_count = count($data_52);
+//        var_dump($data_52);
+//        die();
+        $sql = "select DISTINCT phone,r,time,id from gbook where time >= '" . $startdate . "' AND time <='" . $enddate . "' group by phone order by id";
+        $data = M("gbook", "", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/gbook")->query($sql);
+        $datacount = count($data);
+//        echo $datacount;
+//        die();
+        for ($i = 0; $i < $datacount; $i++) {
+//            $sss = in_array($data[$i]['phone'],$data_52);
+            if (in_array($data[$i]['phone'], $data_52)) {
+                unset($data[$i]);
+            }
+        }
+        $data = array_values($data);
+        $datacount_new = count($data);
+//        echo '时间段 ：'.$startdate.'-------'.$enddate.'<br />';
+//        echo '去重后数据共有<font color="red">'.$datacount_new.'</font>条'.'<br />';
+//        echo '原来数据有<font color="green">'.$data_52_count.'</font>条';
+//        echo '<table><tr><th>号码</th><th>链接</th><th>时间</th><th>id</th></tr>';
+        for ($i = 0; $i < $datacount; $i++) {
+//            echo $data[$i]['phone'].'<br />';
+//            echo "<tr><td>".$data[$i]['phone']."</td><td style='word-wrap:break-word;word-break:break-all;'>".$data[$i]['r']."</td><td>".$data[$i]['time']."</td><td>".$data[$i]['id']."</td></tr>";
+            file_put_contents('./yysphone.txt', $data[$i]['phone'] . "\r", FILE_APPEND);
+        }
+        echo '</table>';
+    }
+
     //每月自动生成源数据量报表
     public function yuanshuju() {
         $project = M("guestbook");
@@ -115,10 +168,20 @@ class ExAction extends Action {
 
     public function park() {
         $project = M("guestbook");
-//        $SQL = "SELECT g.phone,p.name,g.project_id,g.site,g.times  FROM `guestbook` as g left  join project as p on g.project_id = p.projectID WHERE `add_date` >= '2015-01-01' AND `add_date` <= '2015-02-28' AND project_id in (select projectID from project where `cid` = 97 or `cid` = 98)";
-        $SQL = "";
+        $SQL = "SELECT g.phone,p.name,g.project_id,g.site,g.times  FROM `guestbook` as g left  join project as p on g.project_id = p.projectID AND g.site = p.site WHERE `add_date` >= '2015-06-01' AND `add_date` <= '2015-06-11' AND g.project_id in (select projectID from project where `pid`=1)";
+//        $SQL = "";
         $data = $project->query($SQL);
         $datacount = count($data);
+//        var_dump($data);
+        $data_dealed = M("data_dealed");
+        $phone_dealed = $data_dealed->where("`addDate` >= '2015-06-01' AND `addDate` <= '2015-06-11' AND projectID in (select projectID from project where `pid`=1)")->getField("phone",true);
+//        var_dump($phone_dealed);
+        for($i=0;$i<$datacount;$i++){
+           if(in_array($data[$i]['phone'], $phone_dealed)){
+               unset($data[$i]);
+           }
+        }
+        $data = array_values($data);
 //        var_dump($data);
 //        die();
 

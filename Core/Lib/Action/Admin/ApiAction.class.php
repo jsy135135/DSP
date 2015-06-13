@@ -8,8 +8,17 @@
  */
 
 class ApiAction extends OQAction {
-        public function curls($url, $timeout = '10')
-    {
+
+    public function pinyin() {
+        import("ORG.Util.Pinyin");
+        $py = new PinYin();
+        
+        echo $py->getAllPY("朱镕基"); //shuchuhanzisuoyoupinyin
+//        echo $py->getFirstPY("输出汉字首拼音"); //schzspy
+        $this->display("index");
+    }
+
+    public function curls($url, $timeout = '10') {
         // 1. 初始化
         $ch = curl_init();
         // 2. 设置选项，包括URL
@@ -26,11 +35,13 @@ class ApiAction extends OQAction {
     }
 
     function index($number = null) {
+//        echo $number;
 // var_dump($_REQUEST);
-        $number = $_REQUEST['_URL_']['3'];
-//$number = 18326110041;
+//        $number = $_REQUEST['_URL_']['3'];
+//$number = 13354280969;
         header('Content-Type:text/html;charset=utf-8');
         $url = "http://cx.shouji.360.cn/phonearea.php?number=" . $number . "";
+//        echo $url;
 //        k780.com jsonAPI
 //        $url = "http://api.k780.com:88/?app=phone.get&phone=" . $number . "&appkey=10003&sign=b59bc3ef6191eb9f747dd4e83c99f2a4&format=json";
 //        taobao API
@@ -39,7 +50,8 @@ class ApiAction extends OQAction {
 //        var_dump($url);
 //        $rs = file_get_contents($url);
         $rs = $this->curls($url);
-        echo $rs;
+        $rs = json_decode($rs,true);
+        return $rs['data'];
     }
 
     /*
@@ -108,4 +120,5 @@ class ApiAction extends OQAction {
         curl_close($ch);
         return $return;
     }
+
 }
