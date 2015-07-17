@@ -6,13 +6,13 @@
  *
  */
 class DataStatisticsAction extends OQAction {
+
     /**
      * 源量来源分析
      * Time:2015-3-30 14:44:41
      * By:siyuan
      */
-    
-    public function OriginalNum(){
+    public function OriginalNum() {
         $g = M("guestbook");
 //        var_dump($_REQUEST);
 //        die();
@@ -20,27 +20,27 @@ class DataStatisticsAction extends OQAction {
 //        $startday = '2015-03-28';
         $endday = $_REQUEST['enddate'] == "" ? date("Y-m-d") : $_REQUEST['enddate'];
 //        $endday = '2015-03-30';
-        $totol = $g->query("select add_date,count(*) as t from guestbook where add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量
-        $Ytotol = $g->query("select add_date,count(*) as t from guestbook where project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量
-        $Ntotol = $g->query("select add_date,count(*) as t from guestbook where project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量
-        $totol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 28
-        $Ytotol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 28
-        $Ntotol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 28
-        $totol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 ls
-        $Ytotol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 ls
-        $Ntotol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 ls
-        $totol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 zf
-        $Ytotol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 zf
-        $Ntotol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 zf
-        $totol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 wp
-        $Ytotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 wp
-        $Ntotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 wp
-        $totol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//来源总量 91
-        $Ytotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id >0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1v1 来源总量 28
-        $Ntotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id = 0 AND add_date >= '".$startday."' AND add_date <= '".$endday."'group by add_date");//1vN 来源总量 
+        $totol = $g->query("select add_date,count(*) as t from guestbook where add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量
+        $Ytotol = $g->query("select add_date,count(*) as t from guestbook where project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量
+        $Ntotol = $g->query("select add_date,count(*) as t from guestbook where project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量
+        $totol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量 28
+        $Ytotol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 28
+        $Ntotol_28 = $g->query("select add_date,count(*) as t from guestbook where site = '28' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 28
+        $totol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量 ls
+        $Ytotol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 ls
+        $Ntotol_ls = $g->query("select add_date,count(*) as t from guestbook where site = 'ls' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 ls
+        $totol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量 zf
+        $Ytotol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 zf
+        $Ntotol_zf = $g->query("select add_date,count(*) as t from guestbook where site = 'zf' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 zf
+        $totol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量 wp
+        $Ytotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 wp
+        $Ntotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 wp
+        $totol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量 91
+        $Ytotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 28
+        $Ntotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 
         $totolcount = count($totol);
 //        var_dump($totol);
-        for($i=0;$i<$totolcount;$i++){
+        for ($i = 0; $i < $totolcount; $i++) {
             $tdate = $totol[$i]['add_date'];
             $totol[$i]['totol'] = $totol[$i]['t'];
             $totol[$i]['Ytotol'] = $Ytotol[$i]['t'];
@@ -62,15 +62,17 @@ class DataStatisticsAction extends OQAction {
             $totol[$i]['Ntotol_91'] = $Ntotol_91[$i]['t'];
         }
 //        var_dump($totol);
-        $this->assign("totol",$totol);
+        $this->assign("totol", $totol);
         $this->display();
     }
+
     /*
      * 单独查询28转接数量
      * Time:2014-12-1 11:06:33
      * By:siyuan
      */
-    public function transfer_list(){
+
+    public function transfer_list() {
         $dealed = M("DataDealed");
         $transfer_date = date("Y-m-d", strtotime("31 days ago"));
         $aList_transfer = $dealed->query("select addDate,count(distinct phone) as count from data_dealed where transfer=1 AND addDate >= '" . $transfer_date . "'group by addDate");
@@ -78,6 +80,7 @@ class DataStatisticsAction extends OQAction {
         $this->assign("aList_transfer", $aList_transfer);
         $this->display();
     }
+
     #已经排重
 
     public function index() {
@@ -89,31 +92,35 @@ class DataStatisticsAction extends OQAction {
         $startdate = $_REQUEST["startdate"];
         $enddate = $_REQUEST["enddate"];
         $aList = array();
-        $aTotalList = $this->getNumBySite("all", "total", $period,$startdate,$enddate); //全部的成功数
-        $aList_28 = $this->getNumBySite("28", "total", $period,$startdate,$enddate); //28的总成功数
-        $aList_zf = $this->getNumBySite("zf", "total", $period,$startdate,$enddate); //致富的总成功数
-        $aList_ls = $this->getNumBySite("ls", "total", $period,$startdate,$enddate); //连锁的总成功数
-        $aList_wp = $this->getNumBySite("wp", "total", $period,$startdate,$enddate); //wp的总成功数
-        $aList_91 = $this->getNumBySite("91", "total", $period,$startdate,$enddate); //91的总成功数
-        $aSend = $this->getNumBySite("all", ">0", $period,$startdate,$enddate); //全部发送成功数
-        $aSend_28 = $this->getNumBySite("28", ">0", $period,$startdate,$enddate); //28发送成功数
-        $aSend_zf = $this->getNumBySite("zf", ">0", $period,$startdate,$enddate); //zf发送成功数
-        $aSend_ls = $this->getNumBySite("ls", ">0", $period,$startdate,$enddate); //ls发送成功数
-        $aSend_wp = $this->getNumBySite("wp", ">0", $period,$startdate,$enddate); //wp的发送成功数
-        $aSend_91 = $this->getNumBySite("91", ">0", $period,$startdate,$enddate); //91的发送成功数
-        $aFail = $this->getNumBySite("all", "<0", $period,$startdate,$enddate); //全部发送成功数
-        $aFail_28 = $this->getNumBySite("28", "<0", $period,$startdate,$enddate); //28发送失败数
-        $aFail_zf = $this->getNumBySite("zf", "<0", $period,$startdate,$enddate); //zf发送失败数
-        $aFail_ls = $this->getNumBySite("ls", "<0", $period,$startdate,$enddate); //ls发送失败数
-        $aFail_wp = $this->getNumBySite("wp", "<0", $period,$startdate,$enddate); //wp的发送失败数
-        $aFail_91 = $this->getNumBySite("91", "<0", $period,$startdate,$enddate); //91的发送失败数
+        $aTotalList = $this->getNumBySite("all", "total", $period, $startdate, $enddate); //全部的成功数
+        $aList_28 = $this->getNumBySite("28", "total", $period, $startdate, $enddate); //28的总成功数
+        $aList_zf = $this->getNumBySite("zf", "total", $period, $startdate, $enddate); //致富的总成功数
+        $aList_ls = $this->getNumBySite("ls", "total", $period, $startdate, $enddate); //连锁的总成功数
+        $aList_wp = $this->getNumBySite("wp", "total", $period, $startdate, $enddate); //wp的总成功数
+        $aList_91 = $this->getNumBySite("91", "total", $period, $startdate, $enddate); //91的总成功数
+        $aSend = $this->getNumBySite("all", ">0", $period, $startdate, $enddate); //全部发送成功数
+        $aSend_28 = $this->getNumBySite("28", ">0", $period, $startdate, $enddate); //28发送成功数
+        $aSend_zf = $this->getNumBySite("zf", ">0", $period, $startdate, $enddate); //zf发送成功数
+        $aSend_ls = $this->getNumBySite("ls", ">0", $period, $startdate, $enddate); //ls发送成功数
+        $aSend_wp = $this->getNumBySite("wp", ">0", $period, $startdate, $enddate); //wp的发送成功数
+        $aSend_91 = $this->getNumBySite("91", ">0", $period, $startdate, $enddate); //91的发送成功数
+        $aFail = $this->getNumBySite("all", "<0", $period, $startdate, $enddate); //全部发送成功数
+        $aFail_28 = $this->getNumBySite("28", "<0", $period, $startdate, $enddate); //28发送失败数
+        $aFail_zf = $this->getNumBySite("zf", "<0", $period, $startdate, $enddate); //zf发送失败数
+        $aFail_ls = $this->getNumBySite("ls", "<0", $period, $startdate, $enddate); //ls发送失败数
+        $aFail_wp = $this->getNumBySite("wp", "<0", $period, $startdate, $enddate); //wp的发送失败数
+        $aFail_91 = $this->getNumBySite("91", "<0", $period, $startdate, $enddate); //91的发送失败数
 
         for ($i = 0; $i < count($aTotalList); $i++) {
             $Ydate = $aTotalList[$i]["addDate"];
             $aList[$i]["OriginalNum"] = $guestbook->where("add_date = '" . $Ydate . "' AND project_id > 0")->count(); //首次外呼对一的每日数据源量
             $aList[$i]["OriginalNumO"] = $guestbook->where("add_date = '" . $Ydate . "' AND project_id = 0")->count(); //首次外呼对多的每日数据源量
+            $aList[$i]["OriginalNum_All"] = $guestbook->where("add_date = '" . $Ydate . "'")->count(); //每日源数据总量
             $aList[$i]["addDate"] = $aTotalList[$i]["addDate"];
             $aList[$i]["total_all"] = $aTotalList[$i]["t"];
+            $aList[$i]["totol_liuyan"] = $dealed->where("addDate = '" . $Ydate . "'AND transfer <> 1 AND `check` = '1' AND regular = 1")->count("DISTINCT phone");
+            $aList[$i]["totol_transfer"] = $dealed->where("addDate = '" . $Ydate . "'AND transfer = 1 AND `check` = '1' AND regular = 1")->count("DISTINCT phone");
+            $aList[$i]["totol_ratio"] = round($aList[$i]["totol_transfer"] / $aList[$i]["total_all"], 3) * 100;
             $aList[$i]["total_28"] = $aList_28[$i]["t"];
             $aList[$i]["total_zf"] = $aList_zf[$i]["t"];
             $aList[$i]["total_wp"] = $aList_wp[$i]["t"];
@@ -130,6 +137,8 @@ class DataStatisticsAction extends OQAction {
             $aList[$i]["fail_91"] = $aFail_91[$i]["t"];
             $aList[$i]["total_ls"] = $aList_ls[$i]["t"];
             $aList[$i]["send_ls"] = $aSend_ls[$i]["t"];
+            $aList[$i]["ls_transfer"] = $dealed->where("addDate = '" . $Ydate . "'AND transfer = 1 AND site = 'ls' AND regular = 1")->count("DISTINCT phone");
+            $aList[$i]["ls_liuyan"] = $dealed->where("addDate = '" . $Ydate . "'AND transfer <> 1 AND site = 'ls' AND regular = 1")->count("DISTINCT phone");
             $aList[$i]["fail_ls"] = $aFail_ls[$i]["t"];
             $aList[$i]["ratio"] = round($aList[$i]["send_all"] / $aList[$i]["total_all"], 3) * 100;
             $aList[$i]["28ratio"] = round($aList[$i]["fail_28"] / $aList[$i]["total_28"], 3) * 100;
@@ -140,10 +149,10 @@ class DataStatisticsAction extends OQAction {
             $aList[$i]["send_again"] = $dealAgain->where("add_date='" . $aList[$i]["addDate"] . "' AND status >0")->count();
         }
 //                echo '<pre>';
-               // var_dump($aList);
+        // var_dump($aList);
         $this->assign("aList", $aList);
-        $this->assign("startdate",$startdate);
-        $this->assign("enddate",$enddate);
+        $this->assign("startdate", $startdate);
+        $this->assign("enddate", $enddate);
         $this->display();
     }
 
@@ -247,13 +256,14 @@ class DataStatisticsAction extends OQAction {
 
     #已经排重
 
-    private function getNumBySite($sSite = '28', $iType = 'total', $period = "7",$startdate = "",$enddate = "") {
+    private function getNumBySite($sSite = '28', $iType = 'total', $period = "7", $startdate = "", $enddate = "") {
         $sSQL = "1";
         $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";
         $sSQL .= ($iType == "total") ? "" : " AND status $iType";
         if (is_numeric($period)) {
             $dDate = date("Y-m-d", strtotime("$period days ago"));
             $sSQL .= " AND  addDate >= '" . $dDate . "' AND u_id!=0 AND u_id!=10086";
+            $dDate_end = date("Y-m-d");
         } elseif ($period == "month") {
             $dDate = date("Y-m", strtotime("this month")) . "-01";
             $dDate_end = date("Y-m", strtotime("this month")) . "-31";
@@ -275,68 +285,67 @@ class DataStatisticsAction extends OQAction {
             $dDate_end = $enddate;
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         }
-        // echo $sSQL;
-        // die();
-
         $dealed = M("data_dealed");
+        $guestbook = M("guestbook");
         $aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//         echo '<pre>';
-//         echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//        var_dump($aList);
-        if ($iType == "<0") {
-            $iType1 = ">0";
-            $sSQL = "1";
-            $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";
-            $sSQL .= ($iType1 == "total") ? "" : " AND status $iType1";
-            if (is_numeric($period)) {
-                $dDate = date("Y-m-d", strtotime("$period days ago"));
-                $sSQL .= " AND  addDate >= '" . $dDate . "' AND u_id!=0 AND u_id!=10086";
-            } elseif ($period == "month") {
-                $dDate = date("Y-m", strtotime("this month")) . "-01";
-                $dDate_end = date("Y-m", strtotime("this month")) . "-31";
-                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
-            } elseif ($period == "prev") {
-                $dDate = date("Y-m", strtotime("last month")) . "-01";
-//                        $dDate = "2014-05-01";
-                $dDate_end = date("Y-m", strtotime("last month")) . "-31";
-//                        $dDate_end = "2014-05-31";
-                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
-            } elseif ($period == "agotwo") {
-//			$dDate = date("Y-m", strtotime("last month"))."-01";
-                $dDate = "2014-05-01";
-//			$dDate_end = date("Y-m", strtotime("last month"))."-31";
-                $dDate_end = "2014-05-31";
-                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
-            }
-            $QaList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//            echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//         echo '<br />';
-//        var_dump($QaList);
-            $i = 0;
-            $j = 0;
-            foreach ($QaList as &$day) {
-                $day[t] = 0;
-                foreach ($aList as $Day) {
-                    if ($day[addDate] == $Day[addDate]) {
-//                        echo 1;
-                        $day[t] = $Day[t];
-                    }
-                    $i++;
+        $aList_date = $guestbook->query("SELECT add_date FROM `guestbook` WHERE add_date>='" . $dDate . "' AND add_date<='" . $dDate_end . "'group by add_date");
+//        echo $guestbook->getLastSql();
+        foreach ($aList_date as &$value) {
+            $value['t'] = '0';
+            $value['addDate'] = $value['add_date'];
+            foreach ($aList as &$avalue) {
+                if ($avalue['addDate'] == $value['add_date']) {
+                    $value['t'] = $avalue['t'];
                 }
-                $j++;
-            }
-//            echo $i.'<br />';
-//            echo $j.'<br />';
-//        var_dump($QaList);
-//            $aList = array_merge($QaList, $aList);
-//            echo '<pre>';
-//            var_dump($QaList);
-            //判断如果是status<0的话，那就返回重组之后的数组
-            if ($iType == "<0") {
-                return $QaList;
             }
         }
-        return $aList;
+//        var_dump($aList_date);
+//        die();
+//        if ($iType == "<0") {
+//            $iType1 = ">0";
+//            $sSQL = "1";
+//            $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";
+//            $sSQL .= ($iType1 == "total") ? "" : " AND status $iType1";
+//            if (is_numeric($period)) {
+//                $dDate = date("Y-m-d", strtotime("$period days ago"));
+//                $sSQL .= " AND  addDate >= '" . $dDate . "' AND u_id!=0 AND u_id!=10086";
+//            } elseif ($period == "month") {
+//                $dDate = date("Y-m", strtotime("this month")) . "-01";
+//                $dDate_end = date("Y-m", strtotime("this month")) . "-31";
+//                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
+//            } elseif ($period == "prev") {
+//                $dDate = date("Y-m", strtotime("last month")) . "-01";
+////                        $dDate = "2014-05-01";
+//                $dDate_end = date("Y-m", strtotime("last month")) . "-31";
+////                        $dDate_end = "2014-05-31";
+//                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
+//            } elseif ($period == "agotwo") {
+////			$dDate = date("Y-m", strtotime("last month"))."-01";
+//                $dDate = "2014-05-01";
+////			$dDate_end = date("Y-m", strtotime("last month"))."-31";
+//                $dDate_end = "2014-05-31";
+//                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
+//            }
+//            $QaList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
+//            $i = 0;
+//            $j = 0;
+//            foreach ($QaList as &$day) {
+//                $day[t] = 0;
+//                foreach ($aList as $Day) {
+//                    if ($day[addDate] == $Day[addDate]) {
+////                        echo 1;
+//                        $day[t] = $Day[t];
+//                    }
+//                    $i++;
+//                }
+//                $j++;
+//            }
+//            //判断如果是status<0的话，那就返回重组之后的数组
+//            if ($iType == "<0") {
+//                return $QaList;
+//            }
+//        }
+        return $aList_date;
     }
 
     #没有进行排重复的

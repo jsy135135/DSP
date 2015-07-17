@@ -42,7 +42,7 @@
         });
                     </script>
             <tr>
-                <td colspan="23" class="table_title">
+                <td colspan="29" class="table_title">
                 <span class="fl">当前区间:{$startdate}----{$enddate}</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 <form action="__ROOT__/index.php/Admin/DataStatistics/index/period/showforday" method="post">
                     <span class="fl">开始日期:<input type="text" name="startdate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -78,7 +78,11 @@
                     <td>时间</td>
                     <td>首次一源量</td>
                     <td>首次多源量</td>
+                    <td>数据源总数</td>
                     <td>发送总数</td>
+                    <td>留言数</td>
+                    <td>转接数</td>
+                    <td>转接占比</td>
                     <td>发送成功数</td>
                     <td>二次发送成功</td>
                     <td>发送失败数</td>
@@ -91,6 +95,8 @@
                     <td>zf失败</td>
                     <td>zf失败率</td>
                     <td>ls成功</td>
+                    <td>ls转接</td>
+                    <td>ls留言</td>
                     <td>ls失败</td>
                     <td>ls失败率</td>
                     <td>wp成功</td>
@@ -106,7 +112,11 @@
                         <td><a href="__ROOT__/index.php/Admin/UserDealed/index/{$vo.addDate}">{$vo.addDate}</a></td>
                         <td>{$vo.OriginalNum}</td>
                         <td>{$vo.OriginalNumO}</td>
+                        <td>{$vo.OriginalNum_All}</td>
                         <td>{$vo.total_all}</td>
+                        <td>{$vo.totol_liuyan}</td>
+                        <td>{$vo.totol_transfer}</td>
+                        <td>{$vo.totol_ratio}%</td>
                         <td>{$vo.send_all}</td>
                         <td>{$vo.send_again}</td>
                         <td>{$vo.fail_all}</td>
@@ -119,6 +129,8 @@
                         <td>{$vo.fail_zf}</td>
                         <td>{$vo.zfratio}%</td>
                         <td>{$vo.send_ls}</td>
+                        <td>{$vo.ls_transfer}</td>
+                        <td>{$vo.ls_liuyan}</td>
                         <td>{$vo.fail_ls}</td>
                         <td>{$vo.lsratio}%</td>
                         <td>{$vo.send_wp}</td>

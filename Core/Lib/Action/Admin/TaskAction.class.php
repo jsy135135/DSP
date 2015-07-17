@@ -41,15 +41,18 @@ class TaskAction extends Action {
         $datacount = count($data);
         for ($i = 0; $i < $datacount; $i++) {
             //如果来源链接为空，则作废，跳出循环，不做入库操作
-            if(empty($data[$i]['r'])){
+            if (empty($data[$i]['r'])) {
                 continue;
             }
             $data[$i]['phone'] = trim($data[$i]['phone']);
+            if (strlen($data[$i]['phone']) == 13) {
+                $data[$i]['phone'] = substr($data[$i]['phone'], 2, 11);
+            }
 //            echo $data[$i]['phone'].'<br />';
             $starttime = date("Y-m-d H:m:s", strtotime("$datetime-1 hour"));
             $endtime = date("Y-m-d H:m:s", strtotime("$datetime+1 hour"));
 //            $rs = $master->where("phone = '" . $data[$i]['phone'] . "' AND times <='" . $starttime . "' AND times >='" . $endtime . "'")->select();
-            $rs = $master->where("phone = '" . $data[$i]['phone'] ."'")->select();
+            $rs = $master->where("phone = '" . $data[$i]['phone'] . "'")->select();
 //            echo $master->getLastSql();
 //            var_dump($rs).'<br />';
             //如果存在的话，就跳出此次循环，不进行本地数据库的插入操作
@@ -71,7 +74,7 @@ class TaskAction extends Action {
             $aData['update_date'] = $date;
             $re = $master->add($aData);
             unset($aData);
-            echo $re.'<br />';
+            echo $re . '<br />';
         }
 //        var_dump($data);
     }

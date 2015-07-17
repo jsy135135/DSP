@@ -8,11 +8,68 @@
  */
 
 class ApiAction extends OQAction {
+    //给ls返回144外呼后台的录音地址
+    public function record_again_ls(){
+        $phone = $_REQUEST['phone'];
+        $phone = '18423674652';
+        $caller_account = '8062';
+        if(!empty($phone)){
+        $outbound = M("v_call_log_outbound", "", "mysql://root:anlaigz@192.168.200.144:3306/vicidial");
+        $recording = M("v_recording_log", "", "mysql://root:anlaigz@192.168.200.144:3306/vicidial");
+        $outbound_realtime = M("v_call_log_outbound_realtime", "", "mysql://root:anlaigz@192.168.200.144:3306/vicidial");
+        $recording_realtime = M("v_recording_log_realtime", "", "mysql://root:anlaigz@192.168.200.144:3306/vicidial");
+        $data = $outbound->where("caller_account = '".$caller_account."' AND phone_number = '".$phone."'")->select();
+        if($data == NULL){
+            $data = $outbound_realtime->where("caller_account = '".$caller_account."' AND phone_number = '".$phone."'")->select();
+            $recording_data = $recording_realtime->where("outbound_uniqueid = '".$data[0]['uniqueid']."'")->select();
+        }else{
+            $recording_data = $recording->where("outbound_uniqueid = '".$data[0]['uniqueid']."'")->select();
+        }
+        $return_url = $recording_data[0]['location'];
+        $return_url = str_replace('192.168.200.144', '120.210.129.20:144', $return_url);
+        echo $return_url;
+        }else {
+            echo '号码传入错误';
+        }
+    }
+    public function mem() {
+        S('test', 'memcache');
+        $test = S('test');
+        echo $test;
+    }
+    public function test400(){
+        $custid = '1115304';
+        $Phone400 = new Phone400Action();
+        $data = $Phone400->GetCustomer();
+        var_dump($data);
+    }
+
+    public function Callphone() {
+//        $GroupGuid = '078FD35554366E7BE050A8C0CA017514';
+        $GroupGuid = 'C19254E5ADD9499794CE7F657011978C';
+        $phoneNumber = 18535277952;
+        $Phone400 = new Phone400Action();
+        $data = $Phone400->CallNumber($GroupGuid,$phoneNumber);
+        if($data){
+           echo '回拨成功'; 
+        }  else {
+            echo '回拨失败';
+        }
+//        var_dump($Phone400->Get400DayDetail());
+    }
+    public function loglist(){
+        header("content-type:text/html; charset=UTF-8"); 
+        $date = date('Y-m-d');
+        $Phone400 = new Phone400Action();
+        $data = $Phone400->GetFreeDayDetail($date);
+        var_dump($data);
+        
+    }
 
     public function pinyin() {
         import("ORG.Util.Pinyin");
         $py = new PinYin();
-        
+
         echo $py->getAllPY("朱镕基"); //shuchuhanzisuoyoupinyin
 //        echo $py->getFirstPY("输出汉字首拼音"); //schzspy
         $this->display("index");
@@ -50,7 +107,7 @@ class ApiAction extends OQAction {
 //        var_dump($url);
 //        $rs = file_get_contents($url);
         $rs = $this->curls($url);
-        $rs = json_decode($rs,true);
+        $rs = json_decode($rs, true);
         return $rs['data'];
     }
 

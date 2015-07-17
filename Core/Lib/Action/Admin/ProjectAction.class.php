@@ -838,17 +838,20 @@ class ProjectAction extends Action {
             $aTemp["needNum"] = 1;
             $aTemp["numbers"] = 1;
             #DSP手动暂停项目
-            if(in_array($aTemp["projectID"],array(64,65,82,97,120,123,151,192,296,134,135,137,170,258,269,267,270,277,278,287,300,311,315,437,308,280,247,249,304,309,316,305,389,289,456,136,313,290,197,460))){
+            if(in_array($aTemp["projectID"],array(64,65,82,97,120,123,151,192,296,134,135,137,170,258,269,267,270,277,278,287,300,311,315,437,308,280,247,249,304,309,316,305,389,289,456,136,313,290,460,487))){
                 $aTemp["status"] = 0;
             }
             //煲上皇和速汇宝
-            if($aTemp["projectID"] == '307' || $aTemp["projectID"] == '308' || $aTemp["projectID"] == '491' || $aTemp["projectID"] == '487' || $aTemp["projectID"] == '581'){
+            if($aTemp["projectID"] == '307' || $aTemp["projectID"] == '308' || $aTemp["projectID"] == '491' || $aTemp["projectID"] == '487' || $aTemp["projectID"] == '581' || $aTemp["projectID"] == '197'){
                 $aTemp["needNum"] = 100;
                 $aTemp["numbers"] = 100;
             }
             if(in_array($aTemp["projectID"],array(270,483,482,465,687))){
                 $aTemp["needNum"] = 15;
                 $aTemp["numbers"] = 15;
+            }elseif(in_array($aTemp["projectID"],array(978))){
+                $aTemp["needNum"] = 8;
+                $aTemp["numbers"] = 8;
             }
             //乾通国际
             elseif(in_array($aTemp["projectID"],array(134,135,136,137,190))){
@@ -863,7 +866,7 @@ class ProjectAction extends Action {
             }
             #限制数量3条
             #sooe爱儿乐=>313,sooe世纪学习吧=>280
-            elseif (in_array($aTemp["projectID"],array(313,280,436,437))) {
+            elseif (in_array($aTemp["projectID"],array(313,280,436,437,985,987))) {
                 $aTemp["needNum"] = 3;
                 $aTemp["numbers"] = 3;
             }

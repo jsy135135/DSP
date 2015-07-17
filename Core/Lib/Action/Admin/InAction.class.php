@@ -160,7 +160,7 @@ class InAction extends Action {
         $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
         $dDate = date("Y-m-d", strtotime("15 days ago"));
-        $Nums = $gb->where("project_id > 0 AND u_id=0 AND add_date>='" . $dDate . "'AND deal_time='0000-00-00 00:00:00'")->count();
+        $Nums = $gb->where("project_id > 0 AND deal_status = 0 AND u_id=0 AND add_date>='" . $dDate . "'AND deal_time='0000-00-00 00:00:00'")->count();
         echo '现有数据：' . $Nums . '<br />'; //查看一对一现有的数量
         #每天需要定量分配数据的客服号码
         $arr = explode(",", $Arr);
@@ -183,7 +183,7 @@ class InAction extends Action {
             $uID = $arr["$i"];
             // $uID = 814;
             // $iNowNum = 20;
-            $aList = $gb->Distinct(true)->field('phone', 'ids')->where("project_id > 0  AND add_date>='" . $dDate . "' AND u_id=0 AND deal_time='0000-00-00 00:00:00'")->limit($iNowNum)->order("ips asc")->select();
+            $aList = $gb->Distinct(true)->field('phone', 'ids')->where("project_id > 0 AND deal_status = 0 AND add_date>='" . $dDate . "' AND u_id=0 AND deal_time='0000-00-00 00:00:00'")->limit($iNowNum)->order("ips asc")->select();
             $aListCount = count($aList);
             echo $uID . '分配到的数量：' . $aListCount . '<br />';
             // echo $uID.'分配到的数量：'.$aListCount;
@@ -229,7 +229,7 @@ class InAction extends Action {
         $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
         $dDate = date("Y-m-d", strtotime("15 days ago"));
-        $Nums = $gb->where("project_id = 0 AND u_id=0 AND add_date>='" . $dDate . "'AND deal_time='0000-00-00 00:00:00'")->count();
+        $Nums = $gb->where("project_id = 0 AND deal_status = 0 AND u_id=0 AND add_date>='" . $dDate . "'AND deal_time='0000-00-00 00:00:00'")->count();
         echo '现有数据：' . $Nums . '<br />'; //查看一对一现有的数量
         #每天需要定量分配数据的客服号码
         $arr = explode(",", $Arr);
@@ -252,7 +252,7 @@ class InAction extends Action {
             $uID = $arr["$i"];
             // $uID = 814;
             // $iNowNum = 20;
-            $aList = $gb->Distinct(true)->field('phone', 'ids')->where("project_id = 0  AND add_date>='" . $dDate . "' AND u_id=0 AND deal_time='0000-00-00 00:00:00'")->limit($iNowNum)->order("ips asc")->select();
+            $aList = $gb->Distinct(true)->field('phone', 'ids')->where("project_id = 0 AND deal_status = 0 AND add_date>='" . $dDate . "' AND u_id=0 AND deal_time='0000-00-00 00:00:00'")->limit($iNowNum)->order("ips asc")->select();
             $aListCount = count($aList);
             echo $uID . '分配到的数量：' . $aListCount . '<br />';
             // echo $uID.'分配到的数量：'.$aListCount;

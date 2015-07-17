@@ -340,26 +340,28 @@ class GuestbookAction extends OQAction {
      */
 
     function check() {
-        $date = $_REQUEST["date"] == "" ? date("Y-m-d") : $_REQUEST["date"];
+        $startdate = $_REQUEST["startdate"] == "" ? date("Y-m-d") : $_REQUEST["startdate"];
+        $enddate = $_REQUEST["enddate"] == "" ? date("Y-m-d") : $_REQUEST["enddate"];
+        $dsql = "addDate >= '".$startdate."' AND addDate <= '".$enddate."'";
         $d = M("DataDealed");
         $act = $_REQUEST["act"] == "" ? 1 : $_REQUEST["act"];
         if ($act == 1) {
             if ($_SESSION['username'] == '10086') {
-                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where ".$dsql." AND u_id = 10086  AND u_id<>0 order by u_id asc");
             } else {
-                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 AND d.check = 0 AND d.regular = 0 order by u_id asc");
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where ".$dsql." AND u_id<>0 AND u_id<>10086 AND d.check = 0 AND d.regular = 0 order by u_id asc");
             }
         } elseif ($act == 2) {
             if ($_SESSION['username'] == '10086') {
-                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where ".$dsql." AND u_id = 10086  AND u_id<>0 order by u_id asc");
             } else {
-                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 AND d.check = 1 order by u_id asc");
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where ".$dsql." AND u_id<>0 AND u_id<>10086 AND d.check = 1 order by u_id asc");
             }
         } elseif ($act == 3) {
             if ($_SESSION['username'] == '10086') {
-                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id = 10086  AND u_id<>0 order by u_id asc");
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where ".$dsql." AND u_id = 10086  AND u_id<>0 order by u_id asc");
             } else {
-                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where addDate = '" . $date . "' AND u_id<>0 AND u_id<>10086 order by u_id asc");
+                $datalist = $d->query("select p.name as projectname ,d.* from data_dealed as d left join project as p on d.projectID = p.projectID AND d.site = p.site where ".$dsql." AND u_id<>0 AND u_id<>10086 order by u_id asc");
             }
         }
         $datalistcount = count($datalist);
@@ -373,7 +375,8 @@ class GuestbookAction extends OQAction {
         }
         $datalist = json_encode($datalist);
         $this->assign('act', $act);
-        $this->assign('date', $date);
+        $this->assign('startdate', $startdate);
+        $this->assign("enddate", $enddate);
         $this->assign('count', $datalistcount);
         $this->assign('datalist', $datalist);
         $this->display();
