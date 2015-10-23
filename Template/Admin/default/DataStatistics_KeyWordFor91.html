@@ -1,0 +1,96 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>项目来源链接详细列表-{$Think.config.cms_name}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+            <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+            <style>td{ height:22px; line-height:22px; text-align:center;}</style>
+    </head>
+    <body>
+        <!--        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/Dindex">未经过排重</a></span>
+                <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/transfer_list">28转接详细查看</a></span>-->
+        <table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
+            <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
+            <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
+            <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
+            <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+                <script>
+                    $(function () {
+                        $(".date").datepicker({});
+                        $.datepicker.regional['zh-CN'] = {
+                            closeText: '关闭',
+                            prevText: '&#x3c;上月',
+                            nextText: '下月&#x3e;',
+                            currentText: '今天',
+                            monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                                '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                            monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                                '七', '八', '九', '十', '十一', '十二'],
+                            dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                            dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                            dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                            weekHeader: '周',
+                            dateFormat: 'yy-mm-dd',
+                            firstDay: 1,
+                            isRTL: false,
+                            showMonthAfterYear: true,
+                            yearSuffix: '年'};
+                        $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+                    });
+                </script>
+                <tr>
+                    <td colspan="23" class="table_title">
+                        <span class="f1">当前项目数:{$listCount}</span><br />
+                            <span class="fl">当前日期:{$date}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+<!--                            <form action="__ROOT__/index.php/Admin/DataStatistics/OriginalNum" method="post">
+                                <span class="fl">开始日期:<input type="text" name="startdate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="fl">结束日期:<input type="text" name="enddate" class="date" /></span>
+                                <input type="submit" value="查询" />-->
+                                <!-- <input type="reset" value="重选"> -->
+                            <!--</form>-->
+                            <!--                    <span class="fl">查询天数</span>
+                                                <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/7">7天</a></span>
+                                                <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/30">30天</a></span>
+                                                <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/month">本月</a></span>
+                                                <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/prev">上月</a></span>-->
+                            <!--<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/agotwo">5月份</a></span>-->
+                    </td>
+                    <tr class="list_head ct">
+                        <td>来源链接</td>
+                        <td>抓取数量</td>
+                        <td>投放标签</td>
+<!--                        <td>所需量</td>
+                        <td>还需量</td>
+                        <td>投放状态</td>
+                        <td>发送状态</td>
+                        <td>分析所属网站</td>
+                        <td>列表所属网站</td>-->
+                    </tr>
+                    <!-- <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post"> -->
+                    <volist name="data" id="vo">
+                        <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                            <td>{$vo.address}</a></td>
+                            <td>{$vo.t}</td>
+                            <td>{$vo.keywordstag}</td>
+<!--                            <td>{$vo.needNum}</td>
+                            <td>{$vo.numbers}</td>
+                            <td>{$vo.status}</td>
+                            <td>{$vo.sendstatus}</td>
+                            <td>{$vo.gsite}</td>
+                            <td>{$vo.psite}</td>-->
+                    </volist>
+                </tr>
+                </if>
+                <!-- </form> -->
+                <!-- <tr class="tr">
+          <td colspan="9" class="pages">
+            {$page}
+          </td>
+        </tr> -->
+        </table>
+        <script>var version = '{$Think.config.cms_var}';</script>
+        <include file="Index:footer" />
+    </body>
+</html>
