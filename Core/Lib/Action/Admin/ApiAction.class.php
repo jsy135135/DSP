@@ -79,7 +79,7 @@ class ApiAction extends OQAction {
                 $rs['city'] = '';
             }
             if ($type > 0) {
-                echo json_decode($rs);
+                echo json_encode($rs);
             } else {
                 return json_encode($rs);
             }
