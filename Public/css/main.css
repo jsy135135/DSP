@@ -6,76 +6,81 @@ table{border:1px solid #ccc }
 td{border-left:1px solid #ccc;border-top:1px solid #ccc} 
 
 #top{
-	margin-top:20px;
-	margin-bottom:10px;
-	text-align:center;
-	font-size:16px;
-	color:red;
+    margin-top:20px;
+    margin-bottom:10px;
+    text-align:center;
+    font-size:16px;
+    color:red;
 }
 
 #top span {
-	color:blue;
+    color:blue;
 }
 
 #c_left{
-	margin-left: 1px;
-	height:500px;
-	width:150px;
-	border:#ccc 1px solid;
-	overflow-y:auto;
-	text-align:center;
-	cursor:pointer;
-	float:left;
+    margin-left: 1px;
+    height:500px;
+    width:150px;
+    border:#ccc 1px solid;
+    overflow-y:auto;
+    text-align:center;
+    cursor:pointer;
+    float:left;
 }
 
 #c_center{
-	margin-left:10px;
-	height:500px;
-	width:650px;
-	border:#dedede 1px solid;
-	overflow-y:auto;
-	text-align:center;
-	cursor:pointer;
-	float:left;
+    margin-left:10px;
+    height:500px;
+    width:650px;
+    border:#dedede 1px solid;
+    overflow-y:auto;
+    text-align:center;
+    cursor:pointer;
+    float:left;
 }
 
 #c_right{
-	margin-left:10px;
-	height:500px;
-	border:#dedede 1px solid;
-	overflow-y:auto;
-	text-align:left;
-	float:left;
+    margin-left:10px;
+    height:500px;
+    border:#dedede 1px solid;
+    overflow-y:auto;
+    text-align:left;
+    float:left;
 }
 
 .dealed {
-	background-color:#dedede;
+    background-color:#dedede;
 }
 
 #toWhich{
-	color:blue;
+    color:blue;
 }
 .button{
-	background-color:#cccc;
-	width:80px;
-	height:30px;
-	font-family:å¾®è½¯é›…é»‘;
+    background-color:#cccc;
+    width:80px;
+    height:30px;
+    font-family:å¾®è½¯é›…é»‘;
 }
 
 .submit{
-	background-color:red;
-	width:80px;
-	height:30px;
-	font-family:å¾®è½¯é›…é»‘;
+    background-color:red;
+    width:80px;
+    height:30px;
+    font-family:å¾®è½¯é›…é»‘;
 }
 .denySubmit {
-	
+
 }
 .h1{
-	font-size:20pt;
+    font-size:20pt;
 }
 #transfer{
-	width:80px;
-	height:30px;
-	background-color:green;
+    width:80px;
+    height:30px;
+    background-color:green;
+}
+#sanfang{
+    width:80px;
+    height:30px;
+    background-color:rgb(86, 86, 229);
 }

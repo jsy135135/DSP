@@ -8,8 +8,9 @@
     class AMyAimAction extends OQAction{
         public function index(){
             $uID = session("username");
-            if($uID == "admin")
-			$uID = 826; //默认外呼标记为826
+            if($uID == "admin"){
+                $uID = 826; //默认外呼标记为826
+            }
 //            echo $uID;
             $date = date("Y-m-d");
             $user = M("user");

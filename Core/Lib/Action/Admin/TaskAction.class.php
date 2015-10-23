@@ -7,18 +7,89 @@ header("Content-type: text/html; charset=utf-8");
  *
  */
 class TaskAction extends Action {
-
-    public function up_phone() {
+    /*
+     * guestbook 发送给28源数据
+     * Time:2015年10月14日14:23:34
+     * By:siyuan
+     */
+    public function sync_28dsp() {
+        set_time_limit(0);
+        $url = "http://super.28.com/soap/dsp_400_send/phone.php";
         $guestbook = M("guestbook");
-        $data = $guestbook->where("phone like '%s%'")->select();
-//        var_dump($data);
-        $datacount = count($data);
-        for ($i = 0; $i < $datacount; $i++) {
-            $data[$i]['phone'] = str_replace('s', '', $data[$i]['phone']);
-            $rs = $guestbook->where("ids = '" . $data[$i]['ids'] . "'")->save($data[$i]);
-//            echo $guestbook->getLastSql();
-            var_dump($rs);
-//            echo $rs;
+        $dsp28 = M("dsp28");
+        $TheDate = date('Y-m-d');
+        $startDay = date('Y-m-d 09:00:00', strtotime("2 day ago"));
+        $endDay = date('Y-m-d 09:00:00', strtotime("1 day ago"));
+        $data = $guestbook->where("times >= '" . $startDay . "' AND times <= '" . $endDay . "' AND site = 28 AND project_id > 0")->field('phone,ips,address,times,add_date,project_id')->select();
+//        curl_post
+        $Api = new ApiAction();
+        $i = 0;
+        foreach ($data as $key => &$value) {
+            $value['site'] = $value['address'];
+            $address = json_decode($Api->getAttribution($value['phone'], 0), true);
+            $value['address'] = $address['province'] . ' ' . $address['city'];
+            $reStatus = curl_post($url, $value);
+            $value['status'] = $reStatus;
+            $result = $dsp28->add($value);
+            $sFileName = "./Log/Dsp28-" . $TheDate . ".txt";
+            $fp = fopen($sFileName, "a+");
+            fwrite($fp, date("Y-m-d H:i:s") . "#" . "返回值" .$result ."\n");
+            fclose($fp);
+            $i++;
+        }
+    }
+
+    /*
+     * guestbook同步到aliyun by用户网址
+     * Time:2015年7月28日11:12:18
+     * by：siyuan
+     */
+
+    public function sync_aliyun() {
+        $master = M("guestbook");
+        $salver = M("gb", "tj_", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/tongji");
+        $wz = M("wz", "tj_", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/tongji");
+        $wz_data = $wz->select();
+
+        foreach ($wz_data as $key => $value) {
+//            echo $value['wz'].'<br />';
+            $iMaxID = $salver->query("SELECT MAX(ids) as maxid FROM tj_gb where 1");
+            $iMaxID = $iMaxID[0]['maxid'];
+            $data = $master->query("SELECT * FROM guestbook where address like '%" . $value['wz'] . "%' AND ids > '" . $iMaxID . "'");
+            $rs = $salver->addAll($data);
+            if ($rs) {
+                echo "成功";
+            } else {
+                echo "失败";
+            }
+        }
+    }
+
+    /*
+     * guestbook同步到aliyun by用户网址
+     * Time:2015年8月10日13:35:07
+     * by：siyuan
+     */
+
+    public function sync_aliyun2() {
+        $master = M("guestbook");
+        $salver = M("guestbook", "tj_", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/tongji");
+        $wz = M("wz", "tj_", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/tongji");
+        $wz_data = $wz->query("SELECT DISTINCT wz from tj_wz");
+        $iMaxID = $salver->query("SELECT MAX(ids) as maxid FROM tj_guestbook where 1");
+        $iMaxID = $iMaxID[0]['maxid'];
+        foreach ($wz_data as $key => $value) {
+            $data = $master->query("SELECT ids,phone,ips,address,times,add_date,project_id,site FROM guestbook where address like '%" . $value['wz'] . "%' AND ids > '" . $iMaxID . "'");
+            $data_count = count($data);
+//            echo $value['wz'].'#####'.$data_count.'<br />';
+            for ($i = 0; $i < $data_count; $i++) {
+                $rs = $salver->add($data[$i]);
+            }
+            if ($rs) {
+                echo "成功";
+            } else {
+                echo "失败";
+            }
         }
     }
 
@@ -34,14 +105,14 @@ class TaskAction extends Action {
         $iMaxID = $master->query("SELECT MAX(s2_id) as maxid FROM guestbook where 1");
         $iMaxID = $iMaxID[0]['maxid'];
 //        echo $iMaxID;
-        $data = $salver->query("SELECT phone,id,ip,r,keywords,time FROM gbook WHERE id > " . $iMaxID . " group by phone order by id asc LIMIT 20000");
+        $data = $salver->query("SELECT phone,id,ip,r,keywords,referrer,time FROM gbook WHERE id > " . $iMaxID . " group by phone order by id asc LIMIT 20000");
 //        var_dump($data);
 //        die();
 //        echo $salver->getLastSql();
         $datacount = count($data);
         for ($i = 0; $i < $datacount; $i++) {
             //如果来源链接为空，则作废，跳出循环，不做入库操作
-            if (empty($data[$i]['r'])) {
+            if (empty($data[$i]['referrer'])) {
                 continue;
             }
             $data[$i]['phone'] = trim($data[$i]['phone']);
@@ -49,10 +120,10 @@ class TaskAction extends Action {
                 $data[$i]['phone'] = substr($data[$i]['phone'], 2, 11);
             }
 //            echo $data[$i]['phone'].'<br />';
-            $starttime = date("Y-m-d H:m:s", strtotime("$datetime-1 hour"));
-            $endtime = date("Y-m-d H:m:s", strtotime("$datetime+1 hour"));
-//            $rs = $master->where("phone = '" . $data[$i]['phone'] . "' AND times <='" . $starttime . "' AND times >='" . $endtime . "'")->select();
-            $rs = $master->where("phone = '" . $data[$i]['phone'] . "'")->select();
+            $starttime = date("Y-m-d H:m:s", strtotime("" . $data[$i]['time'] . "-24 hour"));
+//            $endtime = date("Y-m-d H:m:s", strtotime("".$data[$i]['time']."+24 hour"));
+            $rs = $master->where("phone = '" . $data[$i]['phone'] . "' AND times >='" . $starttime . "'")->select();
+//            $rs = $master->where("phone = '" . $data[$i]['phone'] . "'")->select();
 //            echo $master->getLastSql();
 //            var_dump($rs).'<br />';
             //如果存在的话，就跳出此次循环，不进行本地数据库的插入操作
@@ -65,7 +136,7 @@ class TaskAction extends Action {
             $aData['s2_id'] = $data[$i]['id'];
             $aData['source'] = '1';
             $aData['ips'] = $data[$i]['ip'];
-            $aData['address'] = $data[$i]['r'];
+            $aData['address'] = $data[$i]['referrer'];
             $aData['province'] = '';
             $aData['keywords'] = $data[$i]['keywords'];
             $aData['times'] = $data[$i]['time'];
@@ -263,44 +334,14 @@ class TaskAction extends Action {
         }
     }
 
-    function test() {
-        $url = "http://wap.zft888.com/2276-3-1240.html?utm_source=Baidu";
-        $urldata = parse_url($url);
-        // var_dump($urldata);
-        $path = str_replace("/", "", $urldata["path"]);
-        $path = str_replace(".html", "", $path);
-        $pathdata = explode("-", $path);
-        // var_dump($pathdata);
-        $iPID = $pathdata[0];
-        // echo $projectID;
-        // $iPID = substr($urldata["query"], strpos($urldata["query"], "=") + 1);
-        var_dump($iPID);
-        $value = is_numeric($iPID);
-        var_dump($value);
-        // var_dump($urldata);
-    }
-
-    function jsy() {
-        $url = "http://800.quikio.cn/hbx/wap/?830";
-        $content = file_get_contents($url);
-        // <input type="hidden" name="p" value="301">
-        preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
-        $iPID = $matches[1][0];
-        $site = "91";
-        var_dump($iPID);
-    }
-
     /**
      * 定时计划的第二步,对数据进行分析，生成各种ID号码
      */
     function step1() {
-//        $Api = new ApiAction;
         $gb = M("Guestbook");
         $project = M("project");
         $aList = $gb->where("site =''")->field("ids,address")->limit(20000)->select();
         $count = count($aList);
-//                        $count = 50;
-//                        var_dump($aList);
         for ($i = 0; $i <= $count; $i++) {
             echo $aList[$i]["ids"] . "\n";
             if (substr($aList[$i]["address"], 0, 4) == "http") {
@@ -308,11 +349,8 @@ class TaskAction extends Action {
             } else {
                 $aUrl = parse_url(trim("http://" . $aList[$i]["address"]));
             }
-//                                var_dump($aUrl);
             echo $aUrl["host"] . '<br />';
-//                                $aUrl["host"] = '3w.wp28.com';
             if (in_array($aUrl["host"], C("ls"))) {
-//                            echo 'ls'.'<br />';
                 if ($aUrl["host"] == "wap.liansuo.com") {
                     $aPath = explode("/", $aUrl["path"]);
                     $iPID = $aPath[3];
@@ -322,20 +360,16 @@ class TaskAction extends Action {
                 }
                 $site = "ls";
             } elseif (in_array($aUrl["host"], C("zf"))) {
-//                            echo 'zf'.'<br />';
                 $iPID = substr($aUrl["query"], strpos($aUrl["query"], "=") + 1);
                 $flag = is_numeric($iPID);
                 if (!$flag) {
                     $path = str_replace("/", "", $aUrl["path"]);
                     $path = str_replace(".html", "", $path);
                     $pathdata = explode("-", $path);
-                    // var_dump($pathdata);
                     $iPID = $pathdata[0];
                 }
                 $site = "zf";
             } elseif (in_array($aUrl["host"], C("WP"))) {
-//                            echo 'wp'.'<br />';
-//                            die();
                 $webpage = $aUrl["path"];
                 $webpage = str_replace("/wp", "/ws", $webpage);
                 $where['webPage'] = array('like', '%' . $webpage . '%');
@@ -346,27 +380,18 @@ class TaskAction extends Action {
                 $iPID = $projectID;
                 $site = "wp";
             } elseif (in_array($aUrl["host"], C("jm"))) {
-//                echo "i am 91 site";
                 $content = file_get_contents($aList[$i]["address"]);
-                // $content = file_get_contents($url);
-                // <input type="hidden" name="p" value="301">
-//                preg_match_all('/<input type="hidden" name="p" value="(\d+)" \/>/', $content, $matches);
+                ;
                 preg_match_all('/<input.*?name="p" value="(\d+)"/', $content, $matches);
                 $iPID = $matches[1][0];
                 $site = "91";
             } else {
-                echo '不知道';
                 $iPID = str_replace(".html", "", substr($aUrl["path"], strrpos($aUrl["path"], "_") + 1));
                 $site = "28";
-            }
-            // var_dump(C("jm"));
+            };
             $aData["ids"] = $aList[$i]["ids"];
             $aData["project_id"] = intval($iPID);
             $aData["site"] = $site;
-//            $aList[$i]['phone'] = trim($aList[$i]['phone']);
-//            $phoneSp = $Api->index($aList[$i]['phone']);
-//            $aData["province"] = $phoneSp['province'] . ' ' . $phoneSp['city'];
-//            $aData["sp"] = $phoneSp['sp'];
             //如果不是致富网数据，就表示已经经过查重了
             if ($site != 'zf') {
                 $aData["repeat_check"] = 1;
@@ -395,208 +420,6 @@ class TaskAction extends Action {
             $i++;
         }
         $this->display("index");
-    }
-
-    /*     * *
-     * 更新数据库里致富网的数据，通过查询接口，如果重复，进行标注
-     * Time：2015年3月26日15:37:07
-     * By:siyuan
-     * 
-     */
-
-    function zf_repeat() {
-        $date = date("Y-m-d");
-        $g = M("guestbook");
-        $data = $g->query("select ids,phone from guestbook where add_date = '" . $date . "' AND site = 'zf' AND repeat_check = 0 limit 20");
-//var_dump($data);
-        $datacount = count($data);
-        $Api = new ApiAction();
-        for ($i = 0; $i < $datacount; $i++) {
-            $repeat_phone = $Api->repeat_phone($data[$i]['phone']);
-            $newdata['ids'] = $data[$i]['ids'];
-            $newdata['repeat_check'] = 1;
-            $newdata["repeat_phone"] = $repeat_phone;
-            $rs = $g->save($newdata);
-            var_dump($rs);
-        }
-//        var_dump($data);
-    }
-
-    /**
-     * 同步项目信息
-     * @param unknown $sSite
-     */
-    public function syncProject() {
-        if ($this->_syncFrom28())
-            echo "Sync 28 is ok<br/>";
-        if ($this->_syncFromZF())
-            echo "Sync zf is ok<br/>";
-        if ($this->_syncFromLS())
-            echo "Sync ls is ok<br/>";
-//                        if($this->_syncFrom91())
-//                                echo "Sync 91 is ok<br/>";
-    }
-
-    /**
-     * 同步28的数据信息，直接同步，新数据插入，原来的数据直接更新。
-     */
-    private function _syncFrom28() {
-        $p = M("Project");
-        $aSource = xml2array(C("xml_28"));
-        for ($i = 0; $i < count($aSource["root"]["items"]); $i++) {
-            $aT = $aSource["root"]["items"][$i];
-            if ($aT["projectID"] > 0) {
-                $aTemp = array();
-                $aTemp["clientID"] = $aT["clientID"];
-                $aTemp["projectID"] = $aT["projectID"];
-                if ($aT["statusStr"] == "空闲" || $aT["statusStr"] == "停用")
-                    $aTemp["status"] = 0;
-                else
-                    $aTemp["status"] = 1;
-                //$aTemp["status"] = $aT["statusStr"] == "空闲" ? 0:1;
-                $aTemp["name"] = $aT["name"];
-                $aTemp["webPage"] = $aT["adWebPage"];
-                $aTemp["backCall"] = $aT["mobnum"];
-                $aTemp["needNum"] = $aT["gbookNum"];
-                $aTemp["numbers"] = $aT["gbookNum"];
-                $aTemp["site"] = "28";
-                $aTemp["catName"] = $aT["topCateName"];
-                $aTemp["subCat"] = $aT["subCateName"];
-                //如果数据已经存在，则更新数据，否则就是插入数据
-                $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-                if ($id > 0)
-                    $p->where("id=" . $id)->save($aTemp);
-                else
-                    $p->add($aTemp);
-                unset($aTemp);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 同步致富网的信息
-     */
-    private function _syncFromZF() {
-        $p = M("Project");
-        $aSource = xml2array(C("xml_zf"));
-        for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
-            $aT = $aSource["log"]["fields"][$i];
-            if ($aT["projectID"] > 0) {
-                $aTemp = array();
-                $aTemp["clientID"] = 0;
-                $aTemp["projectID"] = $aT["projectID"];
-                $aTemp["status"] = 1;
-                $aTemp["name"] = $aT["projectName"];
-                $aTemp["webPage"] = $aT["web"];
-                $aTemp["backCall"] = $aT["tel"];
-                $aTemp["needNum"] = $aT["gbookNumMax"];
-                $aTemp["numbers"] = $aT["gbookNumMax"];
-                $aTemp["site"] = "zf";
-                $aTemp["catName"] = $aT["catName"];
-                $aTemp["subCat"] = $aT["catSubName"];
-                //如果数据已经存在，则更新数据，否则就是插入数据
-                $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-                if ($id > 0)
-                    $p->where("id=" . $id)->save($aTemp);
-                else
-                    $p->add($aTemp);
-                unset($aTemp);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 同步连锁网的信息
-     */
-    private function _syncFromLS() {
-        $p = M("Project");
-        $aSource = xml2array(C("xml_ls"));
-        for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
-            $aT = $aSource["log"]["fields"][$i];
-            if ($aT["projectID"] > 0) {
-                $aTemp = array();
-                $aTemp["clientID"] = 0;
-                $aTemp["projectID"] = $aT["projectID"];
-                $aTemp["status"] = 1;
-                $aTemp["name"] = $aT["projectName"];
-                $aTemp["webPage"] = $aT["adWebPage"];
-                $aTemp["backCall"] = $aT["link"];
-                switch ($aT["level"]) {
-                    case "银牌会员":
-                    case "VIP会员":
-                        $iNeedNum = 3;
-                        break;
-                    case "按效果付费":
-                    case "广告客户":
-                        $iNeedNum = 5;
-                        break;
-                    default:
-                        $iNeedNum = 2;
-                        break;
-                }
-                $aTemp["needNum"] = $iNeedNum;
-                $aTemp["site"] = "ls";
-                $aTemp["catName"] = $aT["industry"];
-                $aTemp["subCat"] = $aT["subindustry"];
-                //如果数据已经存在，则更新数据，否则就是插入数据
-                $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-                if ($id > 0)
-                    $p->where("id=" . $id)->save($aTemp);
-                else
-                    $p->add($aTemp);
-                unset($aTemp);
-            }
-        }
-        return true;
-    }
-
-    /**
-     * 同步91加盟网的信息
-     */
-    public function syncFrom91() {
-        $aSource = file_get_contents(C("json_91"));
-//                    var_dump($aSource);
-        $aSource = json_decode($aSource, true);
-        echo '<pre>';
-        var_dump($aSource);
-        header("content-type:text/html;charset=utf-8");
-        $aSource = $aSource["data"];
-        $aTemp = array();
-        foreach ($aSource as $a => $val) {
-            $aTemp["projectID"] = $a;
-            $aTemp["name"] = $val;
-            $aTemp["site"] = "91";
-//                        var_dump($aTemp);
-            $aTemp["status"] = 1;
-            $aTemp["name"] = $aT["projectName"];
-            $aTemp["webPage"] = $aT["web"];
-            $aTemp["backCall"] = $aT["tel"];
-            $aTemp["needNum"] = $aT["gbookNumMax"];
-            $aTemp["numbers"] = $aT["gbookNumMax"];
-            $aTemp["site"] = "zf";
-            $aTemp["catName"] = $aT["catName"];
-            $aTemp["subCat"] = $aT["catSubName"];
-            //如果数据已经存在，则更新数据，否则就是插入数据
-//                        $id = $p->where("clientID=".$aTemp["clientID"]." AND projectID=".$aTemp["projectID"]." AND site='".$aTemp["site"]."'")->getField("id");
-//					if($id > 0)
-//						$p->where("id=".$id)->save($aTemp);
-//					else
-//						$p->add($aTemp);
-//					unset($aTemp);
-        }
-        return true;
-    }
-
-    /**
-     *
-     * 每天设置发送状态为1，表示可以接受,每天执行一次，而且只能执行一次
-     */
-    public function setSendStatusByDay() {
-        $p = M("Project");
-        $iStatus = $p->where("status > 0")->setField("sendStatus", 1);
-        return $iStatus;
     }
 
 }

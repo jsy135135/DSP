@@ -3,7 +3,7 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>首次外呼-{$Think.config.cms_name}</title>
-        <link href="__PUBLIC__/css/main.css" type="text/css" rel="stylesheet" />
+        <link href="__PUBLIC__/css/main.css?ssssfsf" type="text/css" rel="stylesheet" />
         <link href="__PUBLIC__/css/easyui.css" type="text/css" rel="stylesheet" />
         <script src="__PUBLIC__/js/jquery-1.9.1.min.js"></script>
         <script src="__PUBLIC__/js/jquery.easyui.min.js" type="text/javascript" language="javascript"></script>
@@ -46,6 +46,8 @@
             <input class="button" type="button" value="停机" status="5">
             <input id="transfer" type="button" value="转接" status="8">
             <br /><br />
+            <input id="sanfang" type="button" value="三方转接" status="80">
+            <!--<br /><br />-->
             <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
                 姓名：<input  type="text" name="username" id="username" /><br/>
                 电话：<input  type="text" name="phone" id="phone" /><br/>
@@ -89,7 +91,7 @@
                     data: 'pID=' + $(this).attr('projectID') + '&site=' + $(this).attr('site'),
                     dataType: 'json',
                     success: function (data) {
-//                        console.log(data);
+                        console.log(data);
                         //			 alert(data);
                         // alert(data[0].status);
                         if (data == 0) {
@@ -135,19 +137,36 @@
             //转接传值和标注
             $("#transfer").click(function () {
                 var self = $(this);
-               self.attr('disabled', true);
+                self.attr('disabled', true);
                 $.ajax({
                     type: 'post',
                     url: '__ROOT__/index.php/Admin/Guestbook/transfer',
                     data: $('#myform').serialize(),
                     success: function (response) {
                         $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
-                      console.log(response);
-                     self.attr('disabled', false);
+                        console.log(response);
+                        self.attr('disabled', false);
                         alert("转接标注成功");
                     }
-                })
-            })
+                });
+            });
+
+            //连锁三方转接标注发送
+            $("#sanfang").click(function () {
+                var self = $(this);
+                self.attr('disabled', true);
+                $.ajax({
+                    type: 'post',
+                    url: '__ROOT__/index.php/Admin/Guestbook/sanfang',
+                    data: $('#myform').serialize(),
+                    success: function (response) {
+                        $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+                        console.log(response);
+                        self.attr('disabled', false);
+                        alert("三方转接标注成功");
+                    }
+                });
+            });
             $(".button").click(function () {
                 $.ajax({
                     type: 'get',
@@ -155,8 +174,8 @@
                     success: function (data) {
                         $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
                     }
-                })
-            })
+                });
+            });
 
 
             $("#myform").submit(function () {
@@ -164,26 +183,24 @@
                 //return false;
             });
             //地址归属地
-//            $('#c_left').on('click', 'p', function (event) {
-//                var phone = $(this).attr('phone');
-//                $.ajax({
-//                    type: 'get',
-//                    url: '__ROOT__/index.php/Admin/Api/index/' + phone,
-//                    dataType: 'json',
-//                    success: function (response) {
+            $('#c_left').on('click', 'p', function (event) {
+                var phone = $(this).attr('phone');
+                $.ajax({
+                    type: 'get',
+                    url: '__ROOT__/index.php/Admin/Api/getAttribution/phone/' + phone,
+                    dataType: 'json',
+                    success: function (response) {
 //                        console.log('response: ' + response);
-//                        var addrs = response.data.province + '.' + response.data.city;
-////                        console.log(response.data.sp);
-//                        $("#address").val(addrs);
-//                    }
-////                    success: function(response) {
-//////                        console.log('response: ' + response);
-////                       var add =  response.result.att;
-////                       var addrs = add.replace("中国,","");
-////                        $("#address").val(addrs);
-////                    }
-//                });
-//            });
+                        if (response.city == '') {
+                            var addrs = response.province;
+                        } else {
+                            var addrs = response.province + '.' + response.city;
+                        }
+//                        console.log(response.data.sp);
+                        $("#address").val(addrs);
+                    }
+                });
+            });
         </script>
 
         <script type="text/javascript">

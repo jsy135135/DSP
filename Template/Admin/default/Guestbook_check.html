@@ -72,11 +72,11 @@
             });
                             </script>
                             <span class="fl">当前日期:{$startdate}-----{$enddate}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">共有数据：{$count}</span>
-                             <form action="__ROOT__/index.php/Admin/Guestbook/check/" method="post">
+                            <form action="__ROOT__/index.php/Admin/Guestbook/check/" method="post">
                                 <span class="fl">查询日期:<input type="text" name="startdate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;
                                 <input type="text" name="enddate" class="date" />
                                 <input type ="hidden" name="act" value="{$act}">
-                                <input type="submit" value="查询" />
+                                    <input type="submit" value="查询" />
                             </form>
                     </td>
                 </tr>
@@ -94,7 +94,9 @@
                     <td>客服ID</td>
                     <td>审核状态</td>
                     <td>是否有效</td>
-                    <td>点击审核</td>
+                    <if condition="$rolecheck eq 14">
+                        <else /><td>点击审核</td>
+                    </if>
                 </tr>
             </thead>
 
@@ -113,10 +115,12 @@
                     <td data-bind="text: u_id">{$vo.u_id}</td>
                     <td data-bind="text: check" class="check-status">{$vo.check}</td>
                     <td data-bind="text: regular" class="check-regular">{$vo.regular}</td>
-                    <td align="center" class="btn-group">
-                        <button class="stu" value="1" data-bind="attr: { 'data-id': id, 'data-projectID': projectID, 'data-site': site }" style="background:green" disabled>有效</button>&nbsp;&nbsp;
-                        <button class="stu" value="0" data-bind="attr: { 'data-id': id, 'data-projectID': projectID, 'data-site': site }" style="background:red" disabled>无效</button>
-                    </td>
+                    <if condition="$rolecheck eq 14">
+                        <else /><td align="center" class="btn-group">
+                            <button class="stu" value="1" data-bind="attr: { 'data-id': id, 'data-projectID': projectID, 'data-site': site }" style="background:green" disabled>有效</button>&nbsp;&nbsp;
+                            <button class="stu" value="0" data-bind="attr: { 'data-id': id, 'data-projectID': projectID, 'data-site': site }" style="background:red" disabled>无效</button>
+                        </td>
+                    </if>
                 </tr>
             </tbody>
         </table>

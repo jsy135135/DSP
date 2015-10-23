@@ -28,6 +28,7 @@ return array(
     #2014-10-15 连锁xml文档改变
     'xml_ls' => 'http://www.liansuo.com/index.php?opt=gbinf&par1=xml&par2=callfrommobile&par3=call$%^mobile',
     'json_91' => 'http://800.91jmw.com/index.php/gbook/getProListForTel',
+    'json_91_new' => 'http://800.91jmw.com/index.php/gbook/getProListForDSP',
     'author' => 'siyuan',
     'URL_CASE_INSENSITIVE' =>true,
     'version' => '1.0',

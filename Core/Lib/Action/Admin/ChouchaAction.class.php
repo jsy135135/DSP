@@ -68,12 +68,13 @@ class ChouchaAction extends OQAction {
         $this->assign('list', $uidlist);
         $this->display();
     }
-    function test(){
+
+    function test() {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
         $client = new PHPRPC_Client('http://saas.zhifuwang.cn/soap/server_state.php');
         $aData = array(
             'id' => 1293483,
-            // 'id' => $data[$i]["status"]
+                // 'id' => $data[$i]["status"]
         );
     }
 

@@ -1,5 +1,4 @@
 <?php
-
 // 数组保存到文件
 function arr2file($filename, $arr = '') {
     if (is_array($arr)) {
@@ -248,3 +247,6 @@ function sendMail($to, $title, $content) {
     $mail->AltBody = "这是一个纯文本的身体在非营利的HTML电子邮件客户端"; //邮件正文不支持HTML的备用显示
     return($mail->Send());
 }
+
+
+

@@ -231,11 +231,6 @@ class DataStatisticsAction extends OQAction {
         $dDate = $_REQUEST["date"] == "" ? date("Y-m-d", strtotime("1 days ago")) : $_REQUEST["date"];
         // $dToday = "2014-05-01";
         $iCount = D("DataDealed")->where("again = 0 AND status <0 AND u_id=" . $uID . " AND addDate = '" . $dDate . "'")->count();
-        /* if($iCount == 0)
-          {
-          $aData["u_id"] = $uID;
-          D("DataDealed")->where("again = 0 AND status <0 AND u_id=0 AND addDate >= '".$dDate."'")->order(" id asc ")->limit(100)->save($aData);
-          } */
         $aList = D("DataDealed")->where("again = 0 AND status <0 AND u_id=$uID AND addDate = '" . $dDate . "'")->limit(100)->select();
         $this->assign("iCount", $iCount);
         $this->assign("uID", $uID);
@@ -299,52 +294,6 @@ class DataStatisticsAction extends OQAction {
                 }
             }
         }
-//        var_dump($aList_date);
-//        die();
-//        if ($iType == "<0") {
-//            $iType1 = ">0";
-//            $sSQL = "1";
-//            $sSQL .= ($sSite == "all") ? "" : " AND site='" . $sSite . "'";
-//            $sSQL .= ($iType1 == "total") ? "" : " AND status $iType1";
-//            if (is_numeric($period)) {
-//                $dDate = date("Y-m-d", strtotime("$period days ago"));
-//                $sSQL .= " AND  addDate >= '" . $dDate . "' AND u_id!=0 AND u_id!=10086";
-//            } elseif ($period == "month") {
-//                $dDate = date("Y-m", strtotime("this month")) . "-01";
-//                $dDate_end = date("Y-m", strtotime("this month")) . "-31";
-//                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
-//            } elseif ($period == "prev") {
-//                $dDate = date("Y-m", strtotime("last month")) . "-01";
-////                        $dDate = "2014-05-01";
-//                $dDate_end = date("Y-m", strtotime("last month")) . "-31";
-////                        $dDate_end = "2014-05-31";
-//                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
-//            } elseif ($period == "agotwo") {
-////			$dDate = date("Y-m", strtotime("last month"))."-01";
-//                $dDate = "2014-05-01";
-////			$dDate_end = date("Y-m", strtotime("last month"))."-31";
-//                $dDate_end = "2014-05-31";
-//                $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
-//            }
-//            $QaList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//            $i = 0;
-//            $j = 0;
-//            foreach ($QaList as &$day) {
-//                $day[t] = 0;
-//                foreach ($aList as $Day) {
-//                    if ($day[addDate] == $Day[addDate]) {
-////                        echo 1;
-//                        $day[t] = $Day[t];
-//                    }
-//                    $i++;
-//                }
-//                $j++;
-//            }
-//            //判断如果是status<0的话，那就返回重组之后的数组
-//            if ($iType == "<0") {
-//                return $QaList;
-//            }
-//        }
         return $aList_date;
     }
 
@@ -377,9 +326,6 @@ class DataStatisticsAction extends OQAction {
 
         $dealed = M("data_dealed");
         $aList = $dealed->query("SELECT COUNT(phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//         echo '<pre>';
-//         echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//        var_dump($aList);
         if ($iType == "<0") {
             $iType1 = ">0";
             $sSQL = "1";
@@ -406,9 +352,6 @@ class DataStatisticsAction extends OQAction {
                 $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
             }
             $QaList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//            echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//         echo '<br />';
-//        var_dump($QaList);
             $i = 0;
             $j = 0;
             foreach ($QaList as &$day) {
@@ -422,59 +365,12 @@ class DataStatisticsAction extends OQAction {
                 }
                 $j++;
             }
-//            echo $i.'<br />';
-//            echo $j.'<br />';
-//        var_dump($QaList);
-//            $aList = array_merge($QaList, $aList);
-//            echo '<pre>';
-//            var_dump($QaList);
-            //判断如果是status<0的话，那就返回重组之后的数组
             if ($iType == "<0") {
                 return $QaList;
             }
         }
         return $aList;
     }
-
-    /**
-     *
-     * @param string $sSite
-     * @param string $iType
-     * @param string $period
-     */
-//	private function getNumBySite($sSite='28', $iType='total',$period="7"){
-//		$sSQL = "1";
-//		$sSQL .= ($sSite =="all") ? "" : " AND site='".$sSite."'";
-//		$sSQL .= ($iType == "total") ? "" : " AND status $iType";
-//		if(is_numeric($period)) {
-//			$dDate = date("Y-m-d", strtotime("$period days ago"));
-//			$sSQL .= " AND  addDate >= '".$dDate."' AND u_id!=0 AND u_id!=0";
-//		} elseif ($period == "month") {
-//			$dDate = date("Y-m", strtotime("this month"))."-01";
-//			$dDate_end = date("Y-m", strtotime("this month"))."-31";
-//			$sSQL .= " AND addDate between '".$dDate."' AND '".$dDate_end."' AND u_id!=0";
-//		}elseif ($period == "prev") {
-//			$dDate = date("Y-m", strtotime("last month"))."-01";
-////                        $dDate = "2014-05-01";
-//			$dDate_end = date("Y-m", strtotime("last month"))."-31";
-////                        $dDate_end = "2014-05-31";
-//			$sSQL .= " AND addDate between '".$dDate."' AND '".$dDate_end."' AND u_id!=0";
-//		}elseif ($period == "agotwo") {
-////			$dDate = date("Y-m", strtotime("last month"))."-01";
-//                        $dDate = "2014-05-01";
-////			$dDate_end = date("Y-m", strtotime("last month"))."-31";
-//                        $dDate_end = "2014-05-31";
-//			$sSQL .= " AND addDate between '".$dDate."' AND '".$dDate_end."' AND u_id!=0";
-//		}
-//
-//		$dealed = M("data_dealed");
-//		$aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//		// echo '<pre>';
-//		// echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//		// var_dump($aList);
-//		return $aList;
-//	}
-
     /**
      * 分析数据并入库
      */
@@ -565,4 +461,55 @@ class DataStatisticsAction extends OQAction {
         }
     }
 
+    /**
+     * 针对每日源数据量，所对应的项目，进行数据分析和工作详细划分部署
+     * Time：2015年8月11日14:52:20
+     * By:siyuan
+     */
+    public function getCountForProjectByDate() {
+        $g = M("guestbook");
+        $p = M("project");
+        $date = date("Y-m-d",strtotime("1 days ago"));
+        $data = $g->query("SELECT project_id as pid,count(*) as t,site as gsite from guestbook where add_date = '".$date."' group by project_id order by gsite asc,t desc");
+        $data_count = count($data);
+        for($i=0;$i<$data_count;$i++){
+           $project_data = $p->field("name,needNum,numbers,site as psite,status,sendstatus")->where("site = '".$data[$i]['gsite']."' AND projectID = '".$data[$i]['pid']."'")->select();
+           $data[$i]['name'] = $project_data[0]['name'];
+           $data[$i]['psite'] = $project_data[0]['psite'];
+           $data[$i]['needNum'] = $project_data[0]['needNum'];
+           $data[$i]['numbers'] = $project_data[0]['numbers'];
+           $data[$i]['status'] = $project_data[0]['status'];
+           $data[$i]['sendstatus'] = $project_data[0]['sendstatus'];
+           if($data[$i]['name'] == ''){
+               unset($data[$i]);
+           }
+           if($data[$i]['status'] == '0'){
+               unset($data[$i]);
+           }
+           if($data[$i]['psite'] == '28'){
+               unset($data[$i]);
+           }
+        }
+        $listCount = count($data);
+        $this->assign("date" , $date);
+        $this->assign("listCount", $listCount);
+        $this->assign("data", $data);
+        $this->display();
+    }
+    
+     //分析91竞价投放来源关键词的标识
+    public function KeyWordFor91() {
+        $projectID = $_REQUEST['projectID'];
+        $site = $_REQUEST['site'];
+        $guestbook = M("guesbook");
+        $date = date("Y-m-d",strtotime("1 days ago"));
+        $data = $guestbook->query("SELECT address,count(*) as t  FROM `guestbook` WHERE `add_date` = '".$date."' AND `site` LIKE '".$site."' AND project_id = '".$projectID."' group by address order by t desc");
+        $data_count = count($data);
+        for ($i = 0; $i < $data_count; $i++) {
+            $urldata = parse_url($data[$i]['address']);
+            $data[$i]['keywordstag'] = $urldata['query'];
+        }
+        $this->assign('data',$data);
+        $this->display();
+    }
 }

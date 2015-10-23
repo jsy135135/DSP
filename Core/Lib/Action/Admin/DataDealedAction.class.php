@@ -208,9 +208,6 @@ class DataDealedAction extends OQAction {
 
         $dealed = M("data_dealed");
         $aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//         echo '<pre>';
-//         echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//        var_dump($aList);
         if ($iType == "<0") {
             $iType1 = ">0";
             $sSQL = "1";
@@ -237,9 +234,6 @@ class DataDealedAction extends OQAction {
                 $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
             }
             $QaList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//            echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//         echo '<br />';
-//        var_dump($QaList);
             $i = 0;
             $j = 0;
             foreach ($QaList as &$day) {
@@ -253,13 +247,6 @@ class DataDealedAction extends OQAction {
                 }
                 $j++;
             }
-//            echo $i.'<br />';
-//            echo $j.'<br />';
-//        var_dump($QaList);
-//            $aList = array_merge($QaList, $aList);
-//            echo '<pre>';
-//            var_dump($QaList);
-            //判断如果是status<0的话，那就返回重组之后的数组
             if ($iType == "<0") {
                 return $QaList;
             }
@@ -354,46 +341,6 @@ class DataDealedAction extends OQAction {
         }
         return $aList;
     }
-
-    /**
-     *
-     * @param string $sSite
-     * @param string $iType
-     * @param string $period
-     */
-//	private function getNumBySite($sSite='28', $iType='total',$period="7"){
-//		$sSQL = "1";
-//		$sSQL .= ($sSite =="all") ? "" : " AND site='".$sSite."'";
-//		$sSQL .= ($iType == "total") ? "" : " AND status $iType";
-//		if(is_numeric($period)) {
-//			$dDate = date("Y-m-d", strtotime("$period days ago"));
-//			$sSQL .= " AND  addDate >= '".$dDate."' AND u_id!=0 AND u_id!=0";
-//		} elseif ($period == "month") {
-//			$dDate = date("Y-m", strtotime("this month"))."-01";
-//			$dDate_end = date("Y-m", strtotime("this month"))."-31";
-//			$sSQL .= " AND addDate between '".$dDate."' AND '".$dDate_end."' AND u_id!=0";
-//		}elseif ($period == "prev") {
-//			$dDate = date("Y-m", strtotime("last month"))."-01";
-////                        $dDate = "2014-05-01";
-//			$dDate_end = date("Y-m", strtotime("last month"))."-31";
-////                        $dDate_end = "2014-05-31";
-//			$sSQL .= " AND addDate between '".$dDate."' AND '".$dDate_end."' AND u_id!=0";
-//		}elseif ($period == "agotwo") {
-////			$dDate = date("Y-m", strtotime("last month"))."-01";
-//                        $dDate = "2014-05-01";
-////			$dDate_end = date("Y-m", strtotime("last month"))."-31";
-//                        $dDate_end = "2014-05-31";
-//			$sSQL .= " AND addDate between '".$dDate."' AND '".$dDate_end."' AND u_id!=0";
-//		}
-//
-//		$dealed = M("data_dealed");
-//		$aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
-//		// echo '<pre>';
-//		// echo $siyuan = "SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL GROUP BY addDate";
-//		// var_dump($aList);
-//		return $aList;
-//	}
-
     /**
      * 分析数据并入库
      */

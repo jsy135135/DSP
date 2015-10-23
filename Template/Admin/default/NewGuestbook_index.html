@@ -47,6 +47,7 @@
         <input class="button" type="button" value="停机" status="5">
         <input id="transfer" type="button" value="转接成功" status="8">
         <br /><br />
+        <input id="sanfang" type="button" value="三方转接" status="80">
         <form id="myform"  action="__ROOT__/index.php/Admin/Guestbook/sendDataByInter/"  target="_blank">
             姓名：<input  type="text" name="username" id="username" /><br/>
             电话：<input  type="text" name="phone" id="phone" /><br/>
@@ -112,6 +113,22 @@
                                 }
                             })
                         })
+            //连锁三方转接标注发送
+            $("#sanfang").click(function () {
+                var self = $(this);
+               self.attr('disabled', true);
+                $.ajax({
+                    type: 'post',
+                    url: '__ROOT__/index.php/Admin/Guestbook/sanfang',
+                    data: $('#myform').serialize(),
+                    success: function (response) {
+                        $("#c_left p[thisid=" + $("#guestbook_id").val() + "]").hide(1000);
+                      console.log(response);
+                     self.attr('disabled', false);
+                        alert("三方转接标注成功");
+                    }
+                })
+            })
             //提交处理状态数
             $(".button").click(function () {
                 $.ajax({

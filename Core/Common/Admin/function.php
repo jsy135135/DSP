@@ -186,6 +186,40 @@ function request_by_curl($remote_server, $post_string)
 	curl_close($ch);
 	return $data;
 }
+/*
+ * curl封装函数
+ * 
+ */
+function curls($url, $timeout = '10') {
+        // 1. 初始化
+        $ch = curl_init();
+        // 2. 设置选项，包括URL
+        curl_setopt($ch, CURLOPT_URL, $url);
+        curl_setopt($ch, CURLOPT_TIMEOUT, $timeout);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        curl_setopt($ch, CURLOPT_HEADER, 0);
+        // 3. 执行并获取HTML文档内容
+        $info = curl_exec($ch);
+        // 4. 释放curl句柄
+        curl_close($ch);
+
+        return $info;
+    }
+/*
+ * curl通过POST方式发送数据
+ * 
+ */
+function curl_post($url,$post){
+    $ch = curl_init ();
+    curl_setopt ( $ch, CURLOPT_URL, $url );
+    curl_setopt ( $ch, CURLOPT_POST, 1 );
+    curl_setopt ( $ch, CURLOPT_HEADER, 0 );
+    curl_setopt ( $ch, CURLOPT_RETURNTRANSFER, 1 );
+    curl_setopt ( $ch, CURLOPT_POSTFIELDS, $post );
+    $return = curl_exec ( $ch );
+    curl_close ( $ch );
+    return $return;
+}
 
 
 // 测试写入文件
