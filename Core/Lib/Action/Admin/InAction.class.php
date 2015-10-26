@@ -33,7 +33,7 @@ class InAction extends OQAction {
 //        $dDate = date("Y-m-d", strtotime("2 days ago"));
         $dDate = date("Y-m-d", strtotime("1 days ago"));
         $uID_array = array('9001');
-        $sql = "SELECT * FROM `guestbook` WHERE ((`project_id` in (SELECT projectID FROM `project` WHERE `site` = '91' AND `status` = '1') or `project_id` in (1032,996)  AND `site` = '91') or (`project_id` in (147837,148553,146947,102480,137984,88569,146327,23302) AND `site` = 'ls') or (`project_id` in (2446,2240,1160,1147) AND `site` = 'zf') or (`project_id` in (7207,8540,7795,7667) AND `site` = '28')) AND `add_date` >= '".$dDate."' AND u_id<>9001 AND deal_status not in (7,8)";
+        $sql = "SELECT * FROM `guestbook` WHERE ((`project_id` in (SELECT projectID FROM `project` WHERE `site` = '91' AND `status` = '1') or `project_id` in (1032,996,1033,197)  AND `site` = '91') or (`project_id` in (147837,148553,146947,102480,137984,88569,146327,23302,136346) AND `site` = 'ls') or (`project_id` in (2446,2240,1160,1147) AND `site` = 'zf') or (`project_id` in (7207,8540,7795,7667) AND `site` = '28')) AND `add_date` >= '".$dDate."' AND u_id<>9001 AND deal_status not in (7,8)";
 
         $data = $gb->query($sql);
         $Nums = count($data);
