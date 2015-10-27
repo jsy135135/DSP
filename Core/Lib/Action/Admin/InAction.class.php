@@ -5,21 +5,18 @@ header("content-type:text/html;charset=utf-8");
  * 数据定量的分配
  *
  */
-
 class InAction extends OQAction {
 
     public function index() {
         $user = M('user');
         $data = $user->where("role=5 AND status = 1")->field('username,remark')->select();
         $this->assign('data', $data);
-//            var_dump($data);
         $this->display();
     }
 
     public function TFP() {
         $this->display();
-    }
-    
+    }  
     /*
      * Dsp为91jmw提供数据的分配方法
      * Time: 2015年8月27日09:56:07
@@ -30,11 +27,9 @@ class InAction extends OQAction {
         $gb = M("guestbook");
         $TheDate = date("Y-m-d");
         $Thetime = date("Y-m-d H:i:s");
-//        $dDate = date("Y-m-d", strtotime("2 days ago"));
         $dDate = date("Y-m-d", strtotime("1 days ago"));
         $uID_array = array('9001');
         $sql = "SELECT * FROM `guestbook` WHERE ((`project_id` in (SELECT projectID FROM `project` WHERE `site` = '91' AND `status` = '1') or `project_id` in (1032,996,1033,197)  AND `site` = '91') or (`project_id` in (147837,148553,146947,102480,137984,88569,146327,23302,136346) AND `site` = 'ls') or (`project_id` in (2446,2240,1160,1147) AND `site` = 'zf') or (`project_id` in (7207,8540,7795,7667) AND `site` = '28')) AND `add_date` >= '".$dDate."' AND u_id<>9001 AND deal_status not in (7,8)";
-
         $data = $gb->query($sql);
         $Nums = count($data);
         $uID_count = count($uID_array);
@@ -63,9 +58,7 @@ class InAction extends OQAction {
             fclose($fp);
         }
         echo 'Dsp91专题数据分配完毕';
-    }
-    
-    
+    }   
     /*
      * 28特定项目的，特定数量处理
      * Time: 2015-06-11 15:10:15
@@ -86,7 +79,6 @@ class InAction extends OQAction {
         $numbers = floor($Nums/$uID_count);
         echo '28加量业务现有数据：' . $Nums . '<br />'; //查看特殊现有的数量
         echo '28加量处理账号有: ' . $uID_count . '<br />'; //处理账号数量
-//        die();
         for ($i = 0; $i < $uID_count; $i++) {
             $uID = $uID_array[$i];
             #对分配过的数据在guestbook表中进行标注
@@ -192,7 +184,6 @@ class InAction extends OQAction {
             $fp = fopen($sFileName, "a+");
             fwrite($fp, date("Y-m-d H:i:s") . "#" . "分配到的数量：" . $iNowNum . "#" . $uIDarray[$i] . "#" . $idArray . "\n");
             fclose($fp);
-//            echo $gb->getLastsql();
             var_dump($stu);
             echo '特殊业务分配数据完毕';
         }
@@ -204,9 +195,7 @@ class InAction extends OQAction {
      */
 
     public function FP() {
-        // var_dump($_REQUEST);
         $Arr = $_REQUEST["arr"];
-        // var_dump($Arr);
         $TheDate = date("Y-m-d");
         $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
@@ -340,7 +329,6 @@ class InAction extends OQAction {
         echo '<pre>';
         echo '共有数据' . $count = count($aList);
         echo $uID . '###' . $count;
-        // die();
         for ($i = 0; $i < $arrCount; $i++) {
             $uID = $arr["$i"];
             $uID = 814;

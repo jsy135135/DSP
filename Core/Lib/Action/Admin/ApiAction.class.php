@@ -97,14 +97,9 @@ class ApiAction extends OQAction {
         $mobile = M("mobile");
         $sql = "SELECT *  FROM `guestbook` WHERE `add_date` >= '2015-10-16' AND `add_date` <= '2015-10-18' AND project_id in (SELECT projectID FROM project WHERE pid = 1)";
         $data = $guestbook->query($sql);
-//        dump($data);
-//        die();
         $datacount = count($data);
-//        die();
         for ($i = 0; $i < $datacount; $i++) {
-//            echo 1;
             $number = substr($data[$i]['phone'], 0, 7);
-//            echo $number;
             $rs = $mobile->where("mobile = $number")->getField("province");
             if ($rs == '北京') {
                 echo $data[$i]['ids'] . '<br />';
@@ -122,7 +117,6 @@ class ApiAction extends OQAction {
         $date = '2015-09-03';
         $data = $g->where("add_date ='" . $date . "'")->getField("ids,phone,add_date");
         echo count($data) . '<br />';
-//        die();
         foreach ($data as $key => $value) {
             $rs = $g->where("phone = '" . $value['phone'] . "' AND add_date = '" . $value['add_date'] . "' AND ids !='" . $value['ids'] . "'")->select();
             if ($rs) {
@@ -134,7 +128,8 @@ class ApiAction extends OQAction {
     }
 
     /*
-     * 从数据库到处数据，按照对应规则插入到crm客户表中
+     * 从数据库导出数据，按照对应规则插入到crm客户表中
+     * 
      */
 
     public function importToCrm() {

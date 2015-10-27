@@ -14,12 +14,8 @@ class DataStatisticsAction extends OQAction {
      */
     public function OriginalNum() {
         $g = M("guestbook");
-//        var_dump($_REQUEST);
-//        die();
         $startday = $_REQUEST['startdate'] == "" ? date("Y-m-d", strtotime("7 days ago")) : $_REQUEST['startdate'];
-//        $startday = '2015-03-28';
         $endday = $_REQUEST['enddate'] == "" ? date("Y-m-d") : $_REQUEST['enddate'];
-//        $endday = '2015-03-30';
         $totol = $g->query("select add_date,count(*) as t from guestbook where add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量
         $Ytotol = $g->query("select add_date,count(*) as t from guestbook where project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量
         $Ntotol = $g->query("select add_date,count(*) as t from guestbook where project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量
@@ -39,7 +35,6 @@ class DataStatisticsAction extends OQAction {
         $Ytotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 28
         $Ntotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 
         $totolcount = count($totol);
-//        var_dump($totol);
         for ($i = 0; $i < $totolcount; $i++) {
             $tdate = $totol[$i]['add_date'];
             $totol[$i]['totol'] = $totol[$i]['t'];
@@ -61,7 +56,6 @@ class DataStatisticsAction extends OQAction {
             $totol[$i]['Ytotol_91'] = $Ytotol_91[$i]['t'];
             $totol[$i]['Ntotol_91'] = $Ntotol_91[$i]['t'];
         }
-//        var_dump($totol);
         $this->assign("totol", $totol);
         $this->display();
     }
@@ -76,7 +70,6 @@ class DataStatisticsAction extends OQAction {
         $dealed = M("DataDealed");
         $transfer_date = date("Y-m-d", strtotime("31 days ago"));
         $aList_transfer = $dealed->query("select addDate,count(distinct phone) as count from data_dealed where transfer=1 AND addDate >= '" . $transfer_date . "'group by addDate");
-//        var_dump($aList_transfer);
         $this->assign("aList_transfer", $aList_transfer);
         $this->display();
     }
@@ -87,7 +80,6 @@ class DataStatisticsAction extends OQAction {
         $dealed = M("DataDealed");
         $dealAgain = D("DataAgain");
         $guestbook = D("guestbook");
-        // var_dump($_REQUEST);
         $period = $_REQUEST["period"] == "" ? 7 : $_REQUEST["period"];
         $startdate = $_REQUEST["startdate"];
         $enddate = $_REQUEST["enddate"];
@@ -148,8 +140,6 @@ class DataStatisticsAction extends OQAction {
             $aList[$i]["91ratio"] = round($aList[$i]["fail_91"] / $aList[$i]["total_91"], 3) * 100;
             $aList[$i]["send_again"] = $dealAgain->where("add_date='" . $aList[$i]["addDate"] . "' AND status >0")->count();
         }
-//                echo '<pre>';
-        // var_dump($aList);
         $this->assign("aList", $aList);
         $this->assign("startdate", $startdate);
         $this->assign("enddate", $enddate);
@@ -214,8 +204,6 @@ class DataStatisticsAction extends OQAction {
             $aList[$i]["91ratio"] = round($aList[$i]["fail_91"] / $aList[$i]["total_91"], 3) * 100;
             $aList[$i]["send_again"] = $dealAgain->where("add_date='" . $aList[$i]["addDate"] . "' AND status >0")->count();
         }
-//                echo '<pre>';
-//                var_dump($aList);
         $this->assign("aList", $aList);
         $this->display();
     }
@@ -229,7 +217,6 @@ class DataStatisticsAction extends OQAction {
             $uID = 826; //默认外呼标记为826
 
         $dDate = $_REQUEST["date"] == "" ? date("Y-m-d", strtotime("1 days ago")) : $_REQUEST["date"];
-        // $dToday = "2014-05-01";
         $iCount = D("DataDealed")->where("again = 0 AND status <0 AND u_id=" . $uID . " AND addDate = '" . $dDate . "'")->count();
         $aList = D("DataDealed")->where("again = 0 AND status <0 AND u_id=$uID AND addDate = '" . $dDate . "'")->limit(100)->select();
         $this->assign("iCount", $iCount);
@@ -265,14 +252,10 @@ class DataStatisticsAction extends OQAction {
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         } elseif ($period == "prev") {
             $dDate = date("Y-m", strtotime("last month")) . "-01";
-//                        $dDate = "2014-05-01";
             $dDate_end = date("Y-m", strtotime("last month")) . "-31";
-//                        $dDate_end = "2014-05-31";
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         } elseif ($period == "agotwo") {
-//			$dDate = date("Y-m", strtotime("last month"))."-01";
             $dDate = "2014-05-01";
-//			$dDate_end = date("Y-m", strtotime("last month"))."-31";
             $dDate_end = "2014-05-31";
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         } elseif ($period == "showforday") {
@@ -284,7 +267,6 @@ class DataStatisticsAction extends OQAction {
         $guestbook = M("guestbook");
         $aList = $dealed->query("SELECT COUNT(DISTINCT phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
         $aList_date = $guestbook->query("SELECT add_date FROM `guestbook` WHERE add_date>='" . $dDate . "' AND add_date<='" . $dDate_end . "'group by add_date");
-//        echo $guestbook->getLastSql();
         foreach ($aList_date as &$value) {
             $value['t'] = '0';
             $value['addDate'] = $value['add_date'];
@@ -312,18 +294,13 @@ class DataStatisticsAction extends OQAction {
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         } elseif ($period == "prev") {
             $dDate = date("Y-m", strtotime("last month")) . "-01";
-//                        $dDate = "2014-05-01";
             $dDate_end = date("Y-m", strtotime("last month")) . "-31";
-//                        $dDate_end = "2014-05-31";
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         } elseif ($period == "agotwo") {
-//			$dDate = date("Y-m", strtotime("last month"))."-01";
             $dDate = "2014-05-01";
-//			$dDate_end = date("Y-m", strtotime("last month"))."-31";
             $dDate_end = "2014-05-31";
             $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
         }
-
         $dealed = M("data_dealed");
         $aList = $dealed->query("SELECT COUNT(phone) AS t ,addDate FROM `data_dealed` WHERE $sSQL AND u_id <> 10086 AND regular=1 GROUP BY addDate");
         if ($iType == "<0") {
@@ -340,14 +317,10 @@ class DataStatisticsAction extends OQAction {
                 $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
             } elseif ($period == "prev") {
                 $dDate = date("Y-m", strtotime("last month")) . "-01";
-//                        $dDate = "2014-05-01";
                 $dDate_end = date("Y-m", strtotime("last month")) . "-31";
-//                        $dDate_end = "2014-05-31";
                 $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
             } elseif ($period == "agotwo") {
-//			$dDate = date("Y-m", strtotime("last month"))."-01";
                 $dDate = "2014-05-01";
-//			$dDate_end = date("Y-m", strtotime("last month"))."-31";
                 $dDate_end = "2014-05-31";
                 $sSQL .= " AND addDate between '" . $dDate . "' AND '" . $dDate_end . "' AND u_id!=0";
             }
@@ -358,7 +331,6 @@ class DataStatisticsAction extends OQAction {
                 $day[t] = 0;
                 foreach ($aList as $Day) {
                     if ($day[addDate] == $Day[addDate]) {
-//                        echo 1;
                         $day[t] = $Day[t];
                     }
                     $i++;

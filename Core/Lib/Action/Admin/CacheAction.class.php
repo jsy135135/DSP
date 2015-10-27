@@ -12,10 +12,6 @@ class CacheAction extends AdminAction{
 	// 删除全部核心缓存
     public function delCore(){
 		import("ORG.Io.Dir");
-//                echo __FILE__;
-//                echo __APP__;
-//                var_dump(is_dir('./Temp/Data'));
-//    die();
 		$dir = new Dir;
 		@unlink('./Temp/~runtime.php');		//删除主编译缓存文件
 		@unlink('./Temp/~crons.php');		//删除计划任务缓存文件

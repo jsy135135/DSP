@@ -1,6 +1,9 @@
 <?php
 
-//话务信息的处理结果
+/*
+ * 话务信息的处理结果
+ * 
+ */
 class UserDealedAction extends OQAction {
 
     //每人分配数据详细
@@ -10,29 +13,21 @@ class UserDealedAction extends OQAction {
         $guestbook = M("guestbook");
         $dealed = D("data_dealed");
         $user = D("user");
-//        $aUserList = $dealed->where("addDate >= '" . $startdate . "' AND addDate <= '" . $enddate . "'" . "AND u_id <> 0 AND u_id <>10086")->field(" DISTINCT u_id as uid")->order('u_id asc')->select();
-//        var_dump($aUserList);
-//        $user_array = array();
-//        foreach ($aUserList as $key => $value) {
-//            array_push($user_array,$value['uid']);
-//        }
-//        $user_list = implode(',', $user_array);
-//        echo $user_list;
         $sql = "SELECT u_id,COUNT(DISTINCT phone) AS tp_count FROM `guestbook` WHERE ( Thedate >= '".$startdate."' AND Thedate <= '".$enddate."') group by u_id";
             $data = $guestbook->query($sql);
             foreach ($data as $key => &$value) {
                 $value['name'] = $user->where("username = '".$value['u_id']."'")->getField("remark");
             }
-//            echo $guestbook->getLastSql();
-//            var_dump($data);
             $this->assign('data',$data);
             $this->assign('startDate',$startdate);
             $this->assign('endDate',$enddate);
             $this->display();
     }
 
-    #已经排重
-
+    /*
+     * 已经排重
+     * 
+     */
     public function index($date = 'date("Y-m-d")') {
         $startdate = $_REQUEST["startdate"]; //开始日期
         $enddate = $_REQUEST["enddate"]; //结束日期
@@ -55,7 +50,6 @@ class UserDealedAction extends OQAction {
         $again = D("data_again");
         $guestbook = D("guestbook");
         $user = D("user");
-        // $date = date("Y-m-d", strtotime("1 days ago"));//前一天的数据
         //循环出多个用户名，然后依次进行数据的查询
         //选择当天的参与的UID
         $aUserList = $dealed->where($sSQL . "AND u_id <> 0 AND u_id <>10086")->field(" DISTINCT u_id as uid")->order('u_id asc')->select();
@@ -64,26 +58,16 @@ class UserDealedAction extends OQAction {
         for ($j = 0; $j <= $aUserListcount; $j++) {
             $i = $aUserList[$j]["uid"];
             $aList[$i]["uid"] = $i;
-            // echo $i.'<br />';
             $aList[$i]["username"] = $user->where("username=" . $i)->getField("remark");
             $aList[$i]["section"] = $user->where("username=" . $i)->getField("section");
-//                        $aList[$i]["fpsl"] = $guestbook->where($sSQL3."AND u_id= '".$i."'")->count("DISTINCT phone");
             $aList[$i]["aim"] = $user->where("username=" . $i)->getField("aim");
             $aList[$i]["yunyin"] = $user->where("username=" . $i)->getField("");
-            // echo $aList[$i]["username"];
-            //$aList[$i]["firstCallNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i")->count();	//首次外呼处理数
             $aList[$i]["firstCallNum"] = $guestbook->where($sSQL1 . "AND u_id= '" . $i . "'")->count("DISTINCT phone"); //首次外呼处理数
             $aList[$i]["firstSendNum"] = $dealed->where($sSQL . "AND u_id=$i")->count("DISTINCT phone"); //首次提交数
             $aList[$i]["transfer"] = $dealed->where($sSQL . "AND u_id=$i AND transfer = '1' AND site = '28' ")->count("DISTINCT phone"); //28转接数量
             $aList[$i]["transferOKNum"] = $dealed->where($sSQL . "AND u_id=$i AND transfer = '1' AND site = '28' AND regular = '1' ")->count("DISTINCT phone"); //28转接审核有效数
             $aList[$i]["firstSendOKNum"] = $dealed->where($sSQL . "AND u_id=$i AND status>0")->count("DISTINCT phone"); //首次提交成功数
             $aList[$i]["firstSendOKRatio"] = round($aList[$i]["firstSendOKNum"] / $aList[$i]["firstSendNum"], 4) * 100; //首次提交成功比
-            /**
-              $aList[$i]["secondCallNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id=$i AND again=1 ")->count();	//二次外呼处理数
-              $aList[$i]["secondSendNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id=$i AND send_status <> ''  AND again=1")->count();	//二次提交数
-              $aList[$i]["secondSendOKNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id=$i AND send_status>0  AND again=1")->count();	//二次提交成功数
-              $aList[$i]["secondSendOKRatio"] = round( $aList[$i]["secondSendOKNum"] / $aList[$i]["secondSendNum"],4) *100;	//二次提交成功比
-             * * */
             $aList[$i]["againCallNum"] = $again->where($sSQL2 . "AND u_id=$i")->count("DISTINCT data_id");
             $aList[$i]["againSubmitNum"] = $again->where($sSQL2 . "AND u_id=$i")->count("DISTINCT  data_id");
             $aList[$i]["againSubmitOkNum"] = $again->where($sSQL2 . "AND u_id=$i AND status > 0")->count("DISTINCT data_id");
@@ -92,23 +76,15 @@ class UserDealedAction extends OQAction {
             $aList[$i]["zfSunbmitNum"] = $dealed->where($sSQL . "AND u_id=$i AND status>0 AND site = 'zf'")->count("DISTINCT phone");
             $aList[$i]["zftransfer"] = $dealed->where($sSQL . "AND u_id=$i AND status>0 AND site = 'zf' AND transfer = '1'")->count("DISTINCT phone");
             $aList[$i]["lswx"] = $lswx->where($sSQL . "AND u_id=$i")->count();
-//                        var_dump($aList[$i]["lswx"]);
             $aList[$i]["lszjwx"] = $lswx->where($sSQL . "AND u_id = $i AND (content like '%电话咨询%' or content like '%电话联系过了%' or content like '%转接%')")->count();
             $aList[$i]["zfwx"] = $zfwx->where($sSQL . "AND u_id=$i AND zfwx <> 'ok'")->count();
             $aList[$i]["zfzjwx"] = $zfwx->where($sSQL . "AND u_id = $i AND zfwx <> 'ok' AND content like '%转接%'")->count();
-            // if($aList[$i]["lsws"] == 0){
-            // 	$aList[$i]["lswx"] == "没有数据";
-            // }
             $aList[$i]["lsSunbmitOK"] = round(($aList[$i]["lswx"] / $aList[$i]["lsSunbmitNum"]), 4) * 100;
             $aList[$i]["zfSunbmitOK"] = round(($aList[$i]["zfwx"] / $aList[$i]["zfSunbmitNum"]), 4) * 100;
-            //$aList[$i]["specialOkNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i AND status > 0 AND domain='wap.28.com'")->count();
         }
         $aList = array_values($aList);
         $aListjson = json_encode($aList);
-//                echo $aListjson;
         $aListcount = count($aList);
-        // print_r($aList);
-//                var_dump($aList);
         $this->assign('aListcount', $aListcount);
         $this->assign('username', $username);
         $this->assign('date', $date);
@@ -121,45 +97,27 @@ class UserDealedAction extends OQAction {
     #没有排重
 
     public function Dindex($date = 'date("Y-m-d")') {
-        // $uID = session("username");
-        // if($uID == "admin")
-        // 	$uID = 826; //默认外呼标记为826
-        // var_dump($_REQUEST);
         $date = $_REQUEST["date"] == "" ? date("Y-m-d") : $_REQUEST["date"];
-        // $date = $_REQUEST["_URL_"]["3"];
         $dealed = D("data_dealed");
         $lswx = D("lswx");
         $again = D("data_again");
         $guestbook = D("guestbook");
         $user = D("user");
-        // $date = date("Y-m-d", strtotime("1 days ago"));//前一天的数据
         //循环出多个用户名，然后依次进行数据的查询
         //选择当天的参与的UID
         $aUserList = $dealed->where("addDate =  '" . $date . "'AND u_id <> 0 AND u_id <>10086")->field(" DISTINCT u_id as uid")->order('u_id asc')->select();
-        // echo count($aUserList);
-        // var_dump($aUserList);
-        // var_dump($aUserList[0]['uid']);
         //当天参与UID对应的客服姓名(remark)
         $aUserListcount = count($aUserList) - 1;
         for ($j = 0; $j <= $aUserListcount; $j++) {
             $i = $aUserList[$j]["uid"];
             $aList[$i]["uid"] = $i;
-            // echo $i.'<br />';
             $aList[$i]["username"] = $user->where("username=" . $i)->getField("remark");
             $aList[$i]["aim"] = $user->where("username=" . $i)->getField("aim");
             $aList[$i]["yunyin"] = $user->where("username=" . $i)->getField("");
-            // echo $aList[$i]["username"];
-            //$aList[$i]["firstCallNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i")->count();	//首次外呼处理数
             $aList[$i]["firstCallNum"] = $guestbook->where("deal_date =  '" . $date . "' AND u_id= '" . $i . "'")->count("phone"); //首次外呼处理数
             $aList[$i]["firstSendNum"] = $dealed->where("addDate =  '" . $date . "' AND u_id=$i")->count("phone"); //首次提交数
             $aList[$i]["firstSendOKNum"] = $dealed->where("addDate =  '" . $date . "' AND u_id=$i AND status>0")->count("phone"); //首次提交成功数
             $aList[$i]["firstSendOKRatio"] = round($aList[$i]["firstSendOKNum"] / $aList[$i]["firstSendNum"], 4) * 100; //首次提交成功比
-            /**
-              $aList[$i]["secondCallNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id=$i AND again=1 ")->count();	//二次外呼处理数
-              $aList[$i]["secondSendNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id=$i AND send_status <> ''  AND again=1")->count();	//二次提交数
-              $aList[$i]["secondSendOKNum"] = $guestbook->where("deal_date =  '".$date."' AND u_id=$i AND send_status>0  AND again=1")->count();	//二次提交成功数
-              $aList[$i]["secondSendOKRatio"] = round( $aList[$i]["secondSendOKNum"] / $aList[$i]["secondSendNum"],4) *100;	//二次提交成功比
-             * * */
             $aList[$i]["againCallNum"] = $again->where("add_date =  '" . $date . "' AND u_id=$i")->count("data_id");
             $aList[$i]["againSubmitNum"] = $again->where("add_date =  '" . $date . "' AND u_id=$i")->count(" data_id");
             $aList[$i]["againSubmitOkNum"] = $again->where("add_date =  '" . $date . "' AND u_id=$i AND status > 0")->count("data_id");
@@ -169,10 +127,8 @@ class UserDealedAction extends OQAction {
                 $aList[$i]["lswx"] == "没有数据";
             }
             $aList[$i]["lsSunbmitOK"] = round(($aList[$i]["lswx"] / $aList[$i]["lsSunbmitNum"]), 4) * 100;
-            //$aList[$i]["specialOkNum"] = $dealed->where("addDate =  '".$date."' AND u_id=$i AND status > 0 AND domain='wap.28.com'")->count();
         }
         $aListcount = count($aList);
-        // print_r($aList);
         $this->assign('aListcount', $aListcount);
         $this->assign('username', $username);
         $this->assign('date', $date);
@@ -181,21 +137,13 @@ class UserDealedAction extends OQAction {
     }
 
     public function index_bak($date = 'date("Y-m-d")') {
-        // $uID = session("username");
-        // if($uID == "admin")
-        // 	$uID = 826; //默认外呼标记为826
-        // var_dump($_REQUEST);
         $date = $_REQUEST["date"] == "" ? date("Y-m-d") : $_REQUEST["date"];
-        // $date = $_REQUEST["_URL_"]["3"];
         $dealed = D("data_dealed");
         $again = D("data_again");
         $guestbook = D("guestbook");
-        // $date = date("Y-m-d", strtotime("1 days ago"));//前一天的数据
         //循环出多个用户名，然后依次进行数据的查询
         //选择当天的参与的UID
         $aUserList = $guestbook->where("deal_date =  '" . $date . "' ")->field(" DISTINCT u_id as uid")->select();
-        //print_r($aUserList);
-
         for ($j = 0; $j <= count($aUserList); $j++) {
             $i = $aUserList[$j]["uid"];
             $aList[$i]["uid"] = $i;
@@ -212,9 +160,6 @@ class UserDealedAction extends OQAction {
             $aList[$i]["againSubmitOkNum"] = $again->where("add_date =  '" . $date . "' AND u_id=$i AND status > 0")->count(); //二次提交成功数
             $aList[$i]["specialOkNum"] = $dealed->where("addDate =  '" . $date . "' AND u_id=$i AND status > 0 AND domain='wap.28.com'")->count(); //特殊通道处理数
         }
-
-        //echo '<pre>';
-        // print_r($aList);
         $this->assign('date', $date);
         $this->assign('aList', $aList);
         $this->display();

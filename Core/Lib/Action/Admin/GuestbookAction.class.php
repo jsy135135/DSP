@@ -18,8 +18,6 @@ class GuestbookAction extends OQAction {
         if ($uID == "admin")
             $uID = 808; //默认外呼标记为826
         $dDate = date("Y-m-d", strtotime("30 days ago"));  //昨天1 days ago
-//		$TheDate = date("Y-m-d");
-//                $Thetime = date("Y-m-d H:i:s");
         $gb = M("guestbook");
         $aList = $gb->where("deal_status = 1 AND project_id > 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00' AND repeat_phone = 0")->order("Thetime desc")->select();
         $aListcount = count($aList);
@@ -64,9 +62,7 @@ class GuestbookAction extends OQAction {
         $uID = session("username");
         if ($uID == "admin")
             $uID = 826; //默认外呼标记为826
-//$dDate = date("Y-m-d", strtotime("2 days ago"));  //昨天1 days ago
         $dDate = $_REQUEST["date"] == "" ? date("Y-m-d") : $_REQUEST["date"];
-        // $dDate = "2014-05-01";
         $gb = M("guestbook");
         //所有的处理过，但返回状态不为0和7的，7表示不需要
         $iNoAssignCount = $gb->where("u_id=$uID AND deal_status not in (0,1,7,8) AND  add_date='" . $dDate . "' AND again=1 AND send_status ='' AND repeat_phone = 0")->count();
@@ -123,7 +119,6 @@ class GuestbookAction extends OQAction {
         if ($lenth < 11) {
             $aInfo["ips"] = '';
             $aInfo["project_id"] = '';
-            ;
             $aInfo["site"] = '';
             $aInfo["ids"] = '';
             echo json_encode(array($aInfo["ips"], $aInfo["project_id"], $aInfo["site"], $aInfo["ids"]));
@@ -150,7 +145,6 @@ class GuestbookAction extends OQAction {
 
             $iPID = str_replace(".html", "", substr($aUrl["path"], strrpos($aUrl["path"], "_") + 1));
         }
-//			echo json_encode(array($aInfo["ips"],$iPID,$aUrl["host"]));
         echo json_encode(array($aInfo["ips"], $aInfo["project_id"], $aInfo["site"], $aInfo["ids"]));
     }
 
@@ -435,7 +429,6 @@ class GuestbookAction extends OQAction {
         }
         if ($value == 0) {
             $newdata = array();
-//            $newdata['name'] = $name;
             $newdata['check'] = 1;
             $newdata['regular'] = 0;
             $newdata['checker'] = $checker;
@@ -617,7 +610,6 @@ class GuestbookAction extends OQAction {
         //先检查今天的发送数据量，如果数据超过1000，则什么也不执行
         $dealed = M("DataDealed");
         $iCount = $dealed->where(" addDate = '" . $dDate . "'")->count();
-        //echo $iCount;
         if ($iCount <= 1000 && date("Y-m-d") == $dDate) {
             $aInfo = D("DataDealed")->where(" status <0 AND again=0")->order(" RAND()")->find(); //随机取一条数据吧@
             var_dump($aInfo);
