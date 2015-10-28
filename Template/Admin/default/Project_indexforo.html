@@ -1,26 +1,19 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" />
-
 <html xmlns="http://www.w3.org/1999/xhtml">
 
     <head>
-
         <title>项目分类列表-{$Think.config.cms_name}</title>
-
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-
             <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
             <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/font-awesome.min.css' />
             <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
-
             <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
-
             <style>
                 td {
                     height: 22px;
                     line-height: 22px
                 }
             </style>
-
             <style>
                 #dialog {
                     position: fixed;
@@ -71,64 +64,60 @@
                     display: block;
                 }
             </style>
-
     </head>
 
     <body>
-
         <table id="list_table" width="98%" border="0" cellpadding="12" cellspacing="1" class="table">
-
             <tr>
-
-                <td colspan="15" class="table_title">
-
+                <td colspan="18" class="table_title">
                     <span class="fl">项目列表</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>项目总数：{$countaList}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-
                     <span class="f1">总需求数：{$Aalsum}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>还需总数：{$Anumbers}</span>&nbsp;&nbsp;&nbsp;&nbsp;
-
                     <span class="f1">总提交数：{$Asends}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">提交百分比：{$Apersent}%</span>
                     <if condition="($_SESSION['username'] eq admin) or ($_SESSION['username'] eq weitao)">&nbsp&nbsp&nbsp&nbsp<span class="f1"><a href="__ROOT__/index.php/Admin/Project/syncProject">更新项目列表</a></span>&nbsp&nbsp&nbsp&nbsp
-                        <span class="f1"><a href="__ROOT__/index.php/Admin/Project/indexforo">查看来源量列表</a></span>
+                        <span class="f1"><a href="__ROOT__/index.php/Admin/Project/index">查看项目列表</a></span>
                     </if>
-
-                    <form action="__ROOT__/index.php/Admin/Project/index/" mothod="post">
-
+                    <form action="__ROOT__/index.php/Admin/Project/indexforo/" mothod="post">
                         <select name="act">
-
                             <option>请选择状态</option>
-
                             <option value="28">28商机网</option>
-
                             <option value="ls">中国连锁网</option>
-
                             <option value="zf">致富网</option>
-
                             <option value="91">91加盟网</option>
-
                             <option value="wp">王牌28网</option>
-
                         </select>
+                        <!--                        <select name="site">
+                                                            <option value="28">28商机网</option>
+                                                            <option value="ls">中国连锁网</option>
+                                                            <option value="zf">致富网</option>
+                                                        </select>-->
                         <input type="submit" value="点击查询" />
-
                     </form>
+                    <!--                             <span>点击可查询：</span>
+                                                    <a href="#"><input type="button" value="全部在投项目" name="" id="" /></a>
+                                                    <a href="#"><input type="button" value="今天还可发送项目" name="" id="" /></a>-->
                 </td>
-
                 <tr class="list_head ct">
                     <td>ID</td>
                     <td>所属网站</td>
                     <td>项目ID</td>
                     <td>项目名称</td>
-                    <td>发送状态</td>
-                    <td>转接状态</td>
-                    <td>所需量</td>
-                    <td>已提量</td>
-                    <td>还需量</td>
+                    <td>源量</td>
+                    <td>level</td>
+                    <td>留言所需量</td>
+                    <td>留言已提量</td>
+                    <td>留言还需量</td>
+                    <!-- <td>转接所需量</td>
+                    <td>转接已提量</td>
+                    <td>转接还需量</td> -->
+                    <td>行业（父类）</td>
+                    <td>行业（子类）</td>
                     <td>修改后父类</td>
                     <td>修改后子类</td>
                     <td>项目状态</td>
+                    <td>发送状态</td>
+                    <td>转接状态</td>
                     <td>操作</td>
                 </tr>
-
                 <volist name="aList" id="vo">
                     <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
                         <td align="center">{$vo.id}</td>
@@ -136,181 +125,114 @@
                         <td align="center">{$vo.projectID}</td>
                         <td align="center"><a href="{$vo.http}" target="_blank" class="title">{$vo.name}</a>
                         </td>
-                        <td align="center"><if condition="$vo.sendStatus eq '是'"><i class="fa fa-send" style="color:green;margin:10px"></i><else /><i class="fa fa-send" style="color:red;margin:10px"></i></if>{$vo.sendStatus}</td>
-                        <td align="center"><if condition="$vo.transfer eq '是'"><i class="fa fa-phone" style="color:green;margin:10px;font-weight:bold"></i><else /><i class="fa fa-phone" style="color:red;margin:10px;font-weight:bold"></i></if>{$vo.transfer}</td>
+                        <td align="center">{$vo.rtt}</td>
+                        <if condition="${vo.level} eq '4'">
+                            <td align="center">按效果付费</td>
+                            <else />
+                            <td align="center">{$vo.level}</td>
+                        </if>
                         <td align="center">{$vo.needNum}</td>
                         <td align="center">{$vo.alcount}</td>
                         <td align="center">{$vo.numbers}</td>
+                        <!-- <td align="center">{$vo.tneed}</td>
+                        <td align="center">{$vo.talcount}</td>
+                        <td align="center">{$vo.tnum}</td> -->
+                        <td align="center">{$vo.catName}</td>
+                        <td align="center">{$vo.subCat}</td>
                         <td align="center" class="xghfl">{$catList[$vo["pid"]]}</td>
                         <td align="center" class="xghzl">{$catList[$vo["cid"]]}</td>
                         <td align="center">{$vo.status}</td>
+                        <td align="center"><if condition="$vo.sendStatus eq '是'"><i class="fa fa-send" style="color:green;margin:10px"></i><else /><i class="fa fa-send" style="color:red;margin:10px"></i></if>{$vo.sendStatus}</td>
+                        <td align="center"><if condition="$vo.transfer eq '是'"><i class="fa fa-phone" style="color:green;margin:10px;font-weight:bold"></i><else /><i class="fa fa-phone" style="color:red;margin:10px;font-weight:bold"></i></if>{$vo.transfer}</td>
                         <td align='center'>
+                            <!--<a data-toggle="dialog" data-id="{$vo.id}" href="{:U('/Admin/Project/edit',array("id"=>$vo[id]))}">编辑</a>-->
                             <a data-toggle="dialog" data-id="{$vo.id}" href="">编辑</a>
+                            <!--<a href="#" id="edit">编辑</a>-->
+                            <!-- <a href="{:U('/Admin/Project/category/act/del')}">删除</a> -->
                         </td>
                     </tr>
                 </volist>
         </table>
-
         <div id="dialog">
-
             <div class="header">
-
                 <h1 class="title">修改分类</h1>
-
                 <button class="action close" data-toggle="dialog">x</button>
-
             </div>
-
             <div class="main">
-
                 <form action="__ROOT__/index.php/Admin/Project/update/" method="post">
-
                     <select name="pid" id="pid" class="xghfl">
-
                         <volist name="BigList" id="Bdata">
-
                             <option name="cid" pid="{$Bdata.id}" value="{$Bdata.id}">{$Bdata.catname}</option>
-
                         </volist>
-
-
-
                     </select>
-
                     <select name="cid" id="cid" class="xghzl">
-
                         <volist name="SmallList" id="Sdata">
-
                             <option pid="{$Sdata.pid}" value="{$Sdata.id}">{$Sdata.catname}</option>
-
                         </volist>
-
                     </select>
-
-
 
                     <input type="hidden" name="listid">
-
                         <button type="submit">确定</button>
-
                 </form>
-
             </div>
-
         </div>
-
-
 
         <div id="backdrop" data-toggle="dialog"></div>
 
-
-
         <script>
             $('[data-toggle="dialog"]').click(function (event) {
-
                 event.preventDefault();
 
 
-
-
-
                 var xghfl = $(this).parents('tr').find('.xghfl');
-
                 var xghzl = $(this).parents('tr').find('.xghzl');
-
                 var title = $(this).parents('tr').find('.title').html();
 
-
-
                 $('#dialog').data('xghfl', xghfl);
-
                 $('#dialog').data('xghzl', xghzl);
 
-
-
                 if (!$('body').hasClass('show-dialog')) {
-
                     $('#pid option').each(function () {
-
                         if (this.textContent == xghfl[0].textContent) {
-
                             $('#pid').val(this.value).trigger('change');
-
                         }
-
                     });
-
-
 
                     $('#cid option').each(function () {
-
                         if (this.textContent == xghzl[0].textContent) {
-
                             $('#cid').val(this.value);
 
-
-
                         }
-
                     });
-
                 }
 
 
 
-
-
-
-
                 $('body').toggleClass('show-dialog');
-
-
 
                 $('#dialog [type="hidden"]').val($(this).attr('data-id'));
-
                 $('#dialog .title').html(title);
 
-
-
             });
-
-
 
             $('#dialog form').submit(function (event) {
-
                 event.preventDefault();
-
                 var data = $(this).serialize();
-
                 var action = $(this).attr('action');
 
-
-
                 var xghfl = $(this).find('.xghfl option:selected').html();
-
                 var xghzl = $(this).find('.xghzl option:selected').html();
 
-
-
                 $($('#dialog').data('xghfl')).html(xghfl);
-
                 $($('#dialog').data('xghzl')).html(xghzl);
 
-
-
                 $('body').toggleClass('show-dialog');
-
                 console.log(data);
-
                 $.post(action, data, function (res) {
-
                     console.log(res);
-
                 });
-
             });
         </script>
-
         <style>
             #table-header.pin {
                 position: fixed;
@@ -321,72 +243,42 @@
                 padding: 0 10px;
             }
         </style>
-
         <script>
             var version = '{$Think.config.cms_var}';
         </script>
-
         <include file="Index:footer" />
-
         <script type="text/javascript">
             var data = [];
-
             $('#cid option').each(function (index, item) {
-
                 item = $(item);
-
                 data.push({
                     value: item.val(),
                     pid: item.attr('pid'),
                     content: item.html()
-
                 });
-
             });
-
             // initda
-
             show($('#pid option').val());
 
-
-
             $('#pid').on('change', function (e) {
-
                 var pid = this.value;
-
                 show(pid);
-
             });
 
-
-
             function show(pid) {
-
                 $('#cid').html('');
-
                 var result = '';
-
                 for (var i = 0; i < data.length; i++) {
-
                     var item = data[i];
-
                     if (pid == item.pid) {
-
                         result += '<option value="' + item.value + '">' + item.content + '</option>';
-
                     }
-
                 }
 
-
-
                 $('#cid').append(result);
-
             }
         </script>
-
     </body>
 
 </html>
-
 <!-- 本次查询时间：{$date} -->

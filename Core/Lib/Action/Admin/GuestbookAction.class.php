@@ -16,8 +16,8 @@ class GuestbookAction extends OQAction {
         }
         $uID = session("username");
         if ($uID == "admin")
-            $uID = 808; //默认外呼标记为826
-        $dDate = date("Y-m-d", strtotime("30 days ago"));  //昨天1 days ago
+            $uID = 9001; //默认外呼标记为826
+        $dDate = date("Y-m-d", strtotime("3 days ago"));  //昨天1 days ago
         $gb = M("guestbook");
         $aList = $gb->where("deal_status = 1 AND project_id > 0 AND u_id= " . $uID . " AND add_date>='" . $dDate . "' AND deal_time='0000-00-00 00:00:00' AND repeat_phone = 0")->order("Thetime desc")->select();
         $aListcount = count($aList);

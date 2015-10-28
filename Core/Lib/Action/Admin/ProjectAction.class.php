@@ -12,6 +12,63 @@ class ProjectAction extends Action {
         $p = M("Project");
         $Data = M("data_dealed");
         $Sdata = M("data_again");
+        $date = date("Y-m-d");
+        if ($act == 1) {
+            $aList = $p->where("status = 1 AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND level  >=4 order by site asc,catName asc,subCat asc");
+        } else {
+            $aList = $p->where("status = 1 AND site = '" . $act . "' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
+            $Asum = $p->query("select sum(needNum) as Asum,sum(numbers) as Anumbers from project where status = 1 AND site = '" . $act . "' AND level  >=4 order by site asc,catName asc,subCat asc");
+        }
+        foreach ($aList as &$r) {
+            $r["http"] = $r["webPage"];
+            if ($r["sendStatus"] == 0)
+                $r["sendStatus"] = '否';
+            else
+                $r["sendStatus"] = '是';
+            if ($r["status"] == 0)
+                $r["status"] = '否';
+            else
+                $r["status"] = '是';
+            if ($r["level"] == 5)
+                $r["level"] = '按效果付费';
+            if ($r["level"] == 4)
+                $r["level"] = '广告客户';
+            if ($r["transfer"] == 1) {
+                $r["transfer"] = '是';
+            } else
+                $r["transfer"] = '否';
+        }
+        $countaList = count($aList);
+        for ($i = 0; $i < $countaList; $i++) {
+            $aList["$i"]["alcount"] = ($aList["$i"]["needNum"] - $aList["$i"]["numbers"]); //留言已经提交数
+            $aList["$i"]["talcount"] = ($aList["$i"]["tneed"] - $aList["$i"]["tnum"]); //转接已经提交数
+        }
+        $aCatList = D("category")->where(1)->getField("id,catname");
+        $this->assign("countaList", $countaList);
+        $this->assign("catList", $aCatList);
+        $this->assign("aList", $aList);
+        $Aalsum = $Asum[0]["Asum"];
+        $Anumbers = $Asum[0]["Anumbers"];
+        $Asends = ($Aalsum - $Anumbers);
+        $Apersent = round($Asends / $Aalsum, 3) * 100;
+        $this->assign("Aalsum", $Aalsum);
+        $this->assign("Anumbers", $Anumbers);
+        $this->assign("Asends", $Asends);
+        $this->assign("Apersent", $Apersent);
+        $BigList = $this->_listCategory(1);
+        $SmallList = D("Category")->where("pid != 0")->select();
+        $this->assign("BigList", $BigList);
+        $this->assign("SmallList", $SmallList);
+        $this->display();
+    }
+
+    public function indexforo() {
+        //显示当前在使用的项目列表
+        $act = ($_REQUEST["act"] == "") ? "1" : $_REQUEST["act"];
+        $p = M("Project");
+        $Data = M("data_dealed");
+        $Sdata = M("data_again");
         $g = M("guestbook");
         $date = date("Y-m-d", strtotime("1day ago"));
         if ($act == 1) {
@@ -85,70 +142,9 @@ class ProjectAction extends Action {
             $scendCount = $d->where("addDate = '" . $date . "'AND site = '" . $site . "' AND project_id = '" . $projectID . "' AND status >= 0 AND status <> 8 AND ((`check` = 0 AND `regular` = 0) or (`check` = 1 AND `regular` = 1)")->count(); //此项目今天二次发送成功数
             $numbers = ($prolist["$i"]["needNum"] - $fristCount - $scendCount); //已经发送的数据量
             $rs = $p->where("projectid = '" . $projectID . "' AND site = '" . $site . "'")->setField("numbers", $numbers);
-//            if($numbers <= 0){
-//                $update_sendstatus = $p->where("projectid = '" . $projectID . "' AND site = '" . $site . "'")->setField("sendStatus", '0');
-//            }
-//            if ($rs) {
-//                echo $site . '#' . $projectID . '#' . 'succsess';
-//            } else {
-//                echo $site . '#' . $projectID . '#' . 'enero';
-//            }
         }
         return true;
     }
-
-//    public function index() {
-//        //显示当前在使用的项目列表
-//        $act = ($_REQUEST["act"] == "") ? "1" : $_REQUEST["act"];
-//        $p = M("Project");
-//        $Data = M("data_dealed");
-//        $Sdata = M("data_again");
-//        $date = date("Y-m-d");
-//        if ($act == 1)
-//            $aList = $p->where("status = 1 AND site !='91' AND level  >=4 ")->order('site asc,catName asc,subCat asc')->select();
-//        // $aList = $p->where("1")->order('site asc,catName asc,subCat asc')->select();
-//        else
-//            $aList = $p->where("1")->select();
-//        foreach ($aList as &$r) {
-//            if ($r["site"] == "28")
-//                $r["http"] = "http://tj.28.com" . $r["webPage"];
-//            else
-//                $r["http"] = $r["webPage"];
-//            if ($r["sendStatus"] == 0)
-//                $r["sendStatus"] = '否';
-//            else
-//                $r["sendStatus"] = '是';
-//            if ($r["status"] == 0)
-//                $r["status"] = '否';
-//            else
-//                $r["status"] = '是';
-//        }
-// //                        var_dump($aList);
-//        $countaList = count($aList);
-// //                        echo $countaList;
-// //                        echo $site = $aList["1"]["site"];
-//        for ($i = 0; $i < $countaList; $i++) {
-//            $site = $aList["$i"]["site"];
-//            $projectID = $aList["$i"]["projectID"];
-//            $lastCount = $Data->where("addDate = '" . $date . "'AND site = '" . $site . "' AND projectID = '" . $projectID . "' AND status >= 0")->count(); //此项目今日一次发送成功数
-// //            echo $lastCount;
-//            $scendCount = $Sdata->where("addDate = '" . $date . "'AND site = '" . $site . "' AND project_id = '" . $projectID . "' AND status >= 0")->count(); //此项目今天二次发送成功数
-// //            echo $scendCount;
-//            $numbers = ($aList["$i"]["needNum"] - $lastCount - $scendCount);
-// //            echo $numbers;
-//            $aList["$i"]["alcount"] = ($lastCount + $scendCont);
-//            $rs = $p->where("projectid = '" . $projectID . "' AND site = '" . $site . "'")->setField("numbers", $numbers);
-// //            var_dump($rs);
-//            $aList["$i"]{"numbers"} = $numbers;
-// //                            var_dump($lastCount);
-//        }
-//        $aCatList = D("category")->where(1)->getField("id,catname");
-// //                        var_dump($aList);
-//        $this->assign("countaList", $countaList);
-//        $this->assign("catList", $aCatList);
-//        $this->assign("aList", $aList);
-//        $this->display();
-//    }
 
     /**
      * 项目分类的修改
@@ -164,39 +160,19 @@ class ProjectAction extends Action {
         $this->display("edit");
     }
 
-//    public function update() {
-//        $aD = $_REQUEST;
-////        echo 1;
-////        die();
-//        $id = $aD["id"];
-//        $pid = $aD["pid"];
-//        $cid = $aD["cid"];
-//        $result = D("Project")->execute("update project set pid=" . $pid . ", cid=" . $cid . " where id=" . $id);
-//        if ($result) {
-//            $this->success("修改成功", U('/Admin/Project'));
-//        } else {
-//            $this->error("修改失败");
-//        }
-//    }
     /*
      * ajax修改分类
      * time:2014/09/09 12:03
      * By siyuan
      *
      */
+
     public function update() {
-//        echo 11111;
-//        var_dump($_REQUEST);
         $aD = $_REQUEST;
         $id = $aD["listid"];
         $pid = $aD["pid"];
         $cid = $aD["cid"];
         $result = D("Project")->execute("update project set pid=" . $pid . ", cid=" . $cid . " where id=" . $id);
-//        if ($result) {
-//            $this->success("修改成功", U('/Admin/Project'));
-//        } else {
-//            $this->error("修改失败");
-//        }
     }
 
     public function indexJson() {
@@ -409,7 +385,7 @@ class ProjectAction extends Action {
         foreach ($data as $k => $v) {
             if ($v['pid'] == $pid) {
                 $data[] = $v;
-                resort($data, $v[‘id’], $level + 1);
+                resort($data, $v['id'], $level + 1);
             }
         }
         return $data;
@@ -444,16 +420,13 @@ class ProjectAction extends Action {
     private function _editcategory() {
         $id = $_REQUEST["id"];
         $one = D("category")->where("id=$id")->select();
-        //var_dump($one);
         $alist = D("category")->where("pid=0")->select();
-        //var_dump($alist);
         $this->assign("one", $one);
         $this->assign("alist", $alist);
         $this->display("category_edit");
     }
 
     Private function _updatecategory($aD) {
-        //var_dump($aD);
         $id = $aD["id"];
         $pid = $aD["pid"];
         $catname = $aD["catname"];
@@ -492,7 +465,6 @@ class ProjectAction extends Action {
             echo 'update status is 0 succeed<br />';
             echo 'update sendStatus is 1 succeed';
         }
-//                    die();
         if ($this->_syncFrom28())
             echo "Sync 28 is ok<br/>";
         if ($this->_syncFromZF())
@@ -574,8 +546,6 @@ class ProjectAction extends Action {
                 $aTemp["catName"] = $aT["catName"];
                 $aTemp["subCat"] = $aT["subCat"];
                 //如果数据已经存在，则更新数据，否则就是插入数据
-//                                        var_dump($aTemp);
-//                                        die();
                 $id = $p->where("projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
                 if ($id > 0)
                     $p->where("id=" . $id)->save($aTemp);
@@ -610,12 +580,6 @@ class ProjectAction extends Action {
                 } else {
                     $huibo_flag = 1;
                 }
-                // $aTemp["tneed"] = $aT["cha_huibo"];
-                // $aTemp["tnum"] = $aT["cha_huibo"];
-                // if($huibo_flag == 0){
-                //     $aTemp["tneed"] = 0;
-                //     $aTemp["tnum"] = 0;
-                // }
                 $aTemp["transfer"] = $huibo_flag;
                 $aTemp["name"] = $aT["projectName"];
                 $aTemp["webPage"] = $aT["web"];
@@ -638,68 +602,10 @@ class ProjectAction extends Action {
     }
 
     /**
-     * 测试同步连锁网的信息
-     */
-    public function syncFromLS() {
-        $p = M("Project");
-        //                        $p-> where("site = ls")->setField('status','0');
-        $aSource = xml2array(C("xml_ls"));
-        $j = 0;
-        for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
-            $aT = $aSource["log"]["fields"][$i];
-            if ($aT["projectID"] > 0) {
-                $aTemp = array();
-                $aTemp["clientID"] = 0;
-                $aTemp["projectID"] = $aT["projectID"];
-                $aTemp["status"] = 1;
-                //不需要dsp的项目，作为暂时调整
-                // if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
-                //     $aTemp["status"] = 0;
-                // }
-                $aTemp["name"] = $aT["projectName"];
-                $aTemp["webPage"] = $aT["adWebPage"];
-                $aTemp["backCall"] = $aT["link"];
-                if ($aTemp["backCall"] == null) {
-                    $aTemp["backCall"] = 'NO TEL';
-                }
-                if (!isset($aT["endtime"])) {
-                    $aTemp["level"] = 5;
-                    // $aTemp["needNum"] = 5;
-                    // $aTemp["numbers"] = 5;
-                } else {
-                    $aTemp["level"] = 4;
-                }
-                $aTemp["needNum"] = $aT["dspnum"];
-                $aTemp["numbers"] = $aT["dspnum"];
-                $aTemp["site"] = ls;
-                // $aTemp["catName"] = $aT["industry"];
-                // $aTemp["subCat"] = $aT["subindustry"];
-                //如果数据已经存在，则更新数据，否则就是插入数据
-                $id = $p->where("clientID=" . $aTemp["clientID"] . " AND projectID=" . $aTemp["projectID"] . " AND site='" . $aTemp["site"] . "'")->getField("id");
-                if ($id > 0) {
-                    // $j++;
-                    // var_dump($aTemp);
-                    $rs = $p->where("id=" . $id)->save($aTemp);
-                    // var_dump($rs);
-                } else {
-                    // $j++;
-                    // var_dump($aTemp);
-                    $d = $p->add($aTemp);
-                    echo $p->getLastsql() . '<br />';
-                    // var_dump($d);
-                }
-                unset($aTemp);
-            }
-            // echo $j.'<br />';
-        }
-    }
-
-    /**
      * 同步连锁网的信息
      */
     private function _syncFromLS() {
         $p = M("Project");
-//                        $p-> where("site = ls")->setField('status','0');
         $aSource = xml2array(C("xml_ls"));
         for ($i = 0; $i < count($aSource["log"]["fields"]); $i++) {
             $aT = $aSource["log"]["fields"][$i];
@@ -708,10 +614,6 @@ class ProjectAction extends Action {
                 $aTemp["clientID"] = 0;
                 $aTemp["projectID"] = $aT["projectID"];
                 $aTemp["status"] = 1;
-                //不需要dsp的项目，作为暂时调整
-                // if ($aTemp["projectID"] == 135557 || $aTemp["projectID"] == 135626 || $aTemp["projectID"] == 135861) {
-                //     $aTemp["status"] = 0;
-                // }
                 $aTemp["name"] = $aT["projectName"];
                 $aTemp["webPage"] = $aT["adWebPage"];
                 $aTemp["backCall"] = $aT["link"];
@@ -744,6 +646,7 @@ class ProjectAction extends Action {
 //                        $this->display(index);
         return true;
     }
+
     /**
      * 同步91加盟网的信息
      */
@@ -840,7 +743,7 @@ class ProjectAction extends Action {
             '搜富国际（广告位）' => 'http://www.91jmw.com/data/sfgj/index.html',
             '巴宝顿（91）' => 'http://www.91jmw.com/data/bbdnz/index.html',
             '炙口福(91)' => 'http://www.91jmw.com/data/zkfu/index.html',
-            '怡品饰家(91)' =>'http://www.91jmw.com/data/ypsjjj/index.html',
+            '怡品饰家(91)' => 'http://www.91jmw.com/data/ypsjjj/index.html',
             '泰工照明（91）' => 'http://www.91jmw.com/data/tgzmds/index.html',
             '星期六儿童烘培乐园（91）' => 'http://www.91jmw.com/data/xqlhp/index.html',
             '川香百味鸡（专题）' => 'http://www.91jmw.com/data/chx/index.html',
@@ -875,12 +778,13 @@ class ProjectAction extends Action {
         $data = $guestbook->query("SELECT address,count(*) as t  FROM `guestbook` WHERE `add_date` = '2015-08-24' AND `site` LIKE '91' AND project_id = '987'  group by address order by t desc");
         var_dump($data);
     }
-/*
- * 同步91加盟网的项目列表信息
- * Time:
- * By:siyuan
- */
-    
+
+    /*
+     * 同步91加盟网的项目列表信息
+     * Time:
+     * By:siyuan
+     */
+
     private function _GetProjectListBy91() {
         $p = M("project");
         $aSource = file_get_contents(C("json_91_new"));

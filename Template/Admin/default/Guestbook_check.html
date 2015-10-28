@@ -4,6 +4,8 @@
         <title>待审核发送数据-{$Think.config.cms_name}</title>
         <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
         <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+        <link rel="stylesheet" type="text/css" href="__PUBLIC__/Admin/dist/sweetalert.css" />
+        <script src="__PUBLIC__/Admin/dist/sweetalert.min.js"></script>
         <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
         <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
         <script type="text/javascript" src="__PUBLIC__/Admin/js/knockout-3.2.0.js"></script>
@@ -171,21 +173,34 @@
                 var site = $this.attr("data-site");
                 var value = $this.val();
                 if (value == 0) {
-                    var sh = '确定审核为无效';
+                    var sh = '审核为无效';
+                    var btcolor = 'red';
                 } else {
-                    var sh = '确定审核为有效';
+                    var sh = '审核为有效';
+                    var btcolor = 'green';
                 }
                 var c = confirm(sh);
-                var data = {
-                    id: id,
-                    data: value,
-                    projectID: projectID,
-//                    name:name,
-                    site: site
-                };
-//                console.log(data);
-                if (c) {
-                    parent.find('.btn-group .stu').each(function(index, item) {
+//                var c = swal({
+//                    title: sh,
+//                    text: "",
+//                    type: "warning",
+//                    showCancelButton: true,
+//                    cancelButtonText: "取消",
+////                    confirmButtonColor: "#DD6B55",
+//                    confirmButtonColor: btcolor,
+//                    confirmButtonText: "确定",
+//                    closeOnConfirm: false
+//                },
+//                function(){
+//                    var data = {
+//                    id: id,
+//                    data: value,
+//                    projectID: projectID,
+////                    name:name,
+//                    site: site
+//                };
+            if(c){
+                parent.find('.btn-group .stu').each(function(index, item) {
                         $(item).attr('disabled', true);
                     });
                     $.ajax({
@@ -196,11 +211,13 @@
                         success: function(response) {
                             parent.find('.check-status').html('1');
                             parent.find('.check-regular').html(value);
-                            console.log(response);
+//                            console.log(response);
                             alert(response);
+//                            sweetAlert("发送状态",response, "success");
                         }
                     });
-                }
+//                console.log(data);
+                    }
             });
 
         </script>
