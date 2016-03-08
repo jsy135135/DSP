@@ -30,7 +30,7 @@
  * 
  */
 
-class ApiAction extends OQAction {
+class ApiAction extends Action {
     /*
      * 通过网络获取号码归属地，并进行本地入库操作
      * Time:2015年10月19日14:30:31
@@ -63,17 +63,12 @@ class ApiAction extends OQAction {
      * Time:
      * By:siyuan
      */
-
     public function getAttribution($phone = null, $type = 1) {
         $mobile = M("mobile");
 //        $phone = '13718253509';
+        $url = 'http://192.168.200.52/api/getMobileAddress.php?s='.$phone.'';
         if (isset($phone) && !empty($phone)) {
-            $number = substr($phone, 0, 7);
-            $rs = $mobile->where("mobile = $number")->field("province,city,sp")->select();
-//            if ($rs === NUll) {
-//                $rs = $this->internetAttribution($phone);
-//            } else {
-            $rs = $rs[0];
+            $rs = json_decode(file_get_contents($url),true);
 //            }
             if ($rs['province'] == $rs['city']) {
                 $rs['city'] = '';
@@ -87,6 +82,29 @@ class ApiAction extends OQAction {
             echo '没有传入号码';
         }
     }
+//    public function getAttribution($phone = null, $type = 1) {
+//        $mobile = M("mobile");
+////        $phone = '13718253509';
+//        if (isset($phone) && !empty($phone)) {
+//            $number = substr($phone, 0, 7);
+//            $rs = $mobile->where("mobile = $number")->field("province,city,sp")->select();
+////            if ($rs === NUll) {
+////                $rs = $this->internetAttribution($phone);
+////            } else {
+//            $rs = $rs[0];
+////            }
+//            if ($rs['province'] == $rs['city']) {
+//                $rs['city'] = '';
+//            }
+//            if ($type > 0) {
+//                echo json_encode($rs);
+//            } else {
+//                return json_encode($rs);
+//            }
+//        } else {
+//            echo '没有传入号码';
+//        }
+//    }
 
     /*
      *  临时处理分取北京地区号码的方法

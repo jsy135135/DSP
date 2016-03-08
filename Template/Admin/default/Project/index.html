@@ -87,7 +87,7 @@
                     <span class="f1">总需求数：{$Aalsum}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span>还需总数：{$Anumbers}</span>&nbsp;&nbsp;&nbsp;&nbsp;
 
                     <span class="f1">总提交数：{$Asends}</span>&nbsp;&nbsp;&nbsp;&nbsp;<span class="f1">提交百分比：{$Apersent}%</span>
-                    <if condition="($_SESSION['username'] eq admin) or ($_SESSION['username'] eq weitao)">&nbsp&nbsp&nbsp&nbsp<span class="f1"><a href="__ROOT__/index.php/Admin/Project/syncProject">更新项目列表</a></span>&nbsp&nbsp&nbsp&nbsp
+                    <if condition="($_SESSION['username'] eq admin) or ($_SESSION['username'] eq weitao) or ($_SESSION['username'] eq wuyu)">&nbsp&nbsp&nbsp&nbsp<span class="f1"><a href="__ROOT__/index.php/Admin/Project/syncProject">更新项目列表</a></span>&nbsp&nbsp&nbsp&nbsp
                         <span class="f1"><a href="__ROOT__/index.php/Admin/Project/indexforo">查看来源量列表</a></span>
                     </if>
 

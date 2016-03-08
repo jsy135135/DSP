@@ -78,8 +78,6 @@ class DataDealedAction extends OQAction {
             $aList[$i]["91ratio"] = round($aList[$i]["fail_91"] / $aList[$i]["total_91"], 3) * 100;
             $aList[$i]["send_again"] = $dealAgain->where("add_date='" . $aList[$i]["addDate"] . "' AND status >0")->count();
         }
-//                echo '<pre>';
-//                var_dump($aList);
         $this->assign("aList", $aList);
         $this->display();
     }

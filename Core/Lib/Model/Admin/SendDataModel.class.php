@@ -1,6 +1,8 @@
 <?php
+
 //通过PHPRPC方式发送到各媒体平台的方法
 class SendDataModel extends Model {
+
     //发送到连锁网
     public function sendToLS($aData, $sanfang = 0) {
         import("phprpc_client", "Core/Lib/Widget/", ".php");
@@ -58,6 +60,7 @@ class SendDataModel extends Model {
             'owner' => $owner, //
             'address' => $aData["address"],
         );
+        sendAgain:
         if ($sanfang == 1) {
             $state_new = $client->clientSend($aNewData, 'utf-8', 'calltoliansuo', 'liansuo67867587');
         } else {
@@ -68,9 +71,13 @@ class SendDataModel extends Model {
         $fp = fopen($sFileName, "a+");
         fwrite($fp, date("Y-m-d H:i:s") . "#" . "项目ID：" . $aData["project_id"] . "#" . $aData["phone"] . "#" . $aData["uid"] . "#" . $state_new . "\n");
         fclose($fp);
+//        if (in_array($state_new, array('1:Illegal HTTP server.', '500:Internal Server Error'))) {
+        if(!is_numeric($state_new)){
+            goto sendAgain;
+        }
         return $state_new;
     }
-    
+
     //发送到28商机网
     public function sendTo28($aData) {
         import("phprpc_client", "Core/Lib/Widget/", ".php");

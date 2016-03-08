@@ -94,7 +94,8 @@ class View {
         // 网页字符编码
         header('Content-Type:'.$contentType.'; charset='.$charset);
         header('Cache-control: '.C('HTTP_CACHE_CONTROL'));  // 页面缓存控制
-        header('X-Powered-By:ThinkPHP');
+//        header('X-Powered-By:ThinkPHP');
+        header('X-Powered-By:ChinaNet');
         // 输出模板文件
         echo $content;
     }

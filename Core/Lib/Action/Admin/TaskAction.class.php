@@ -8,10 +8,57 @@ header("Content-type: text/html; charset=utf-8");
  */
 class TaskAction extends Action {
     /*
+     * guestbook 发送给28源数据，根据远程获取域名筛选数据
+     * Time:2015年12月16日16:04:28
+     * By:siyuan
+     */
+
+    public function sync_28dsp_d() {
+        set_time_limit(0);
+        $domin_array = file_get_contents('http://super.28.com/soap/dsp_400_send/domain.php');
+        $domin_array = unserialize($domin_array);
+//        var_dump($domin_array);
+        $domin_str = implode(',', $domin_array);
+        $url = "http://super.28.com/soap/dsp_400_send/phone.php";
+        $guestbook = M("guestbook");
+        $dsp28 = M("dsp28");
+        $TheDate = date('Y-m-d');
+        $startDay = date('Y-m-d 09:00:00', strtotime("2 day ago"));
+        $endDay = date('Y-m-d 09:00:00', strtotime("1 day ago"));
+//        $startDay = '2016-01-23 09:00:00';
+//        $endDay = '2016-01-24 09:00:00';
+//        $data = $guestbook->where("times >= '" . $startDay . "' AND times <= '" . $endDay . "' AND site = 28 AND project_id > 0")->field('phone,ips,address,times,add_date,project_id')->select();
+        $data = $guestbook->where("times >= '" . $startDay . "' AND times <= '" . $endDay . "'")->field('phone,ips,address,times,add_date,project_id')->select();
+        $Api = new ApiAction();
+        $i = 0;
+        foreach ($data as $key => &$value) {
+            $domin = parse_url($value['address']);
+            $value['domin'] = $domin['host'];
+            if (in_array($value['domin'], $domin_array)) {
+                $value['site'] = $value['address'];
+                $address = json_decode($Api->getAttribution($value['phone'], 0), true);
+                $value['address'] = $address['province'] . ' ' . $address['city'];
+                $reStatus = curl_post($url, $value);
+                $value['status'] = $reStatus;
+                $result = $dsp28->add($value);
+                $sFileName = "./Log/Dsp28-" . $TheDate . ".txt";
+                $fp = fopen($sFileName, "a+");
+                fwrite($fp, date("Y-m-d H:i:s") . "#" . "返回值" . $result . "\n");
+                fclose($fp);
+                $i++;
+                unset($value);
+            } else {
+                continue;
+            }
+        }
+    }
+
+    /*
      * guestbook 发送给28源数据
      * Time:2015年10月14日14:23:34
      * By:siyuan
      */
+
     public function sync_28dsp() {
         set_time_limit(0);
         $url = "http://super.28.com/soap/dsp_400_send/phone.php";
@@ -20,8 +67,11 @@ class TaskAction extends Action {
         $TheDate = date('Y-m-d');
         $startDay = date('Y-m-d 09:00:00', strtotime("2 day ago"));
         $endDay = date('Y-m-d 09:00:00', strtotime("1 day ago"));
+//        $startDay = '2015-11-19 09:00:00';
+//        $endDay = '2015-11-20 09:00:00';
         $data = $guestbook->where("times >= '" . $startDay . "' AND times <= '" . $endDay . "' AND site = 28 AND project_id > 0")->field('phone,ips,address,times,add_date,project_id')->select();
-//        curl_post
+//        dump($data);
+//        die();
         $Api = new ApiAction();
         $i = 0;
         foreach ($data as $key => &$value) {
@@ -33,9 +83,10 @@ class TaskAction extends Action {
             $result = $dsp28->add($value);
             $sFileName = "./Log/Dsp28-" . $TheDate . ".txt";
             $fp = fopen($sFileName, "a+");
-            fwrite($fp, date("Y-m-d H:i:s") . "#" . "返回值" .$result ."\n");
+            fwrite($fp, date("Y-m-d H:i:s") . "#" . "返回值" . $result . "\n");
             fclose($fp);
             $i++;
+            unset($value);
         }
     }
 
@@ -73,8 +124,8 @@ class TaskAction extends Action {
 
     public function sync_aliyun2() {
         $master = M("guestbook");
-        $salver = M("guestbook", "tj_", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/tongji");
-        $wz = M("wz", "tj_", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/tongji");
+        $salver = M("guestbook", "tj_", "mysql://sy:syys@182.92.150.169:3306/tjjt");
+        $wz = M("wz", "tj_", "mysql://sy:syys@182.92.150.169:3306/tjjt");
         $wz_data = $wz->query("SELECT DISTINCT wz from tj_wz");
         $iMaxID = $salver->query("SELECT MAX(ids) as maxid FROM tj_guestbook where 1");
         $iMaxID = $iMaxID[0]['maxid'];
@@ -101,7 +152,8 @@ class TaskAction extends Action {
 
     public function sync_s2() {
         $master = M("guestbook");
-        $salver = M("gbook", "", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/gbook");
+//        $salver = M("gbook", "", "mysql://root:!@#kingbone$%^@182.92.150.169:3306/gbook");
+        $salver = M("gbook", "", "mysql://aNXYWcKC:uA9SWZQtC3jORpNT@218.246.18.4:3306/tj.91jmw.com");
         $iMaxID = $master->query("SELECT MAX(s2_id) as maxid FROM guestbook where 1");
         $iMaxID = $iMaxID[0]['maxid'];
 //        echo $iMaxID;

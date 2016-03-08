@@ -1,0 +1,416 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>项目分类列表-{$Think.config.cms_name}</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+            <link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+            <script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+            <script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+            <script src="__PUBLIC__/Admin/js/knockout-3.2.0.js"></script>
+            <style>td{ height:22px; line-height:22px}</style>
+    </head>
+      <script>
+        var raw = {$aList};
+    </script>
+    <body>
+        <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/OriginalNum">源量详细数据</a></span>
+        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/Dindex">未经过排重</a></span>
+        <span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/transfer_list">28转接详细查看</a></span>
+        <table width="98%" border="0" cellpadding="9" cellspacing="1" class="table">
+                <script src="__PUBLIC__/Admin/js/jquery-ui-1.10.3.full.min.js"></script>
+                <script src="__PUBLIC__/Admin/js/jquery.ui.touch-punch.min.js"></script>
+                <!-- <link rel="stylesheet" href="__PUBLIC__/Admin/css/theme.css"> -->
+                <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+                    <script>
+        $(function () {
+            $(".date").datepicker({});
+            $.datepicker.regional['zh-CN'] = {
+                closeText: '关闭',
+                prevText: '&#x3c;上月',
+                nextText: '下月&#x3e;',
+                currentText: '今天',
+                monthNames: ['一月', '二月', '三月', '四月', '五月', '六月',
+                    '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                monthNamesShort: ['一', '二', '三', '四', '五', '六',
+                    '七', '八', '九', '十', '十一', '十二'],
+                dayNames: ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'],
+                dayNamesShort: ['周日', '周一', '周二', '周三', '周四', '周五', '周六'],
+                dayNamesMin: ['日', '一', '二', '三', '四', '五', '六'],
+                weekHeader: '周',
+                dateFormat: 'yy-mm-dd',
+                firstDay: 1,
+                isRTL: false,
+                showMonthAfterYear: true,
+                yearSuffix: '年'};
+            $.datepicker.setDefaults($.datepicker.regional['zh-CN']);
+        });
+                    </script>
+            <tr>
+                <td colspan="29" class="table_title">
+                <span class="fl">当前区间:{$startdate}----{$enddate}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                <form action="__ROOT__/index.php/Admin/DataStatistics/index/period/showforday" method="post">
+                    <span class="fl">开始日期:<input type="text" name="startdate" class="date" /></span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <span class="fl">结束日期:<input type="text" name="enddate" class="date" /></span>
+                    <input type="submit" value="查询" />
+                    <!-- <input type="reset" value="重选"> -->
+                </form>
+                    <span class="fl">查询天数</span>
+                    <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/7">7天</a></span>
+                    <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/30">30天</a></span>
+                    <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/month">本月</a></span>
+                    <span class="f1"><a href="__ROOT__/index.php/Admin/DataStatistics/index/period/prev">上月</a></span>
+                    <!--<span class="f1"><a href="__ROOT__/index.php/Admin/DataDealed/index/period/agotwo">5月份</a></span>-->
+                </td>
+                <if condition="$_SESSION['username'] == guanyutong">
+                    <tr class="list_head ct">
+                    <td>时间</td>
+                    <td>91成功</td>
+                    <td>91失败</td>
+                    <td>91失败率</td>
+                </tr>
+                <!-- <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post"> -->
+                <volist name="aList" id="vo">
+                    <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                        <td><a href="__ROOT__/index.php/Admin/UserDealed/index/{$vo.addDate}">{$vo.addDate}</a></td>
+                        <td>{$vo.send_91}</td>
+                        <td>{$vo.fail_91}</td>
+                        <td>{$vo.91ratio}%</td>
+                </volist>
+            </tr>
+                    <else />
+                <tr class="list_head ct">
+                    <td>时间</td>
+                    <td>首次一源量</td>
+                    <td>首次多源量</td>
+                    <td>数据源总数</td>
+                    <td>发送总数</td>
+                    <td>留言数</td>
+                    <td>转接数</td>
+                    <td>转接占比</td>
+                    <td>发送成功数</td>
+                    <td>二次发送成功</td>
+                    <td>发送失败数</td>
+                    <td>成功率</td>
+                    <!--<td>28转接数</td>-->
+                    <td>28成功</td>
+                    <td>28失败</td>
+                    <td>28失败率</td>
+                    <td>zf成功</td>
+                    <td>zf失败</td>
+                    <td>zf失败率</td>
+                    <td>ls成功</td>
+                    <td>ls转接</td>
+                    <td>ls留言</td>
+                    <td>ls失败</td>
+                    <td>ls失败率</td>
+                    <td>wp成功</td>
+                    <td>wp失败</td>
+                    <td>wp失败率</td>
+                    <td>91成功</td>
+                    <td>91失败</td>
+                    <td>91失败率</td>
+                </tr>
+                <!-- <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post"> -->
+                <!-- ko foreach: datalist -->
+                    <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                        <td>
+                        <a data-bind="attr: {href: '__ROOT__/index.php/Admin/UserDealed/index/{$vo.addDate}'}, text: addDate"></a>
+                        </td>
+                        <td data-bind="text: OriginalNum"></td>
+                        <td data-bind="text: OriginalNumO"></td>
+                        <td data-bind="text: OriginalNum_All"></td>
+                        <td data-bind="text: total_all"></td>
+                        <td data-bind="text: totol_liuyan"></td>
+                        <td data-bind="text: totol_transfer"></td>
+                        <td><span  data-bind="text: totol_ratio"></span>%</td>
+                        <!-- <td data-bind="text: totol_ratio">%</td> -->
+                        <td data-bind="text: send_all"></td>
+                        <td data-bind="text: send_again"></td>
+                        <td data-bind="text: fail_all"></td>
+                        <td><span  data-bind="text: ratio"></span>%</td>
+                        <!-- <td data-bind="text: ratio">%</td> -->
+                        <!--<td>{$vo.transfer}</td>-->
+                        <td data-bind="text: send_28"></td>
+                        <td data-bind="text: fail_28"></td>
+                        <td><span  data-bind="text: ebratio"></span>%</td>
+                        <!-- <td data-bind="text: ebratio">%</td> -->
+                        <td data-bind="text: send_zf"></td>
+                        <td data-bind="text: fail_zf"></td>
+                        <td><span  data-bind="text: zfratio"></span>%</td>
+                        <!-- <td data-bind="text: zfratio">%</td> -->
+                        <td data-bind="text: send_ls"></td>
+                        <td data-bind="text: ls_transfer"></td>
+                        <td data-bind="text: ls_liuyan"></td>
+                        <td data-bind="text: fail_ls"></td>
+                        <td><span  data-bind="text: lsratio"></span>%</td>
+                        <!-- <td data-bind="text: lsratio">%</td> -->
+                        <td data-bind="text: send_wp"></td>
+                        <td data-bind="text: fail_wp"></td>
+                        <td><span  data-bind="text: wpratio"></span>%</td>
+                        <!-- <td data-bind="text: wpratio">%</td> -->
+                        <td data-bind="text: send_91"></td>
+                        <td data-bind="text: fail_91"></td>
+                        <td><span  data-bind="text: jyratio"></span>%</td>
+                        <!-- <td data-bind="text: jyratio">%</td> -->
+            </tr>
+            <!-- /ko -->
+            <tfoot>
+                <td align="center">合计：</td>
+                <td data-bind="text: t_OriginalNum"></td>
+                <td data-bind="text: t_OriginalNumO"></td>
+                <td data-bind="text: t_OriginalNum_All"></td>
+                <td data-bind="text: t_total_all"></td>
+                <td data-bind="text: t_totol_liuyan"></td>
+                <td data-bind="text: t_totol_transfer"></td>
+                <td></td>
+                <td data-bind="text: t_send_all"></td>
+                <td data-bind="text: t_send_again"></td>
+                <td data-bind="text: t_fail_all"></td>
+                <td></td>
+                <td data-bind="text: t_send_28"></td>
+                <td data-bind="text: t_fail_28"></td>
+                <td></td>
+                <td data-bind="text: t_send_zf"></td>
+                <td data-bind="text: t_fail_zf"></td>
+                <td></td>
+                <td data-bind="text: t_send_ls"></td>
+                <td data-bind="text: t_ls_transfer"></td>
+                <td data-bind="text: t_ls_liuyan"></td>
+                <td data-bind="text: t_fail_ls"></td>
+                <td></td>
+                <td data-bind="text: t_send_wp"></td>
+                <td data-bind="text: t_fail_wp"></td>
+                <td></td>
+                <td data-bind="text: t_send_91"></td>
+                <td data-bind="text: t_fail_91"></td>
+                <td></td>
+            <!--     <td align="center" data-bind="text: a_cost"></td> -->
+                <!-- <td></td> -->
+            </tfoot>
+                    </if>
+            <!-- </form> -->
+            <!-- <tr class="tr">
+      <td colspan="9" class="pages">
+        {$page}
+      </td>
+    </tr> -->
+        </table>
+        <!--28转接列表-->
+<!--        <span style="text-align:left;color:#0066FF">28转接数量统计</span>
+        <table width="20%" border="0" cellpadding="9" cellspacing="1" class="table">
+            <tr>
+                <tr class="list_head ct">
+                    <td>时间</td>
+                    <td>28转接数量</td>
+                </tr>
+                 <form action="__ROOT__/index.php/Admin/UserDealed/index/" method="post">
+                <volist name="aList_transfer" id="vo">
+                    <tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+                        <td><a href="#">{$vo.addDate}</a></td>
+                        <td>{$vo.count}</td>
+                </volist>
+            </tr>
+                    </if>
+             </form>
+             <tr class="tr">
+      <td colspan="9" class="pages">
+        {$page}
+      </td>
+    </tr>
+        </table>-->
+        <script>var version = '{$Think.config.cms_var}';</script>
+        <include file="Index:footer" />
+
+                                        <script>
+                                            function VM() {
+                                                var self = this;
+
+                                                self.datalist = ko.observableArray( raw );
+
+                                                self.filter = function(filterType, curItem, event) {
+                                                    var filterValue = curItem[filterType];
+
+                                                    var newData = raw.filter(function(item, index) {
+                                                        return item[filterType] == filterValue;
+                                                    });
+
+                                                    self.datalist(newData);
+                                                    // renderTableHeader();
+                                                };
+
+                                                self.t_OriginalNum = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.OriginalNum;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_OriginalNumO = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.OriginalNumO;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_OriginalNum_All = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.OriginalNum_All;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_total_all = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.total_all;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_totol_liuyan = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.totol_liuyan;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_totol_transfer = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.totol_transfer;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_all = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_all;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_again = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_again;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_fail_all = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.fail_all;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_28 = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_28;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_fail_28 = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.fail_28;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_zf = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_zf;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_fail_zf = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.fail_zf;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_ls = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_ls;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_ls_transfer = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.ls_transfer;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_ls_liuyan = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.ls_liuyan;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_fail_ls = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.fail_ls;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_wp = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_wp;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_fail_wp = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.fail_wp;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_send_91 = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.send_91;
+
+                                                    });
+                                                    return ret;
+                                                });
+                                                self.t_fail_91 = ko.computed(function() {
+                                                    var ret = 0;
+                                                    self.datalist().forEach(function(item, index) {
+                                                        ret += +item.fail_91;
+
+                                                    });
+                                                    return ret;
+                                                });
+
+                                            }
+                                            var ovm = new VM();
+                                            ko.applyBindings(ovm);
+                                            // renderTableHeader();
+                                        </script>
+    </body>
+</html>

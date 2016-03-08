@@ -33,7 +33,7 @@ class DataStatisticsAction extends OQAction {
         $Ntotol_wp = $g->query("select add_date,count(*) as t from guestbook where site = 'wp' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 wp
         $totol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //来源总量 91
         $Ytotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id >0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1v1 来源总量 28
-        $Ntotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量 
+        $Ntotol_91 = $g->query("select add_date,count(*) as t from guestbook where site = '91' AND project_id = 0 AND add_date >= '" . $startday . "' AND add_date <= '" . $endday . "'group by add_date"); //1vN 来源总量
         $totolcount = count($totol);
         for ($i = 0; $i < $totolcount; $i++) {
             $tdate = $totol[$i]['add_date'];
@@ -133,13 +133,14 @@ class DataStatisticsAction extends OQAction {
             $aList[$i]["ls_liuyan"] = $dealed->where("addDate = '" . $Ydate . "'AND transfer <> 1 AND site = 'ls' AND regular = 1")->count("DISTINCT phone");
             $aList[$i]["fail_ls"] = $aFail_ls[$i]["t"];
             $aList[$i]["ratio"] = round($aList[$i]["send_all"] / $aList[$i]["total_all"], 3) * 100;
-            $aList[$i]["28ratio"] = round($aList[$i]["fail_28"] / $aList[$i]["total_28"], 3) * 100;
+            $aList[$i]["ebratio"] = round($aList[$i]["fail_28"] / $aList[$i]["total_28"], 3) * 100;
             $aList[$i]["zfratio"] = round($aList[$i]["fail_zf"] / $aList[$i]["total_zf"], 3) * 100;
             $aList[$i]["lsratio"] = round($aList[$i]["fail_ls"] / $aList[$i]["total_ls"], 3) * 100;
             $aList[$i]["wpratio"] = round($aList[$i]["fail_wp"] / $aList[$i]["total_wp"], 3) * 100;
-            $aList[$i]["91ratio"] = round($aList[$i]["fail_91"] / $aList[$i]["total_91"], 3) * 100;
+            $aList[$i]["jyratio"] = round($aList[$i]["fail_91"] / $aList[$i]["total_91"], 3) * 100;
             $aList[$i]["send_again"] = $dealAgain->where("add_date='" . $aList[$i]["addDate"] . "' AND status >0")->count();
         }
+        $aList = json_encode($aList);
         $this->assign("aList", $aList);
         $this->assign("startdate", $startdate);
         $this->assign("enddate", $enddate);
@@ -468,7 +469,7 @@ class DataStatisticsAction extends OQAction {
         $this->assign("data", $data);
         $this->display();
     }
-    
+
      //分析91竞价投放来源关键词的标识
     public function KeyWordFor91() {
         $projectID = $_REQUEST['projectID'];
