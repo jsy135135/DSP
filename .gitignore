@@ -1,4 +1,9 @@
+################
+##Thinkphp
+##tpcms
+################
 nbproject/
+config.php
 Core/PHPExcel/
 .idea/
 Log/
